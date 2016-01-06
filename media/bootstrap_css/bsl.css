@@ -227,3 +227,23 @@ body, html {
    -moz-border-radius: 0px 0px 10px 10px;
    border-radius: 0px 0px 10px 10px;
 }
+
+div.view-quiz { margin-top: 1em; }
+div.quiz-block, div.solution { display: none; }
+div#quiz-intro { display: block; }
+div#quiz-intro h1 { text-align: center; }
+div#quiz-intro h2 { text-align: center; }
+div#quiz-intro input { display: block; margin: 1em auto; font-size: 2em; }
+div#quiz { font-size: 2em; }
+div#quiz p { font-weight: bold; }
+div#quiz form { margin-left: 1em; }
+div#quiz label { display: block; font-size: 0.8em; font-weight: normal; }
+div#quiz input.action { display: block; margin: 1em auto; }
+div#quiz div.solution { text-align: center; }
+div#quiz div.solution p { font-weight: normal; }
+div#quiz div.solution p span.was { font-weight: bold; }
+div#quiz-total p { text-align: center; }
+div#quiz p.hidden { display: none; }
+div#quiz p.scoring { text-align: center; display: none; }
+div#quiz input.answer { font-size: 2em; }
+

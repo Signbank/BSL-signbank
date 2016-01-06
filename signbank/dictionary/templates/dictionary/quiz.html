@@ -1,486 +1,429 @@
-<html>
-  <head>
-    <title>BSL SignBank: Quiz</title>
-    <base href="http://bslsignbank.ucl.ac.uk/">
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap_css/style.css">
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap_css/bsl.css">
-    <script src="/static/js/jquery-1.11.0.min.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/js/jquery.dataTables.min.js" charset="utf-8" type="text/javascript"></script>
-    <script src="/static/js/signbank.js"></script>
-    <style>
-      div.view-quiz { margin-top: 1em; }
-      div.quiz-block, div.solution { display: none; }
-      div#quiz-intro { display: block; }
-      div#quiz-intro h1 { text-align: center; }
-      div#quiz-intro h2 { text-align: center; }
-      div#quiz-intro input { display: block; margin: 1em auto; font-size: 2em; }
-      div#quiz { font-size: 2em; }
-      div#quiz p { font-weight: bold; }
-      div#quiz form { margin-left: 1em; }
-      div#quiz label { display: block; font-size: 0.8em; font-weight: normal; }
-      div#quiz input.action { display: block; margin: 1em auto; }
-      div#quiz div.solution { text-align: center; }
-      div#quiz div.solution p { font-weight: normal; }
-      div#quiz div.solution p span.was { font-weight: bold; }
-      div#quiz-total p { text-align: center; }
-      div#quiz p.hidden { display: none; }
-      div#quiz p.scoring { text-align: center; display: none; }
-      div#quiz input.answer { font-size: 2em; }
-    </style>
-  </head>
-  <body>
-    <div id="wrap">
-      <div class="container">
+{% extends "pages/default.html" %}
 
-        <div id="leftcontentborder"></div>
-        <div id="rightcontentborder"></div>
-        <div id="header"><h1>Signbank</h1>
-          <div id="logoholder" class="visible-lg visible-md visible-sm"></div>
+{% block bottomcontent %}
+
+<noscript>The BSL SignBank Quiz requires javascript</noscript>
+
+<div role="main">
+    <div id="publicsign" class="view-words view-quiz">
+      <div id="definitionblock">
+        <div id="quiz-intro" class="quiz-block">
+          <div class="col-md-10 col-md-offset-1">
+            <h1>BSL Signbank Quiz</h1>
+
+            <h2>Test your knowledge of BSL signs for colours, countries and UK place names from BSL SignBank!</h2>
+
+            <p>First you’ll guess the meaning of a sign, then we’ll ask you to guess where the sign is used in the UK. Answers are based on information from BSL SignBank, which is based on the “What’s your sign?” task from the BSL Corpus, in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. After you guess which region(s) the signs are linked to, next to each city name, you’ll see the number of people in each city who gave that sign as their preferred sign for a particular concept.</p>
+
+            <form action="">
+              <input class="action" type="button" value="Start Quiz" onclick="showQuiz();">
+            </form>
+          </div>
         </div>
-
-        <div id="bslstripe"></div>
-
-
-
-
-
-        <noscript>The BSL SignBank Quiz requires javascript</noscript>
-
-        <div role="main">
-            <div id="publicsign" class="view-words view-quiz">
-              <div id="definitionblock">
-                <div id="quiz-intro" class="quiz-block">
-                  <div class="col-md-10 col-md-offset-1">
-                    <h1>BSL Signbank Quiz</h1>
-
-                    <h2>Test your knowledge of BSL signs for colours, countries and UK place names from BSL SignBank!</h2>
-
-                    <ul>
-                        <li>We’ll ask you about 8 BSL signs - it should take around 5 minutes.</li>
-                        <li>First you’ll guess the meaning of a sign, then we’ll ask you to guess where the sign is used in the UK.</li>
-                        <li>Answers are based on information from BSL SignBank, which is based on the “What’s your sign?” task from the BSL Corpus, in which 249 Deaf BSL signers from Belfast, Birmingham, Bristol, Cardiff, Glasgow, London, Manchester & Newcastle were asked their signs for various concepts.</li>
-                        <li>After you guess which region(s) the signs are linked to, next to each city name, you’ll see the number of people in each city who gave that sign as their preferred sign for a particular concept.</li>
-                    </ul>
-
-                    <form action="">
-                      <input class="action" type="button" value="Start Quiz" onclick="showQuiz();">
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
-
-        <div role="main">
-            <div id="publicsign" class="view-words view-quiz">
-              <div id="definitionblock">
-                <div id="quiz-meaning" class="quiz-block">
-                  <div class="col-md-4 region-left">
-                    <div id="videocontainer">
-                      <div id="player">
-                        <iframe id="videoiframe" scrolling="no" allowfullscreen="allowfullscreen" frameborder="0">
-                        </iframe>
-                      </div>
-                      <div id="replay"></div>
-                    </div>
-                    
-                    
-                    <div id="quiz">
-                      <p class="question"><span class="countq"></span> of <span class="totalq"></span>. What does this sign mean?</p>
-                      <form action="">
-                        <div class="question">
-                        <label class="answer"><input class="answer" type="radio" name="answer" value="0" checked="checked"> <span></span></label>
-                        <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
-                        <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
-                        <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
-                        </div>
-                        
-                        <div class="answer">
-                          <input class="action" type="button" value="Answer" onclick="answerMeaning();">
-                        </div>
-                        
-                        <div class="solution">
-                          <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
-                          <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
-                          <p class="hidden"><a class="linkout" href="#" target="_blank">Show video with full set of keywords</a></p>
-                          <input class="action" type="button" value="Next" onclick="showQuiz();">
-                        </div>
-                      </form>
-                      <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
-                    </div>
-                    
-                  </div>
-                  
-                  <div class="col-md-3 region-right">
-                  
-                  </div>
-                </div>
-
-
-
-
-
-
-
-
-                <div id="quiz-regional" class="quiz-block">
-                  <div class="col-md-4 region-left">
-                    <div id="videocontainer">
-                      <div id="player">
-                        <iframe id="videoiframe" scrolling="no" allowfullscreen="allowfullscreen" frameborder="0">
-                        </iframe>
-                      </div>
-                      <div id="replay"></div>
-                    </div>
-                    
-
-                    <div id="quiz">
-                      <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region(s) where you think this sign is used. (You may choose more than one)</p>
-                      <form action="">
-                        <div class="question">
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Birmingham</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Bristol</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Cardiff</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Glasgow</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Belfast</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Newcastle</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>London</span></label>
-                        <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Manchester</span></label>
-                        </div>
-                        
-                        <div class="answer">
-                          <input class="action" type="button" value="Answer" onclick="answerRegional();">
-                        </div>
-                        
-                        <div class="solution">
-                          <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
-                          <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
-                          <p class="partial">😐 <b>Partially correct</b> - The correct answer was <span class="was"></span></p>
-                          <p class="bonus">Bonus! Which region is this sign <b>most often</b> used in? <a class="linkout" href="#" target="_blank">Answer</a></p>
-                          <input class="action" type="button" value="Next" onclick="showQuiz();">
-                        </div>
-                      </form>
-                      <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
-                    </div>
-
-                  </div>
-
-                  <div class="col-md-3 region-right">
-
-                  </div>
-                </div>
-
-
-
-
-
-                <div id="quiz-total" class="quiz-block">
-                  <div class="col-md-4 region-left">
-                    <div id="quiz">
-                      <p>You scored <span class="percent"></span></p>
-                      <p>For more information see <a href="http://bslsignbank.ucl.ac.uk/" target="_blank">BSL Signbank</a></p>
-                      <form action="http://bslsignbank.ucl.ac.uk/static/quiz-do-not-share.html"><input class="action" type="submit" value="Start Over"></form>
-                    </div>
-
-                  </div>
-
-                  <div class="col-md-3 region-right">
-
-                  </div>
-                </div>
-
-
-
-              </div>
-            </div>
-        </div>
-
-
-
-    
       </div>
     </div>
+</div>
 
-    <script>
-      var score = 0.0;
-      var total = 0.0;
-      var question = 0;
+<div role="main">
+    <div id="publicsign" class="view-words view-quiz">
+      <div id="definitionblock">
+        <div id="quiz-meaning" class="quiz-block">
+          <div class="col-md-4 region-left">
+            <div id="videocontainer">
+              <div id="player">
+                <iframe id="videoiframe" scrolling="no" allowfullscreen="allowfullscreen" frameborder="0">
+                </iframe>
+              </div>
+              <div id="replay"></div>
+            </div>
+            
+            
+            <div id="quiz">
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. What does this sign mean?</p>
+              <form action="">
+                <div class="question">
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0" checked="checked"> <span></span></label>
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
+                </div>
+                
+                <div class="answer">
+                  <input class="action" type="button" value="Answer" onclick="answerMeaning();">
+                </div>
+                
+                <div class="solution">
+                  <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
+                  <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
+                  <p class="hidden"><a class="linkout" href="#" target="_blank">Show video with full set of keywords</a></p>
+                  <input class="action" type="button" value="Next" onclick="showQuiz();">
+                </div>
+              </form>
+              <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
+            </div>
+            
+          </div>
+          
+          <div class="col-md-3 region-right">
+          
+          </div>
+        </div>
 
-      var score_at_question = [];
-      var total_at_question = [];
 
-      var quiz = [
-      {
-      type: 'meaning',
-      video: '/video/iframe/2893',
-      correct: 'brown',
-      incorrect: ['Ireland', 'purple', 'Manchester'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/brown-4.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/2893',
-      correct: ['Newcastle', 'Bristol', 'Manchester', 'London'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/brown-4.html'
-      },
 
-      {
-      type: 'meaning',
-      video: '/video/iframe/3468',
-      correct: 'France',
-      incorrect: ['China', 'Bristol', 'Glasgow'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/France-5.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/3468',
-      correct: ['Glasgow'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/France-5.html'
-      },
-      
-      {
-      type: 'meaning',
-      video: '/video/iframe/3597',
-      correct: 'green',
-      incorrect: ['Belfast', 'Ireland', 'Glasgow'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/green-5.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/3597',
-      correct: ['Birmingham'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/green-5.html'
-      },
-      
-      {
-      type: 'meaning',
-      video: '/video/iframe/6151',
-      correct: 'Birmingham',
-      incorrect: ['yellow', 'Glasgow', 'Italy'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/Birmingham-4.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/6151',
-      correct: ['Cardiff', 'Glasgow', 'Belfast', 'London'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/Birmingham-4.html'
-      },
-      
-      {
-      type: 'meaning',
-      video: '/video/iframe/2879',
-      correct: 'Britain',
-      incorrect: ['London', 'Bristol', 'grey'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/Britain-1.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/2879',
-      correct: ['Birmingham', 'Bristol', 'Cardiff', 'Glasgow', 'Belfast', 'Newcastle', 'London', 'Manchester'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/Britain-1.html'
-      },
-      
-      {
-      type: 'meaning',
-      video: '/video/iframe/4369',
-      correct: 'purple',
-      incorrect: ['green', 'India', 'Ireland'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/purple-2.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/4369',
-      correct: ['Bristol', 'Belfast', 'London', 'Manchester'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/purple-2.html'
-      },
-      
-      {
-      type: 'meaning',
-      video: '/video/iframe/3760',
-      correct: 'India',
-      incorrect: ['yellow', 'China', 'Birmingham'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/India-3.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/3760',
-      correct: ['Belfast'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/India-3.html'
-      },
-      
-      {
-      type: 'meaning',
-      video: '/video/iframe/5132',
-      correct: 'yellow',
-      incorrect: ['brown', 'America', 'London'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/yellow-3.html'
-      },
-      {
-      type: 'regional',
-      video: '/video/iframe/5132',
-      correct: ['Newcastle'],
-      linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/yellow-3.html'
-      }
-      ];
 
-      function scrollTo(elementName) {
-      $('html, body').animate({
-      scrollTop: $(elementName).offset().top
-      }, 100);
-      }
-      
-      function shuffle(array) {
-      var currentIndex = array.length, temporaryValue, randomIndex ;
-      while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-      }
-      return array;
-      }
 
-      function toSentence(array) {
-      var result = array.slice(0, array.length - 1).join(', ');
-      if (array.length > 1) {
-      result = result + " and " + array.slice(-1);
-      } else {
-      result = array[0];
-      }
-      return result;
-      }
 
-      function percentageScore() {
-      return Math.floor(score / total * 100.0) + "%";
-      }
-      
-      function startQuiz() {
-      score = 0;
-      total = 0;
-      question = 0;
-      showQuiz();
-      }
 
-      function finishQuiz() {
-      $('div.quiz-block').hide();
-      $('div#quiz-total span.percent').html(percentageScore());
-      $('div#quiz-total').show();
-      scrollTo('div#wrap');
-      }
 
-      function showQuiz() {
-      updateScore();
-      if (question >= quiz.length) {
-      finishQuiz();
-      return;
-      }
-      var q = quiz[question];
-      $('div.quiz-block').hide();
-      $('div.solution').hide();
-      $('span.countq').html(Math.floor(question / 2) + 1);
-      $('span.totalq').html(quiz.length / 2);
-      $('.question').show();
-      $('div#quiz-regional input[name=answer]:checked').attr('checked', false);
-      $('div#quiz-meaning input[name=answer]').attr('checked', false);
-      if (q.type == 'meaning') {
-      $('div#quiz-regional iframe').get(0).contentWindow.location.replace('about:blank');
-      $('div#quiz-meaning iframe').get(0).contentWindow.location.replace(q.video);
-      $('div#quiz-meaning div.solution a.linkout').attr('href', q.linkout);
-      var answers = q.incorrect;
-      answers.push(q.correct);
-      $.each(shuffle(answers), function(i, answer) {
-      $('div#quiz-meaning label.answer span').eq(i).html(answer);      
-      });
-      $('div#quiz-meaning').show();
-      $('div#quiz-meaning div.answer').show();
-      scrollTo('div#quiz-meaning');
+        <div id="quiz-regional" class="quiz-block">
+          <div class="col-md-4 region-left">
+            <div id="videocontainer">
+              <div id="player">
+                <iframe id="videoiframe" scrolling="no" allowfullscreen="allowfullscreen" frameborder="0">
+                </iframe>
+              </div>
+              <div id="replay"></div>
+            </div>
+            
 
-      } else {
-      $('div#quiz-meaning iframe').get(0).contentWindow.location.replace('about:blank');
-      $('div#quiz-regional iframe').get(0).contentWindow.location.replace(q.video);
-      $('div#quiz-regional div.solution a.linkout').attr('href', q.linkout);
-      $('div#quiz-regional').show();
-      $('div#quiz-regional div.answer').show();
-      scrollTo('div#quiz-regional');
-      }
-      }
+            <div id="quiz">
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region(s) where you think this sign is used. (You may choose more than one)</p>
+              <form action="">
+                <div class="question">
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Birmingham</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Bristol</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Cardiff</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Glasgow</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Belfast</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Newcastle</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>London</span></label>
+                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Manchester</span></label>
+                </div>
+                
+                <div class="answer">
+                  <input class="action" type="button" value="Answer" onclick="answerRegional();">
+                </div>
+                
+                <div class="solution">
+                  <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
+                  <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
+                  <p class="partial">😐 <b>Partially correct</b> - The correct answer was <span class="was"></span></p>
+                  <p class="bonus">Bonus! Which region is this sign <b>most often</b> used in? <a class="linkout" href="#" target="_blank">Answer</a></p>
+                  <input class="action" type="button" value="Next" onclick="showQuiz();">
+                </div>
+              </form>
+              <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
+            </div>
 
-      function updateScore() {
-      $('span.score').html(score);
-      $('span.total').html(total);
-      }
+          </div>
 
-      function answerMeaning() {
-      score_at_question[question] = score;
-      total_at_question[question] = total;
-      var q = quiz[question++];
-      $('div#quiz-meaning div.answer').hide();
-      $('.question').hide();
-      var theirAnswer = $('div#quiz-meaning input[name=answer]:checked').parent().children('span').html();
-      $('div#quiz-meaning div.solution p.right').hide();
-      $('div#quiz-meaning div.solution p.wrong').hide();
-      total++;
-      if (theirAnswer == q.correct) {
-      score++;
-      $('div#quiz-meaning div.solution p.right').show();
-      } else {
-      $('div#quiz-meaning div.solution p.wrong').show();
-      }
-      updateScore();
-      $('div#quiz-meaning div.solution span.was').html(q.correct);
-      $('div#quiz-meaning div.solution').show();
-      }
+          <div class="col-md-3 region-right">
 
-      function answerRegional() {
-      score_at_question[question] = score;
-      total_at_question[question] = total;
-      var q = quiz[question++];
-      $('div#quiz-regional div.answer').hide();
-      $('.question').hide();
-      var theirAnswer = [];
-      $('div#quiz-regional input[name=answer]:checked').each(function(i, value) {
-      theirAnswer.push($(value).parent().children('span').html());
-      });
-      var correctCount = 0;
-      var incorrectCount = 0;
-      total++;
-      var perAnswerScore = 1.0 / q.correct.length;
-      $.each(theirAnswer, function(i, value) {
-      if ($.inArray(value, q.correct) >= 0) {
-      correctCount++;
-      } else {
-      incorrectCount++;
-      }
-      });
-      
-      $('div#quiz-regional div.solution p.right').hide();
-      $('div#quiz-regional div.solution p.wrong').hide();
-      $('div#quiz-regional div.solution p.partial').hide();
-      if (correctCount == q.correct.length && incorrectCount == 0) {
-      score ++;
-      $('div#quiz-regional div.solution p.right').show();
-      } else if (correctCount > 0) {
-      score += 0.5;
-      $('div#quiz-regional div.solution p.partial').show();
-      } else {
-      $('div#quiz-regional div.solution p.wrong').show();
-      }
-      if (q.correct.length <= 1) {
-      $('p.bonus').hide();
-      } else {
-      $('p.bonus').show();
-      }
-      updateScore();
-      $('div#quiz-regional div.solution span.was').html(toSentence(q.correct));
-      $('div#quiz-regional div.solution').show();
-      }
-    </script>
-    
-  </body>
-</html>
+          </div>
+        </div>
 
+
+
+
+
+        <div id="quiz-total" class="quiz-block">
+          <div class="col-md-4 region-left">
+            <div id="quiz">
+              <p>You scored <span class="percent"></span></p>
+              <p>For more information see <a href="http://bslsignbank.ucl.ac.uk/" target="_blank">BSL Signbank</a></p>
+              <form action="http://bslsignbank.ucl.ac.uk/static/quiz-do-not-share.html"><input class="action" type="submit" value="Start Over"></form>
+            </div>
+
+          </div>
+
+          <div class="col-md-3 region-right">
+
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+</div>
+
+
+
+<script>
+var score = 0.0;
+var total = 0.0;
+var question = 0;
+
+var score_at_question = [];
+var total_at_question = [];
+
+var quiz = [
+{
+type: 'meaning',
+video: '/video/iframe/2893',
+correct: 'brown',
+incorrect: ['Ireland', 'purple', 'Manchester'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/brown-4.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/2893',
+correct: ['Newcastle', 'Bristol', 'Manchester', 'London'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/brown-4.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/3468',
+correct: 'France',
+incorrect: ['China', 'Bristol', 'Glasgow'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/France-5.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/3468',
+correct: ['Glasgow'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/France-5.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/3597',
+correct: 'green',
+incorrect: ['Belfast', 'Ireland', 'Glasgow'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/green-5.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/3597',
+correct: ['Birmingham'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/green-5.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/6151',
+correct: 'Birmingham',
+incorrect: ['yellow', 'Glasgow', 'Italy'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/Birmingham-4.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/6151',
+correct: ['Cardiff', 'Glasgow', 'Belfast', 'London'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/Birmingham-4.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/2879',
+correct: 'Britain',
+incorrect: ['London', 'Bristol', 'grey'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/Britain-1.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/2879',
+correct: ['Birmingham', 'Bristol', 'Cardiff', 'Glasgow', 'Belfast', 'Newcastle', 'London', 'Manchester'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/Britain-1.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/4369',
+correct: 'purple',
+incorrect: ['green', 'India', 'Ireland'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/purple-2.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/4369',
+correct: ['Bristol', 'Belfast', 'London', 'Manchester'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/purple-2.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/3760',
+correct: 'India',
+incorrect: ['yellow', 'China', 'Birmingham'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/India-3.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/3760',
+correct: ['Belfast'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/India-3.html'
+},
+
+{
+type: 'meaning',
+video: '/video/iframe/5132',
+correct: 'yellow',
+incorrect: ['brown', 'America', 'London'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/yellow-3.html'
+},
+{
+type: 'regional',
+video: '/video/iframe/5132',
+correct: ['Newcastle'],
+linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/yellow-3.html'
+}
+];
+
+function scrollTo(elementName) {
+$('html, body').animate({
+scrollTop: $(elementName).offset().top
+}, 100);
+}
+
+function shuffle(array) {
+var currentIndex = array.length, temporaryValue, randomIndex ;
+while (0 !== currentIndex) {
+randomIndex = Math.floor(Math.random() * currentIndex);
+currentIndex -= 1;
+temporaryValue = array[currentIndex];
+array[currentIndex] = array[randomIndex];
+array[randomIndex] = temporaryValue;
+}
+return array;
+}
+
+function toSentence(array) {
+var result = array.slice(0, array.length - 1).join(', ');
+if (array.length > 1) {
+result = result + " and " + array.slice(-1);
+} else {
+result = array[0];
+}
+return result;
+}
+
+function percentageScore() {
+return Math.floor(score / total * 100.0) + "%";
+}
+
+function startQuiz() {
+score = 0;
+total = 0;
+question = 0;
+showQuiz();
+}
+
+function finishQuiz() {
+$('div.quiz-block').hide();
+$('div#quiz-total span.percent').html(percentageScore());
+$('div#quiz-total').show();
+scrollTo('div#wrap');
+}
+
+function showQuiz() {
+updateScore();
+if (question >= quiz.length) {
+finishQuiz();
+return;
+}
+var q = quiz[question];
+$('div.quiz-block').hide();
+$('div.solution').hide();
+$('span.countq').html(Math.floor(question / 2) + 1);
+$('span.totalq').html(quiz.length / 2);
+$('.question').show();
+$('div#quiz-regional input[name=answer]:checked').attr('checked', false);
+$('div#quiz-meaning input[name=answer]').attr('checked', false);
+if (q.type == 'meaning') {
+$('div#quiz-regional iframe').get(0).contentWindow.location.replace('about:blank');
+$('div#quiz-meaning iframe').get(0).contentWindow.location.replace(q.video);
+$('div#quiz-meaning div.solution a.linkout').attr('href', q.linkout);
+var answers = q.incorrect;
+answers.push(q.correct);
+$.each(shuffle(answers), function(i, answer) {
+$('div#quiz-meaning label.answer span').eq(i).html(answer);      
+});
+$('div#quiz-meaning').show();
+$('div#quiz-meaning div.answer').show();
+scrollTo('div#quiz-meaning');
+
+} else {
+$('div#quiz-meaning iframe').get(0).contentWindow.location.replace('about:blank');
+$('div#quiz-regional iframe').get(0).contentWindow.location.replace(q.video);
+$('div#quiz-regional div.solution a.linkout').attr('href', q.linkout);
+$('div#quiz-regional').show();
+$('div#quiz-regional div.answer').show();
+scrollTo('div#quiz-regional');
+}
+}
+
+function updateScore() {
+$('span.score').html(score);
+$('span.total').html(total);
+}
+
+function answerMeaning() {
+score_at_question[question] = score;
+total_at_question[question] = total;
+var q = quiz[question++];
+$('div#quiz-meaning div.answer').hide();
+$('.question').hide();
+var theirAnswer = $('div#quiz-meaning input[name=answer]:checked').parent().children('span').html();
+$('div#quiz-meaning div.solution p.right').hide();
+$('div#quiz-meaning div.solution p.wrong').hide();
+total++;
+if (theirAnswer == q.correct) {
+score++;
+$('div#quiz-meaning div.solution p.right').show();
+} else {
+$('div#quiz-meaning div.solution p.wrong').show();
+}
+updateScore();
+$('div#quiz-meaning div.solution span.was').html(q.correct);
+$('div#quiz-meaning div.solution').show();
+}
+
+function answerRegional() {
+score_at_question[question] = score;
+total_at_question[question] = total;
+var q = quiz[question++];
+$('div#quiz-regional div.answer').hide();
+$('.question').hide();
+var theirAnswer = [];
+$('div#quiz-regional input[name=answer]:checked').each(function(i, value) {
+theirAnswer.push($(value).parent().children('span').html());
+});
+var correctCount = 0;
+var incorrectCount = 0;
+total++;
+var perAnswerScore = 1.0 / q.correct.length;
+$.each(theirAnswer, function(i, value) {
+if ($.inArray(value, q.correct) >= 0) {
+correctCount++;
+} else {
+incorrectCount++;
+}
+});
+
+$('div#quiz-regional div.solution p.right').hide();
+$('div#quiz-regional div.solution p.wrong').hide();
+$('div#quiz-regional div.solution p.partial').hide();
+if (correctCount == q.correct.length && incorrectCount == 0) {
+score ++;
+$('div#quiz-regional div.solution p.right').show();
+} else if (correctCount > 0) {
+score += 0.5;
+$('div#quiz-regional div.solution p.partial').show();
+} else {
+$('div#quiz-regional div.solution p.wrong').show();
+}
+if (q.correct.length <= 1) {
+$('p.bonus').hide();
+} else {
+$('p.bonus').show();
+}
+updateScore();
+$('div#quiz-regional div.solution span.was').html(toSentence(q.correct));
+$('div#quiz-regional div.solution').show();
+}
+</script>
+
+{% endblock %}

@@ -186,7 +186,8 @@ def quiz(request):
     """Quiz on meanings and regions, added for the BSL anniversary"""
 
     return render_to_response("dictionary/quiz.html",
-                              {'bsl': True})
+                              {'bsl': True},
+                              context_instance=RequestContext(request))
 
 @login_required_config
 def gloss(request, idgloss):
