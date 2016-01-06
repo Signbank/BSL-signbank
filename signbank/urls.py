@@ -26,6 +26,9 @@ urlpatterns = patterns('',
     url(r'^attachments/', include('signbank.attachments.urls')),
     url(r'^video/', include('signbank.video.urls')),
 
+    # Quiz view for the BSL anniversary
+    url(r'^quiz/$', 'signbank.dictionary.views.quiz', name='quiz_view'),
+
     #(r'^register.html', 'signbank.views.index'),
     url(r'^logout.html', 'django.contrib.auth.views.logout',
                        {'next_page': "/"}, "logout"),

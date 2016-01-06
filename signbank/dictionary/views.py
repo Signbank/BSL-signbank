@@ -182,6 +182,12 @@ def regional(request, keyword, n):
     
     return word_and_regional_view(request, keyword, n, "regional")
 
+def quiz(request):
+    """Quiz on meanings and regions, added for the BSL anniversary"""
+
+    return render_to_response("dictionary/quiz.html",
+                              {'bsl': True})
+
 @login_required_config
 def gloss(request, idgloss):
     """View of a gloss - mimics the word view, really for admin use

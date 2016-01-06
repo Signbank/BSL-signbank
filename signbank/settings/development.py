@@ -1,6 +1,18 @@
 from signbank.settings.base import *
 
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bsl_signbank',
+        'USER': 'bsl',
+        'PASSWORD': 'pigeon59',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'bootstrap_templates'),
 )
@@ -8,8 +20,8 @@ TEMPLATE_DIRS = (
 # show emails on the console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-#PRIMARY_CSS = "bootstrap_css/bsl.css"
-PRIMARY_CSS = "bootstrap_css/auslan.css"
+PRIMARY_CSS = "bootstrap_css/bsl.css"
+#PRIMARY_CSS = "bootstrap_css/auslan.css"
 
 
 # defines the aspect ratio for videos

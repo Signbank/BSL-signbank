@@ -68,4 +68,4 @@ def page(request, url='/'):
     response = HttpResponse(t.render(c))
     return response
 
-    
+ 
