@@ -16,7 +16,7 @@
             <p>First you’ll guess the meaning of a sign, then we’ll ask you to guess where the sign is used in the UK. Answers are based on information from BSL SignBank, which is based on the “What’s your sign?” task from the BSL Corpus, in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. After you guess which region(s) the signs are linked to, next to each city name, you’ll see the number of people in each city who gave that sign as their preferred sign for a particular concept.</p>
 
             <form action="">
-              <input class="action" type="button" value="Start Quiz" onclick="showQuiz();">
+              <input class="action" type="button" value="Start Quiz" onclick="startQuiz();">
             </form>
           </div>
         </div>
@@ -131,8 +131,8 @@
           <div class="col-md-4 region-left">
             <div id="quiz">
               <p>You scored <span class="percent"></span></p>
-              <p>For more information see <a href="http://bslsignbank.ucl.ac.uk/" target="_blank">BSL Signbank</a></p>
-              <form action="http://bslsignbank.ucl.ac.uk/static/quiz-do-not-share.html"><input class="action" type="submit" value="Start Over"></form>
+              <p>For more information see <a href="/" target="_blank">BSL Signbank</a></p>
+              <form action="/quiz/"><input class="action" type="submit" value="Start Over"></form>
             </div>
 
           </div>
@@ -153,7 +153,9 @@
 <script>
 var score = 0.0;
 var total = 0.0;
-var question = 0;
+var questionIndex = 0;
+var QuestionCount = 5; // How many questions should we ask?
+var questionsToAsk = []; // Will hold the random list of questions to ask
 
 var score_at_question = [];
 var total_at_question = [];
@@ -307,7 +309,17 @@ return Math.floor(score / total * 100.0) + "%";
 function startQuiz() {
 score = 0;
 total = 0;
-question = 0;
+questionIndex = 0;
+questionsToAsk = [];
+for (var i=0; i < QuestionCount; i++) {
+  var qNum;
+  do {
+    qNum = Math.floor(Math.random() * quiz.length / 2) * 2;
+  } while(questionsToAsk.indexOf(qNum) != -1);
+  questionsToAsk.push(qNum);
+  questionsToAsk.push(qNum + 1);
+}
+console.log(questionsToAsk);
 showQuiz();
 }
 
@@ -320,15 +332,15 @@ scrollTo('div#wrap');
 
 function showQuiz() {
 updateScore();
-if (question >= quiz.length) {
+if (questionIndex >= QuestionCount * 2) {
 finishQuiz();
 return;
 }
-var q = quiz[question];
+var q = quiz[questionsToAsk[questionIndex]];
 $('div.quiz-block').hide();
 $('div.solution').hide();
-$('span.countq').html(Math.floor(question / 2) + 1);
-$('span.totalq').html(quiz.length / 2);
+$('span.countq').html(Math.floor(questionIndex / 2) + 1);
+$('span.totalq').html(QuestionCount);
 $('.question').show();
 $('div#quiz-regional input[name=answer]:checked').attr('checked', false);
 $('div#quiz-meaning input[name=answer]').attr('checked', false);
@@ -361,9 +373,9 @@ $('span.total').html(total);
 }
 
 function answerMeaning() {
-score_at_question[question] = score;
-total_at_question[question] = total;
-var q = quiz[question++];
+score_at_question[questionIndex] = score;
+total_at_question[questionIndex] = total;
+var q = quiz[questionsToAsk[questionIndex++]];
 $('div#quiz-meaning div.answer').hide();
 $('.question').hide();
 var theirAnswer = $('div#quiz-meaning input[name=answer]:checked').parent().children('span').html();
@@ -382,9 +394,9 @@ $('div#quiz-meaning div.solution').show();
 }
 
 function answerRegional() {
-score_at_question[question] = score;
-total_at_question[question] = total;
-var q = quiz[question++];
+score_at_question[questionIndex] = score;
+total_at_question[questionIndex] = total;
+var q = quiz[questionsToAsk[questionIndex++]];
 $('div#quiz-regional div.answer').hide();
 $('.question').hide();
 var theirAnswer = [];
