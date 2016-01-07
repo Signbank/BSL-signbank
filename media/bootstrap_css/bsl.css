@@ -230,6 +230,8 @@ body, html {
 
 div.view-quiz { margin-top: 1em; }
 div.quiz-block, div.solution { display: none; }
+div.quiz-share { text-align: center; margin: 2em auto; }
+div.quiz-share a { margin: 0 1em; }
 div#quiz-intro { display: block; }
 div#quiz-intro h1 { text-align: center; }
 div#quiz-intro h2 { text-align: center; }
