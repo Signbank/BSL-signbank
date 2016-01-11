@@ -106,17 +106,52 @@
                 </div>
                 
                 <div class="solution">
+
                   <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
                   <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
                   <p class="partial">😐 <b>Partially correct</b> - The correct answer was <span class="was"></span></p>
-                  <p class="bonus">Bonus! Which region is this sign <b>most often</b> used in? <a class="linkout" href="#" target="_blank">Answer</a></p>
+
                   <input class="action" type="button" value="Next" onclick="showQuiz();">
+
                 </div>
               </form>
               <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
             </div>
 
           </div>
+
+          <div id="definitionblock">
+            <div class="col-md-9">
+This page documents the variation found within the signs for country signs from the “What’s your sign?” task from the BSL Corpus in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. Orange dots on the map indicate country signs that are traditionally linked to that region (typically those used by the oldest signers). Blue dots on the map indicate country signs that are not traditionally linked to that region but are reported to be in use. Next to each city name under Sign Distribution, we show the number of people in each city who gave that sign as their preferred sign for that country. Because we only asked approximately 30 people in each region what sign they preferred to use for a specific concept, all the variants that are actually in use within each region may not have been recorded. A few of the 249 responses have been excluded (and thus frequencies don’t always add up to 249) because they were produced by a small number of signers and need to be verified.
+            </div>
+            <div class='col-md-3 region-right'>
+                <div id="states">
+                    <div>
+                        <img src="{{ STATIC_URL }}images/maps/BSL.png" alt="Region">
+                        <img src="{{ STATIC_URL }}images/maps/BSL/Belfast.png" alt="Region">
+                        <img src="{{ STATIC_URL }}images/maps/BSL/Belfast-traditional.png" alt="Region">
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Sign Distribution</h4>
+                    <table class="table table-condensed">
+                      <tr>
+                        <td>
+                          Belfast
+                        </td>
+                        <td>
+                          traditional,
+                        </td>
+                        <td>
+                            42
+                        </td>
+                      </tr>
+                    </table>
+                </div>
+            </div>
+          </div>
+
 
           <div class="col-md-3 region-right">
 
