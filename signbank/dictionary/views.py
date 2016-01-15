@@ -206,7 +206,7 @@ def quiz(request):
         'video_num': gloss.pk,
         'keyword': gloss.translation_set.first().translation.text,
         'link': "/dictionary/gloss/" + idgloss + ".html",
-        'regions_and_frequencies': [[str(x.dialect.description), str(x.frequency), x.traditional] for x in gloss.region_set.all()],
+        'regions_and_frequencies': [[str(x.dialect.description), str(x.frequency), str(x.traditional).lower()] for x in gloss.region_set.all()],
         'region_list': [[str(x.dialect.description)] for x in gloss.region_set.all()],
         'region_images': map_image_for_regions(gloss.region_set),
         'wrong_answers': wrong_answers,

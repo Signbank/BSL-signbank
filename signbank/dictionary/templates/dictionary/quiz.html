@@ -120,22 +120,36 @@
 
           </div>
 
-          <div id="definitionblock">
+          <div id="regionblock">
             <div class="col-md-9">
 This page documents the variation found within the signs for country signs from the “What’s your sign?” task from the BSL Corpus in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. Orange dots on the map indicate country signs that are traditionally linked to that region (typically those used by the oldest signers). Blue dots on the map indicate country signs that are not traditionally linked to that region but are reported to be in use. Next to each city name under Sign Distribution, we show the number of people in each city who gave that sign as their preferred sign for that country. Because we only asked approximately 30 people in each region what sign they preferred to use for a specific concept, all the variants that are actually in use within each region may not have been recorded. A few of the 249 responses have been excluded (and thus frequencies don’t always add up to 249) because they were produced by a small number of signers and need to be verified.
             </div>
             <div class='col-md-3 region-right'>
                 <div id="states">
                     <div>
-                        <img src="{{ STATIC_URL }}images/maps/BSL.png" alt="Region">
-                        <img src="{{ STATIC_URL }}images/maps/BSL/Belfast.png" alt="Region">
-                        <img src="{{ STATIC_URL }}images/maps/BSL/Belfast-traditional.png" alt="Region">
+<img src="{{ STATIC_URL }}images/maps/BSL.png" alt="Region" id="map-BSL">
+<img src="{{ STATIC_URL }}images/maps/BSL/Birmingham.png" alt="Birmingham" id="map-Birmingham">
+<img src="{{ STATIC_URL }}images/maps/BSL/Birmingham-traditional.png" alt="Birmingham, traditional" id="map-Birmingham-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/Bristol.png" alt="Bristol" id="map-Bristol">
+<img src="{{ STATIC_URL }}images/maps/BSL/Bristol-traditional.png" alt="Bristol, traditional" id="map-Bristol-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/Cardiff.png" alt="Cardiff" id="map-Cardiff">
+<img src="{{ STATIC_URL }}images/maps/BSL/Cardiff-traditional.png" alt="Cardiff, traditional" id="map-Cardiff-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/Glasgow.png" alt="Glasgow" id="map-Glasgow">
+<img src="{{ STATIC_URL }}images/maps/BSL/Glasgow-traditional.png" alt="Glasgow, traditional" id="map-Glasgow-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/Belfast.png" alt="Belfast" id="map-Belfast">
+<img src="{{ STATIC_URL }}images/maps/BSL/Belfast-traditional.png" alt="Belfast, traditional" id="map-Belfast-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/Newcastle.png" alt="Newcastle" id="map-Newcastle">
+<img src="{{ STATIC_URL }}images/maps/BSL/Newcastle-traditional.png" alt="Newcastle, traditional" id="map-Newcastle-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/London.png" alt="London" id="map-London">
+<img src="{{ STATIC_URL }}images/maps/BSL/London-traditional.png" alt="London, traditional" id="map-London-traditional">
+<img src="{{ STATIC_URL }}images/maps/BSL/Manchester.png" alt="Manchester" id="map-Manchester">
+<img src="{{ STATIC_URL }}images/maps/BSL/Manchester-traditional.png" alt="Manchester, traditional" id="map-Manchester-traditional">
                     </div>
                 </div>
 
                 <div>
                     <h4>Sign Distribution</h4>
-                    <table class="table table-condensed">
+                    <table class="table table-condensed" id="regiontable">
                       <tr>
                         <td>
                           Belfast
@@ -215,7 +229,8 @@ linkout: '{{q.link}}'
 type: 'regional',
 video: '/video/iframe/{{q.video_num}}',
 correct: {{q.region_list|safe}},
-linkout: '{{q.link}}'
+linkout: '{{q.link}}',
+regions: {{q.regions_and_frequencies|safe}}
 },
 
 {% endfor %}
@@ -270,7 +285,6 @@ for (var i=0; i < QuestionCount; i++) {
   questionsToAsk.push(qNum);
   questionsToAsk.push(qNum + 1);
 }
-console.log(questionsToAsk);
 showQuiz();
 }
 
@@ -309,6 +323,7 @@ $('div#quiz-meaning div.answer').show();
 scrollTo('div#quiz-meaning');
 
 } else {
+$('div#regionblock').hide();
 $('div#quiz-meaning iframe').get(0).contentWindow.location.replace('about:blank');
 $('div#quiz-regional iframe').get(0).contentWindow.location.replace(q.video);
 $('div#quiz-regional div.solution a.linkout').attr('href', q.linkout);
@@ -386,6 +401,26 @@ $('p.bonus').show();
 updateScore();
 $('div#quiz-regional div.solution span.was').html(toSentence(q.correct));
 $('div#quiz-regional div.solution').show();
+
+$('div#regionblock img').hide();
+$('div#regionblock img#map-BSL').show();
+$('div#regionblock table#regiontable').empty();
+for (var i = 0; i < q.regions.length; i++) {
+  var r = q.regions[i];
+  var dialect = r[0];
+  var frequency = r[1];
+  var traditional = r[2] == 'true';
+  var row = "<tr><td>" + dialect + "</td><td>";
+  if (traditional) {
+    row = row + "traditional, ";
+    $('img#map-' + dialect + '-traditional').show();
+  } else {
+    $('img#map-' + dialect).show();
+  }
+  row = row + "</td><td>" + frequency + "</td>";
+  $('div#regionblock table#regiontable').append(row);
+}
+$('div#regionblock').show();
 }
 </script>
 
