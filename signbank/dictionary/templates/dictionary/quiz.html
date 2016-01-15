@@ -202,118 +202,28 @@ var score_at_question = [];
 var total_at_question = [];
 
 var quiz = [
-{
-type: 'meaning',
-video: '/video/iframe/2893',
-correct: 'brown',
-incorrect: ['Ireland', 'purple', 'Manchester'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/brown-4.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/2893',
-correct: ['Newcastle', 'Bristol', 'Manchester', 'London'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/brown-4.html'
-},
+{% for q in quiz %}
 
 {
 type: 'meaning',
-video: '/video/iframe/3468',
-correct: 'France',
-incorrect: ['China', 'Bristol', 'Glasgow'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/France-5.html'
+video: '/video/iframe/{{q.video_num}}',
+correct: '{{q.keyword}}',
+incorrect: {{q.wrong_answers|safe}},
+linkout: '{{q.link}}'
 },
 {
 type: 'regional',
-video: '/video/iframe/3468',
-correct: ['Glasgow'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/France-5.html'
+video: '/video/iframe/{{q.video_num}}',
+correct: {{q.region_list|safe}},
+linkout: '{{q.link}}'
 },
 
-{
-type: 'meaning',
-video: '/video/iframe/3597',
-correct: 'green',
-incorrect: ['Belfast', 'Ireland', 'Glasgow'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/green-5.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/3597',
-correct: ['Birmingham'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/green-5.html'
-},
+{% endfor %}
 
-{
-type: 'meaning',
-video: '/video/iframe/6151',
-correct: 'Birmingham',
-incorrect: ['yellow', 'Glasgow', 'Italy'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/Birmingham-4.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/6151',
-correct: ['Cardiff', 'Glasgow', 'Belfast', 'London'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/Birmingham-4.html'
-},
+{}
 
-{
-type: 'meaning',
-video: '/video/iframe/2879',
-correct: 'Britain',
-incorrect: ['London', 'Bristol', 'grey'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/Britain-1.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/2879',
-correct: ['Birmingham', 'Bristol', 'Cardiff', 'Glasgow', 'Belfast', 'Newcastle', 'London', 'Manchester'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/Britain-1.html'
-},
-
-{
-type: 'meaning',
-video: '/video/iframe/4369',
-correct: 'purple',
-incorrect: ['green', 'India', 'Ireland'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/purple-2.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/4369',
-correct: ['Bristol', 'Belfast', 'London', 'Manchester'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/purple-2.html'
-},
-
-{
-type: 'meaning',
-video: '/video/iframe/3760',
-correct: 'India',
-incorrect: ['yellow', 'China', 'Birmingham'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/India-3.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/3760',
-correct: ['Belfast'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/India-3.html'
-},
-
-{
-type: 'meaning',
-video: '/video/iframe/5132',
-correct: 'yellow',
-incorrect: ['brown', 'America', 'London'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/words/yellow-3.html'
-},
-{
-type: 'regional',
-video: '/video/iframe/5132',
-correct: ['Newcastle'],
-linkout: 'http://bslsignbank.ucl.ac.uk/dictionary/regional/yellow-3.html'
-}
 ];
+quiz.pop(); // Just avoiding last comma failing in IE
 
 function scrollTo(elementName) {
 $('html, body').animate({

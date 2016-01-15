@@ -185,8 +185,38 @@ def regional(request, keyword, n):
 def quiz(request):
     """Quiz on meanings and regions, added for the BSL anniversary"""
 
+    quiz_values = [
+      ['BROWN03', "['Ireland', 'purple', 'Manchester']"],
+      ['FRANCE05', "['China', 'Bristol', 'Glasgow']"],
+      ['GREEN03', "['Belfast', 'Ireland', 'Glasgow']"],
+      ['BIRMINGHAM03', "['yellow', 'Glasgow', 'Italy']"],
+      ['BRITAIN', "['Ireland', 'purple', 'Manchester']"],
+      ['PURPLE02', "['Ireland', 'purple', 'Manchester']"],
+      ['INDIA02', "['Ireland', 'purple', 'Manchester']"],
+      ['YELLOW03', "['Ireland', 'purple', 'Manchester']"],
+    ]
+
+    quiz = []
+    for q in quiz_values:
+      idgloss = q[0]
+      wrong_answers = q[1]
+      gloss = Gloss.objects.filter(idgloss=idgloss)[0]
+
+      quiz.append({
+        'video_num': gloss.pk,
+        'keyword': gloss.translation_set.first().translation.text,
+        'link': "/dictionary/gloss/" + idgloss + ".html",
+        'regions_and_frequencies': [[str(x.dialect.description), str(x.frequency), x.traditional] for x in gloss.region_set.all()],
+        'region_list': [[str(x.dialect.description)] for x in gloss.region_set.all()],
+        'region_images': map_image_for_regions(gloss.region_set),
+        'wrong_answers': wrong_answers,
+      })
+
     return render_to_response("dictionary/quiz.html",
-                              {'bsl': True},
+                              {
+                                'bsl': True,
+                                'quiz': quiz,
+                              },
                               context_instance=RequestContext(request))
 
 @login_required_config
