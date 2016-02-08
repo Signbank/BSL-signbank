@@ -40,7 +40,7 @@ body {
 
 /* Regional view overrides */
 #publicsign.view-regional #signinfo {
-  width: auto;
+  max-width: 100%;
 }
 
 #publicsign.view-regional #definitionblock .region-left {

@@ -146,6 +146,13 @@ body, html {
    border-radius: 10px 10px 10px 10px;
 }
 
+@media  (max-width: 980px) {
+
+    #publicsign.view-regional #definitionblock .region-right {
+      width: 100%;
+    }
+}
+
 @media  (max-width: 768px) {
 
     #publicsign #videocontainer {
