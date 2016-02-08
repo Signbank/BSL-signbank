@@ -174,7 +174,7 @@ def word_and_regional_view(request, keyword, n, viewname):
 def word(request, keyword, n):
     """View of a single keyword that may have more than one sign"""
     
-    return word_and_regiquonal_view(request, keyword, n, "words")
+    return word_and_regional_view(request, keyword, n, "words")
 
 @login_required_config
 def regional(request, keyword, n):
