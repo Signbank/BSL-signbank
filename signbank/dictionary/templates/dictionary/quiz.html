@@ -9,11 +9,11 @@
       <div id="definitionblock">
         <div id="quiz-intro" class="quiz-block">
           <div class="col-md-10 col-md-offset-1">
-            <h1>BSL Signbank Quiz</h1>
+            <h3>BSL Signbank Quiz</h3>
 
-            <h2>Test your knowledge of BSL signs for colours, countries and UK place names from BSL SignBank!</h2>
+            <h4>Test your knowledge of BSL signs for colours, countries and UK place names!</h4>
 
-            <p>First you’ll guess the meaning of a sign, then we’ll ask you to guess where the sign is used in the UK. Answers are based on information from BSL SignBank, which is based on the “What’s your sign?” task from the BSL Corpus, in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. After you guess which region(s) the signs are linked to, next to each city name, you’ll see the number of people in each city who gave that sign as their preferred sign for a particular concept.</p>
+            <p>First you’ll guess the meaning of a sign, then we’ll ask you to guess where the sign is used in the UK. Answers are based on information from the “What’s your sign?” task from the <a href="http://www.bslcorpusproject.org/">BSL Corpus</a>, in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. After you guess which region(s) the signs are linked to, next to each city name, you’ll see the number of people in each city who gave that sign as their preferred sign for a particular concept.</p>
 
             <form action="">
               <input class="action" type="button" value="Start Quiz" onclick="startQuiz();">
@@ -88,7 +88,7 @@
             
 
             <div id="quiz">
-              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region(s) where you think this sign is used. (You may choose more than one)</p>
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is most often used.</p>
               <form action="">
                 <div class="question">
                 <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Birmingham</span></label>
@@ -122,7 +122,7 @@
 
           <div id="regionblock">
             <div class="col-md-9">
-This page documents the variation found within the signs for country signs from the “What’s your sign?” task from the BSL Corpus in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for various concepts. Orange dots on the map indicate country signs that are traditionally linked to that region (typically those used by the oldest signers). Blue dots on the map indicate country signs that are not traditionally linked to that region but are reported to be in use. Next to each city name under Sign Distribution, we show the number of people in each city who gave that sign as their preferred sign for that country. Because we only asked approximately 30 people in each region what sign they preferred to use for a specific concept, all the variants that are actually in use within each region may not have been recorded. A few of the 249 responses have been excluded (and thus frequencies don’t always add up to 249) because they were produced by a small number of signers and need to be verified.
+This map shows the variation found for this concept from the “What’s your sign?” task from the <a href="http://www.bslcorpusproject.org/">BSL Corpus</a> in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for colours, countries, numbers and UK placenames. Orange dots on the map indicate signs that are traditionally linked to that region (typically those used by the oldest signers). Blue dots on the map indicate signs that are not traditionally linked to that region but are reported to be in use. Next to each city name under Sign Distribution, we show the number of people in each city who gave that sign as their preferred sign for that concept. Because we only asked approximately 30 people in each region what sign they preferred to use for a specific concept, all the variants that are actually in use within each region may not have been recorded. A few responses have been excluded (and thus frequencies don’t always add up to 30, 32 or 37) because they were produced by a small number of signers and need to be verified.
             </div>
             <div class='col-md-3 region-right'>
                 <div id="states">
@@ -182,12 +182,12 @@ This page documents the variation found within the signs for country signs from 
               <p>You scored <span class="percent"></span></p>
 
               <div class="quiz-share">
-                <a href="http://www.facebook.com/sharer.php?u={{ request.build_absolute_uri|urlencode }}&t={{ "Try the BSL signbank quiz"|urlencode }}" class="btn btn-primary"><img src="{{ STATIC_URL }}images/social/facebook.png" alt="Twitter"> Share on Facebook</a>
-                <a href="http://twitter.com/share?text={{ "Try the #bslsignbank quiz"|urlencode }}&url={{ request.build_absolute_uri|urlencode }}" class="btn btn-primary"><img src="{{ STATIC_URL }}images/social/twitter.png" alt="Twitter"> Share on Twitter</a>
+                <a href="http://www.facebook.com/sharer.php?u={{ request.build_absolute_uri|urlencode }}&t={{ "I scored PERCENTSCORE25 in the BSL Signbank Quiz! Have a go!"|urlencode }}" class="btn btn-primary btn-facebook"><img src="{{ STATIC_URL }}images/social/facebook.png" alt="Twitter"> Share on Facebook</a>
+                <a href="http://twitter.com/share?text={{ "I scored PERCENTSCORE25 in the #BSLSignbank Quiz! Have a go!"|urlencode }}&url={{ request.build_absolute_uri|urlencode }}" class="btn btn-primary btn-twitter"><img src="{{ STATIC_URL }}images/social/twitter.png" alt="Twitter"> Share on Twitter</a>
               </div>
 
               <p>For more information see <a href="/" target="_blank">BSL Signbank</a></p>
-              <form action="/quiz/"><input class="action" type="submit" value="Start Over"></form>
+              <form action="/quiz/"><input class="action" type="submit" value="Play Again"></form>
             </div>
 
           </div>
@@ -209,7 +209,7 @@ This page documents the variation found within the signs for country signs from 
 var score = 0.0;
 var total = 0.0;
 var questionIndex = 0;
-var QuestionCount = 5; // How many questions should we ask?
+var QuestionCount = 1; // How many questions should we ask?
 var questionsToAsk = []; // Will hold the random list of questions to ask
 
 var score_at_question = [];
@@ -291,6 +291,8 @@ showQuiz();
 function finishQuiz() {
 $('div.quiz-block').hide();
 $('div#quiz-total span.percent').html(percentageScore());
+$('a.btn-twitter').attr('href', $('a.btn-twitter').attr('href').replace('PERCENTSCORE', percentageScore()));
+$('a.btn-facebook').attr('href', $('a.btn-twitter').attr('href').replace('PERCENTSCORE', percentageScore()));
 $('div#quiz-total').show();
 scrollTo('div#wrap');
 }
