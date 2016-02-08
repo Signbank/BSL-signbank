@@ -174,7 +174,7 @@ def word_and_regional_view(request, keyword, n, viewname):
 def word(request, keyword, n):
     """View of a single keyword that may have more than one sign"""
     
-    return word_and_regional_view(request, keyword, n, "words")
+    return word_and_regiquonal_view(request, keyword, n, "words")
 
 @login_required_config
 def regional(request, keyword, n):
@@ -188,12 +188,12 @@ def quiz(request):
     quiz_values = [
       ['BROWN03', "['Ireland', 'purple', 'Manchester']"],
       ['FRANCE05', "['China', 'Bristol', 'Glasgow']"],
-      ['GREEN03', "['Belfast', 'Ireland', 'Glasgow']"],
-      ['BIRMINGHAM03', "['yellow', 'Glasgow', 'Italy']"],
-      ['BRITAIN', "['Ireland', 'purple', 'Manchester']"],
-      ['PURPLE02', "['Ireland', 'purple', 'Manchester']"],
-      ['INDIA02', "['Ireland', 'purple', 'Manchester']"],
-      ['YELLOW03', "['Ireland', 'purple', 'Manchester']"],
+      ['GREEN05', "['Belfast', 'Ireland', 'Glasgow']"],
+      ['ITALY', "['yellow', 'Glasgow', 'grey']"],
+      ['BRITAIN', "['London', 'Bristol', 'grey']"],
+      ['PURPLE03', "['green', 'India', 'Germany']"],
+      ['BRISTOL', "['Cardiff', 'purple', 'France']"],
+      ['YELLOW03', "['brown', 'American', 'London']"],
     ]
 
     quiz = []

@@ -91,14 +91,14 @@
               <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is most often used.</p>
               <form action="">
                 <div class="question">
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Birmingham</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Bristol</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Cardiff</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Glasgow</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Belfast</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Newcastle</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>London</span></label>
-                <label><input class="answer" type="checkbox" name="answer" value="0"> <span>Manchester</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Birmingham</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Bristol</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Cardiff</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Glasgow</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Belfast</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Newcastle</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>London</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Manchester</span></label>
                 </div>
                 
                 <div class="answer">
@@ -109,7 +109,6 @@
 
                   <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
                   <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
-                  <p class="partial">😐 <b>Partially correct</b> - The correct answer was <span class="was"></span></p>
 
                   <input class="action" type="button" value="Next" onclick="showQuiz();">
 
@@ -385,13 +384,9 @@ incorrectCount++;
 
 $('div#quiz-regional div.solution p.right').hide();
 $('div#quiz-regional div.solution p.wrong').hide();
-$('div#quiz-regional div.solution p.partial').hide();
 if (correctCount == q.correct.length && incorrectCount == 0) {
 score ++;
 $('div#quiz-regional div.solution p.right').show();
-} else if (correctCount > 0) {
-score += 0.5;
-$('div#quiz-regional div.solution p.partial').show();
 } else {
 $('div#quiz-regional div.solution p.wrong').show();
 }
