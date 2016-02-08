@@ -186,20 +186,21 @@ def quiz(request):
     """Quiz on meanings and regions, added for the BSL anniversary"""
 
     quiz_values = [
-      ['BROWN03', "['Ireland', 'purple', 'Manchester']"],
-      ['FRANCE05', "['China', 'Bristol', 'Glasgow']"],
-      ['GREEN05', "['Belfast', 'Ireland', 'Glasgow']"],
-      ['ITALY', "['yellow', 'Glasgow', 'grey']"],
-      ['BRITAIN', "['London', 'Bristol', 'grey']"],
-      ['PURPLE03', "['green', 'India', 'Germany']"],
-      ['BRISTOL', "['Cardiff', 'purple', 'France']"],
-      ['YELLOW03', "['brown', 'American', 'London']"],
+      ['BROWN03',   "['Ireland', 'purple', 'Manchester']", 'London'],
+      ['FRANCE05',  "['China', 'Bristol', 'Glasgow']",     'Glasgow'],
+      ['GREEN05',   "['Belfast', 'Ireland', 'Glasgow']",   'Birmingham'],
+      ['ITALY',     "['yellow', 'Glasgow', 'grey']",       'Cardiff'],
+      ['BRITAIN',   "['London', 'Bristol', 'grey']",       'Glasgow'],
+      ['PURPLE03',  "['green', 'India', 'Germany']",       'Bristol'],
+      ['BRISTOL',   "['Cardiff', 'purple', 'France']",     'Manchester'],
+      ['YELLOW03',  "['brown', 'American', 'London']",     'Newcastle'],
     ]
 
     quiz = []
     for q in quiz_values:
       idgloss = q[0]
       wrong_answers = q[1]
+      top_region = q[2]
       gloss = Gloss.objects.filter(idgloss=idgloss)[0]
 
       quiz.append({
@@ -210,6 +211,7 @@ def quiz(request):
         'region_list': [[str(x.dialect.description)] for x in gloss.region_set.all()],
         'region_images': map_image_for_regions(gloss.region_set),
         'wrong_answers': wrong_answers,
+        'top_region': top_region,
       })
 
     return render_to_response("dictionary/quiz.html",

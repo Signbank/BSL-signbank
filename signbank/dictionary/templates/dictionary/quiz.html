@@ -88,7 +88,7 @@
             
 
             <div id="quiz">
-              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is most often used.</p>
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is <span class="mostoften">most often</span> used.</p>
               <form action="">
                 <div class="question">
                 <label><input class="answer" type="radio" name="answer" value="0"> <span>Birmingham</span></label>
@@ -109,6 +109,7 @@
 
                   <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
                   <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
+                  <p class="used">Did you know? This sign is used in <span class="usedin"></span>.</p>
 
                   <input class="action" type="button" value="Next" onclick="showQuiz();">
 
@@ -208,7 +209,7 @@ This map shows the variation found for this concept from the “What’s your si
 var score = 0.0;
 var total = 0.0;
 var questionIndex = 0;
-var QuestionCount = 1; // How many questions should we ask?
+var QuestionCount = 5; // How many questions should we ask?
 var questionsToAsk = []; // Will hold the random list of questions to ask
 
 var score_at_question = [];
@@ -228,6 +229,7 @@ linkout: '{{q.link}}'
 type: 'regional',
 video: '/video/iframe/{{q.video_num}}',
 correct: {{q.region_list|safe}},
+top: '{{q.top_region}}',
 linkout: '{{q.link}}',
 regions: {{q.regions_and_frequencies|safe}}
 },
@@ -325,6 +327,11 @@ scrollTo('div#quiz-meaning');
 
 } else {
 $('div#regionblock').hide();
+if (q.correct.length <= 1) {
+$('.mostoften').hide();
+} else {
+$('.mostoften').show();
+}
 $('div#quiz-meaning iframe').get(0).contentWindow.location.replace('about:blank');
 $('div#quiz-regional iframe').get(0).contentWindow.location.replace(q.video);
 $('div#quiz-regional div.solution a.linkout').attr('href', q.linkout);
@@ -358,6 +365,7 @@ $('div#quiz-meaning div.solution p.wrong').show();
 updateScore();
 $('div#quiz-meaning div.solution span.was').html(q.correct);
 $('div#quiz-meaning div.solution').show();
+scrollTo('div#quiz-meaning');
 }
 
 function answerRegional() {
@@ -366,37 +374,24 @@ total_at_question[questionIndex] = total;
 var q = quiz[questionsToAsk[questionIndex++]];
 $('div#quiz-regional div.answer').hide();
 $('.question').hide();
-var theirAnswer = [];
-$('div#quiz-regional input[name=answer]:checked').each(function(i, value) {
-theirAnswer.push($(value).parent().children('span').html());
-});
-var correctCount = 0;
-var incorrectCount = 0;
-total++;
-var perAnswerScore = 1.0 / q.correct.length;
-$.each(theirAnswer, function(i, value) {
-if ($.inArray(value, q.correct) >= 0) {
-correctCount++;
-} else {
-incorrectCount++;
-}
-});
-
+var theirAnswer = $('div#quiz-regional input[name=answer]:checked').parent().children('span').html();
 $('div#quiz-regional div.solution p.right').hide();
 $('div#quiz-regional div.solution p.wrong').hide();
-if (correctCount == q.correct.length && incorrectCount == 0) {
-score ++;
+total++;
+if (theirAnswer == q.top) {
+score++;
 $('div#quiz-regional div.solution p.right').show();
 } else {
 $('div#quiz-regional div.solution p.wrong').show();
 }
-if (q.correct.length <= 1) {
-$('p.bonus').hide();
-} else {
-$('p.bonus').show();
-}
 updateScore();
-$('div#quiz-regional div.solution span.was').html(toSentence(q.correct));
+$('div#quiz-regional div.solution span.was').html(q.top);
+$('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct));
+if (q.correct.length <= 1) {
+$('div#quiz-regional div.solution p.used').hide();
+} else {
+$('div#quiz-regional div.solution p.used').show();
+}
 $('div#quiz-regional div.solution').show();
 
 $('div#regionblock img').hide();
@@ -418,6 +413,7 @@ for (var i = 0; i < q.regions.length; i++) {
   $('div#regionblock table#regiontable').append(row);
 }
 $('div#regionblock').show();
+scrollTo('div#quiz-regional');
 }
 </script>
 
