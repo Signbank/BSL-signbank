@@ -69,6 +69,8 @@ LOGGING = {
         },
     },
 }
+DO_LOGGING = True
+LOG_FILENAME = "debug.log"
 
 
 import mimetypes

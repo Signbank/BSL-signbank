@@ -8,10 +8,12 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 from forms import RegistrationForm, EmailAuthenticationForm
 from models import RegistrationProfile, UserProfile
-
+from signbank.log import debug
 
 def activate(request, activation_key, template_name='registration/activate.html'):
     """
@@ -108,6 +110,39 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.views.decorators.cache import never_cache
 from django.contrib.sites.models import Site, RequestSite
 
+def terms_of_service(request,
+  template_name='registration/tos.html',
+  redirect_field_name=REDIRECT_FIELD_NAME,):
+  "Show data protection terms of service and get user to agree to them"
+
+  if request.method == "POST":
+    if request.POST.get("accept", "") == "accept":
+        user = User.objects.get(pk=request.session['tos_user'])
+        user.backend = request.session['tos_backend']
+        user_profile = UserProfile.objects.get(user = user)
+        from django.contrib.auth import login
+        login(request, user)
+        user_profile.data_protection_agree = True
+        user_profile.save()
+        if request.session.test_cookie_worked():
+            request.session.delete_test_cookie()
+        return HttpResponseRedirect("/")
+    else:
+        messages.error(request, "You must agree to the data protection terms to login.")
+        return HttpResponseRedirect("/")
+  
+  request.session.set_test_cookie()
+  if Site._meta.installed:
+      current_site = Site.objects.get_current()
+  else:
+      current_site = RequestSite(request)
+  return render_to_response(template_name, {
+        redirect_field_name: redirect_to,
+        'site': current_site,
+        'site_name': current_site.name,
+        'allow_registration': settings.ALLOW_REGISTRATION,
+    }, context_instance=RequestContext(request))
+terms_of_service = never_cache(terms_of_service)
 
 def mylogin(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Displays the login form and handles the login action."
@@ -119,11 +154,20 @@ def mylogin(request, template_name='registration/login.html', redirect_field_nam
             # Light security check -- make sure redirect_to isn't garbage.
             if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
                 redirect_to = settings.LOGIN_REDIRECT_URL
-            from django.contrib.auth import login
-            login(request, form.get_user())
-            if request.session.test_cookie_worked():
-                request.session.delete_test_cookie()
-            return HttpResponseRedirect(redirect_to)
+            # Check for data protection agreement
+            user = form.get_user()
+            user_profile = UserProfile.objects.get(user = user)
+            if user_profile.data_protection_agree:
+              from django.contrib.auth import login
+              login(request, form.get_user())
+              if request.session.test_cookie_worked():
+                  request.session.delete_test_cookie()
+              return HttpResponseRedirect(redirect_to)
+            else:
+              request.session['tos_user'] = user.pk
+              request.session['tos_backend'] = user.backend
+              return render_to_response('registration/tos.html', {},
+                  context_instance=RequestContext(request))
     else:
         form = EmailAuthenticationForm(request)
     request.session.set_test_cookie()
