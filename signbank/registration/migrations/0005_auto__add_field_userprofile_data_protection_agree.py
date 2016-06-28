@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'UserProfile.researcher_credentials'
-        db.add_column(u'registration_userprofile', 'researcher_credentials',
-                      self.gf('django.db.models.fields.TextField')(default=''),
+        # Adding field 'UserProfile.data_protection_agree'
+        db.add_column(u'registration_userprofile', 'data_protection_agree',
+                      self.gf('django.db.models.fields.BooleanField')(default=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'UserProfile.researcher_credentials'
-        db.delete_column(u'registration_userprofile', 'researcher_credentials')
+        # Deleting field 'UserProfile.data_protection_agree'
+        db.delete_column(u'registration_userprofile', 'data_protection_agree')
 
 
     models = {
@@ -67,6 +67,7 @@ class Migration(SchemaMigration):
             'auslan_user': ('django.db.models.fields.BooleanField', [], {}),
             'australian': ('django.db.models.fields.BooleanField', [], {}),
             'background': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '20'}),
+            'data_protection_agree': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'deaf': ('django.db.models.fields.BooleanField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'learned': ('django.db.models.fields.IntegerField', [], {}),

@@ -274,6 +274,7 @@ class UserProfile(models.Model):
     """Extended profile for users of the site"""
     
     user = models.ForeignKey(authmodels.User, unique=True)    
+    data_protection_agree = models.BooleanField(t("Do you agree to the site's data protection policy?"), default=True)
     yob = models.IntegerField("When were you born?")
     australian = models.BooleanField(t("Do you live in $country?"))
     postcode = models.CharField(t("If you live in $country, what is your postcode?"), max_length=20, blank=True)
