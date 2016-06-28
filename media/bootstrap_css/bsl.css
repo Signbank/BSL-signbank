@@ -258,4 +258,5 @@ div#quiz-total p { text-align: center; }
 div#quiz p.hidden { display: none; }
 div#quiz p.scoring { text-align: center; display: none; }
 div#quiz input.answer { font-size: 2em; }
+.quiz-debug { display: none; }
 

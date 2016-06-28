@@ -186,21 +186,20 @@ def quiz(request):
     """Quiz on meanings and regions, added for the BSL anniversary"""
 
     quiz_values = [
-      ['BROWN03',   "['Ireland', 'purple', 'Manchester']", 'London'],
-      ['FRANCE05',  "['China', 'Bristol', 'Glasgow']",     'Glasgow'],
-      ['GREEN05',   "['Belfast', 'Ireland', 'Glasgow']",   'Birmingham'],
-      ['ITALY',     "['yellow', 'Glasgow', 'grey']",       'Cardiff'],
-      ['BRITAIN',   "['London', 'Bristol', 'grey']",       'Glasgow'],
-      ['PURPLE03',  "['green', 'India', 'Germany']",       'Bristol'],
-      ['BRISTOL',   "['Cardiff', 'purple', 'France']",     'Manchester'],
-      ['YELLOW03',  "['brown', 'American', 'London']",     'Newcastle'],
+      ['BRISTOL02', "['Cardiff', 'purple', 'France']"],
+      ['FRANCE05',  "['China', 'India', 'Glasgow']"],
+      ['GREY04',    "['Belfast', 'Ireland', 'yellow']"],
+      ['AMERICA03', "['Ireland', 'purple', 'Manchester']"],
+      ['BRITAIN',   "['London', 'Bristol', 'grey']"],
+      ['PURPLE02',  "['green', 'India', 'Germany']"],
+      ['ITALY',     "['China', 'Glasgow', 'grey']"],
+      ['YELLOW04',  "['brown', 'America', 'London']"],
     ]
 
     quiz = []
     for q in quiz_values:
       idgloss = q[0]
       wrong_answers = q[1]
-      top_region = q[2]
       gloss = Gloss.objects.filter(idgloss=idgloss)[0]
 
       quiz.append({
@@ -208,15 +207,15 @@ def quiz(request):
         'keyword': gloss.translation_set.first().translation.text,
         'link': "/dictionary/gloss/" + idgloss + ".html",
         'regions_and_frequencies': [[str(x.dialect.description), str(x.frequency), str(x.traditional).lower()] for x in gloss.region_set.all()],
-        'region_list': [[str(x.dialect.description)] for x in gloss.region_set.all()],
+        'region_list': [str(x.dialect.description) for x in gloss.region_set.all()],
         'region_images': map_image_for_regions(gloss.region_set),
         'wrong_answers': wrong_answers,
-        'top_region': top_region,
       })
 
     return render_to_response("dictionary/quiz.html",
                               {
                                 'bsl': True,
+                                'debug': settings.DEBUG,
                                 'quiz': quiz,
                               },
                               context_instance=RequestContext(request))
