@@ -39,6 +39,7 @@
             
             
             <div id="quiz">
+              <pre class="quiz-debug"></pre>
               <p class="question"><span class="countq"></span> of <span class="totalq"></span>. What does this sign mean?</p>
               <form action="">
                 <div class="question">
@@ -88,7 +89,8 @@
             
 
             <div id="quiz">
-              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is <span class="mostoften">most often</span> used.</p>
+              <pre class="quiz-debug"></pre>
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is used.</p>
               <form action="">
                 <div class="question">
                 <label><input class="answer" type="radio" name="answer" value="0"> <span>Birmingham</span></label>
@@ -120,7 +122,17 @@
 
           </div>
 
-          <div id="regionblock">
+          <div class="col-md-3 region-right">
+
+          </div>
+        </div>
+
+        <div>
+          <div class="col-md-4 region-left">
+          
+          </div>
+          
+          <div id="regionblock" class="quiz-block">
             <div class="col-md-9">
 This map shows the variation found for this concept from the “What’s your sign?” task from the <a href="http://www.bslcorpusproject.org/">BSL Corpus</a> in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for colours, countries, numbers and UK placenames. Orange dots on the map indicate signs that are traditionally linked to that region (typically those used by the oldest signers). Blue dots on the map indicate signs that are not traditionally linked to that region but are reported to be in use. Next to each city name under Sign Distribution, we show the number of people in each city who gave that sign as their preferred sign for that concept. Because we only asked approximately 30 people in each region what sign they preferred to use for a specific concept, all the variants that are actually in use within each region may not have been recorded. A few responses have been excluded (and thus frequencies don’t always add up to 30, 32 or 37) because they were produced by a small number of signers and need to be verified.
             </div>
@@ -166,13 +178,10 @@ This map shows the variation found for this concept from the “What’s your si
             </div>
           </div>
 
-
           <div class="col-md-3 region-right">
-
+          
           </div>
         </div>
-
-
 
 
 
@@ -186,7 +195,6 @@ This map shows the variation found for this concept from the “What’s your si
                 <a href="http://twitter.com/share?text={{ "I scored PERCENTSCORE25 in the #BSLSignbank Quiz! Have a go!"|urlencode }}&url={{ request.build_absolute_uri|urlencode }}" class="btn btn-primary btn-twitter"><img src="{{ STATIC_URL }}images/social/twitter.png" alt="Twitter"> Share on Twitter</a>
               </div>
 
-              <p>For more information see <a href="/" target="_blank">BSL Signbank</a></p>
               <form action="/quiz/"><input class="action" type="submit" value="Play Again"></form>
             </div>
 
@@ -209,6 +217,7 @@ This map shows the variation found for this concept from the “What’s your si
 var score = 0.0;
 var total = 0.0;
 var questionIndex = 0;
+var Debug = {{ debug|lower }} || location.search == '?debug';
 var QuestionCount = 5; // How many questions should we ask?
 var questionsToAsk = []; // Will hold the random list of questions to ask
 
@@ -220,18 +229,18 @@ var quiz = [
 
 {
 type: 'meaning',
-video: '/video/iframe/{{q.video_num}}',
 correct: '{{q.keyword}}',
+region_count: {{q.region_list|safe}}.length,
 incorrect: {{q.wrong_answers|safe}},
-linkout: '{{q.link}}'
+linkout: '{{q.link}}',
+video: '/video/iframe/{{q.video_num}}'
 },
 {
 type: 'regional',
-video: '/video/iframe/{{q.video_num}}',
 correct: {{q.region_list|safe}},
-top: '{{q.top_region}}',
+regions: {{q.regions_and_frequencies|safe}},
 linkout: '{{q.link}}',
-regions: {{q.regions_and_frequencies|safe}}
+video: '/video/iframe/{{q.video_num}}'
 },
 
 {% endfor %}
@@ -278,6 +287,12 @@ score = 0;
 total = 0;
 questionIndex = 0;
 questionsToAsk = [];
+if (Debug) {
+  // In debug mode we ask all questions in order instead of a random selection
+  QuestionCount = quiz.length / 2;
+  var i = 0;
+  while (questionsToAsk.push(i++) <= QuestionCount * 2);
+} else {
 for (var i=0; i < QuestionCount; i++) {
   var qNum;
   do {
@@ -286,7 +301,30 @@ for (var i=0; i < QuestionCount; i++) {
   questionsToAsk.push(qNum);
   questionsToAsk.push(qNum + 1);
 }
+}
 showQuiz();
+}
+
+function showRegionInformation(qu) {
+$('div#regionblock img').hide();
+$('div#regionblock img#map-BSL').show();
+$('div#regionblock table#regiontable').empty();
+for (var i = 0; i < qu.regions.length; i++) {
+  var r = qu.regions[i];
+  var dialect = r[0];
+  var frequency = r[1];
+  var traditional = r[2] == 'true';
+  var row = "<tr><td>" + dialect + "</td><td>";
+  if (traditional) {
+    row = row + "traditional, ";
+    $('img#map-' + dialect + '-traditional').show();
+  } else {
+    $('img#map-' + dialect).show();
+  }
+  row = row + "</td><td>" + frequency + "</td>";
+  $('div#regionblock table#regiontable').append(row);
+}
+$('div#regionblock').show();
 }
 
 function finishQuiz() {
@@ -307,11 +345,17 @@ return;
 var q = quiz[questionsToAsk[questionIndex]];
 $('div.quiz-block').hide();
 $('div.solution').hide();
+$('div#regionblock').hide();
 $('span.countq').html(Math.floor(questionIndex / 2) + 1);
 $('span.totalq').html(QuestionCount);
 $('.question').show();
 $('div#quiz-regional input[name=answer]:checked').attr('checked', false);
 $('div#quiz-meaning input[name=answer]').attr('checked', false);
+if (Debug) {
+$('.quiz-debug').html(JSON.stringify(q, null, 2));
+$('.quiz-debug').show();
+}
+
 if (q.type == 'meaning') {
 $('div#quiz-regional iframe').get(0).contentWindow.location.replace('about:blank');
 $('div#quiz-meaning iframe').get(0).contentWindow.location.replace(q.video);
@@ -327,17 +371,20 @@ scrollTo('div#quiz-meaning');
 
 } else {
 $('div#regionblock').hide();
-if (q.correct.length <= 1) {
-$('.mostoften').hide();
-} else {
-$('.mostoften').show();
-}
 $('div#quiz-meaning iframe').get(0).contentWindow.location.replace('about:blank');
 $('div#quiz-regional iframe').get(0).contentWindow.location.replace(q.video);
 $('div#quiz-regional div.solution a.linkout').attr('href', q.linkout);
 $('div#quiz-regional').show();
 $('div#quiz-regional div.answer').show();
+// Skip the top region question if we have several regions
+if (q.correct.length > 1) {
+score_at_question[questionIndex] = score;
+total_at_question[questionIndex] = total;
+var q = quiz[questionsToAsk[questionIndex++]];
+showQuiz();
+} else {
 scrollTo('div#quiz-regional');
+}
 }
 }
 
@@ -365,6 +412,10 @@ $('div#quiz-meaning div.solution p.wrong').show();
 updateScore();
 $('div#quiz-meaning div.solution span.was').html(q.correct);
 $('div#quiz-meaning div.solution').show();
+var otherq = quiz[questionsToAsk[questionIndex]];
+if (otherq.regions.length > 1) {
+showRegionInformation(otherq);
+}
 scrollTo('div#quiz-meaning');
 }
 
@@ -378,14 +429,14 @@ var theirAnswer = $('div#quiz-regional input[name=answer]:checked').parent().chi
 $('div#quiz-regional div.solution p.right').hide();
 $('div#quiz-regional div.solution p.wrong').hide();
 total++;
-if (theirAnswer == q.top) {
+if ($.inArray(theirAnswer, q.correct) >= 0) {
 score++;
 $('div#quiz-regional div.solution p.right').show();
 } else {
 $('div#quiz-regional div.solution p.wrong').show();
 }
 updateScore();
-$('div#quiz-regional div.solution span.was').html(q.top);
+$('div#quiz-regional div.solution span.was').html(q.correct[0]);
 $('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct));
 if (q.correct.length <= 1) {
 $('div#quiz-regional div.solution p.used').hide();
@@ -394,25 +445,7 @@ $('div#quiz-regional div.solution p.used').show();
 }
 $('div#quiz-regional div.solution').show();
 
-$('div#regionblock img').hide();
-$('div#regionblock img#map-BSL').show();
-$('div#regionblock table#regiontable').empty();
-for (var i = 0; i < q.regions.length; i++) {
-  var r = q.regions[i];
-  var dialect = r[0];
-  var frequency = r[1];
-  var traditional = r[2] == 'true';
-  var row = "<tr><td>" + dialect + "</td><td>";
-  if (traditional) {
-    row = row + "traditional, ";
-    $('img#map-' + dialect + '-traditional').show();
-  } else {
-    $('img#map-' + dialect).show();
-  }
-  row = row + "</td><td>" + frequency + "</td>";
-  $('div#regionblock table#regiontable').append(row);
-}
-$('div#regionblock').show();
+showRegionInformation(q);
 scrollTo('div#quiz-regional');
 }
 </script>
