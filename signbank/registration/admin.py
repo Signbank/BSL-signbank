@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'permissions', 'best_describes_you', 'australian', 'auslan_user', 'deaf', 'researcher_credentials']
-    readonly_fields = ['user', 'australian', 'auslan_user', 'deaf', 'yob', 'postcode', 'best_describes_you', 'researcher_credentials', 'learned', 'schooltype', 'school', 'teachercomm']
+    list_display = ['user', 'permissions', 'best_describes_you', 'australian', 'auslan_user', 'deaf', 'researcher_credentials', 'background']
+    readonly_fields = ['user', 'australian', 'auslan_user', 'deaf', 'yob', 'postcode', 'best_describes_you', 'researcher_credentials', 'learned', 'schooltype', 'school', 'teachercomm', 'background']
     list_filter = ['australian', 'auslan_user', 'deaf']
    
     def permissions(self, obj):
