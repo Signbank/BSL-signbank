@@ -272,7 +272,8 @@ class RegistrationFormAuslan(RegistrationFormUniqueEmail):
                               deaf=self.cleaned_data['deaf'] == '1',
                               schooltype=self.cleaned_data['schooltype'],
                               school=self.cleaned_data['school'],
-                              teachercomm=self.cleaned_data['teachercomm'])
+                              teachercomm=self.cleaned_data['teachercomm'],
+                              data_protection_agree=True)
 
         profile.save()
 
