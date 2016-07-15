@@ -384,19 +384,46 @@ def feature_search(request):
     else:
         result_page = paginator.page(1)
 
+
+    span = 2
+    page = result_page.number
+
+    first_page = page - span
+    if first_page <= 1:
+      first_page = 1
+      page_range_pre = []
+    else:
+      page_range_pre = [1]
+      if first_page > 2:
+        page_range_pre += ['...']
+
+    last_page = page + span
+    if last_page >= paginator.num_pages:
+      last_page = paginator.num_pages
+      page_range_post = []
+    else:
+      page_range_post = [paginator.num_pages]
+      if last_page < paginator.num_pages - 1:
+        page_range_post = ['...'] + page_range_post
+
+    page_range = page_range_pre + range(first_page, last_page + 1) + page_range_post
+
+
     if len(result_page.object_list) > 0:
         gloss = result_page.object_list.first()
     else:
         gloss = None
     
-    debug("GLOSSESE" + str(len(glosses)))
     return render_to_response("dictionary/feature_search.html",
                               {'query_valid': query_valid,
                                'query': term,
+                               'handshape': handshape,
+                               'location': location,
                                'form': form,
                                'glosscount' : len(glosses),
                                'paginator' : paginator,
                                'page' : result_page,
+                               'page_range': page_range,
                                'gloss': gloss,
                                'language': settings.LANGUAGE_NAME,
                                },

@@ -82,6 +82,14 @@ body, html {
   display: inline-block;
 }
 
+#featureSearch div {
+  margin-bottom: 0.5em;
+}
+
+#featureSearch input.query {
+  width: 20em;
+}
+
 .alphablock {
   margin-bottom: 1.5em;
 }
