@@ -12,11 +12,13 @@ CATEGORY_CHOICES = (('all', 'All Signs'),
 
 class UserSignSearchForm(forms.Form):
 
-    query = forms.CharField(label='Keywords starting with', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    category = forms.ChoiceField(label='Search', choices=CATEGORY_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control'}))
-    handshape = forms.ChoiceField(label='Handshape', choices=handshapeChoices,
+    query = forms.CharField(label='Keywords starting with', max_length=100,
+      required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    category = forms.ChoiceField(label='Search', choices=CATEGORY_CHOICES, required=False,
       widget=forms.Select(attrs={'class': 'form-control'}))
-    location = forms.ChoiceField(label='Location', choices=locationChoices,
+    handshape = forms.ChoiceField(label='Handshape', choices=handshapeChoices, required=False,
+      widget=forms.Select(attrs={'class': 'form-control'}))
+    location = forms.ChoiceField(label='Location', choices=locationChoices, required=False,
       widget=forms.Select(attrs={'class': 'form-control'}))
 
 class GlossModelForm(forms.ModelForm):
