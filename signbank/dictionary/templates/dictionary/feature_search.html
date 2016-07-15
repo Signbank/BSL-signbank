@@ -7,11 +7,11 @@
 {% block extrajs %}
 <script>
 $(function() {
-  // Replace the dropdown list with an image map we can click to pick a handshape and location
+  // Replace the dropdown list with an image map we can click to pick a handshape
   $("#handshape_dropdown").show();
   $("#id_handshape").hide();
   // Fill in the existing handshape for this search
-  $('#dropdownMenuHandshape span.content').text($("#id_handshape option:selected").text());
+  $('#dropdown_menu_handshape span.content').text($("#id_handshape option:selected").text());
   // Copy the alt tag to title for a little label tooltip on compatible browsers
   // Also fill in the href with something meaningful
   $("#handshape-map area").each(function(event) {
@@ -29,7 +29,33 @@ $(function() {
       pickAlt = 'Any Handshape';
     }
     $('#id_handshape').val(pickVal);
-    $('#dropdownMenuHandshape span.content').text(pickAlt);
+    $('#dropdown_menu_handshape span.content').text(pickAlt);
+  });
+
+
+  // Replace the dropdown list with an image map we can click to pick a location
+  $("#location_dropdown").show();
+  $("#id_location").hide();
+  // Fill in the existing location for this search
+  $('#dropdown_menu_location span.content').text($("#id_location option:selected").text());
+  // Copy the alt tag to title for a little label tooltip on compatible browsers
+  // Also fill in the href with something meaningful
+  $("#location-map area").each(function(event) {
+    var pickAlt = $(this).prop('alt');
+    $(this).prop('title', pickAlt);
+    $(this).prop('href', '#location-' + pickAlt);
+  });
+  // When we click the image map fill the select value and display a meaningful value
+  $("#location-map area").click(function(event) {
+    event.preventDefault();
+    var pickVal = $(this).data('pick');
+    var pickAlt = $(this).prop('alt');
+    if (pickVal == undefined) {
+      pickVal = '-1';
+      pickAlt = 'Any Location';
+    }
+    $('#id_location').val(pickVal);
+    $('#dropdown_menu_location span.content').text(pickAlt);
   });
 });
 </script>
@@ -47,7 +73,7 @@ $(function() {
     <div class="searchblock">
       <form role="search" id="mainSearch" name="mainSearch" method="get" action="/dictionary/featuresearch">
          <div class="form-group">
-            <label for='query'>English keyword (optional)</label>
+            <label for='query'>Keyword (optional)</label>
             <input class='form-control' placeholder='Enter keywords (optional)' type="Text" id="query" name="query" value="{{ query }}" maxlength="50">
          </div>
          <div class="form-group">
@@ -55,11 +81,11 @@ $(function() {
             <label for='id_handshape'>Handshape</label>
 
             <div class="dropdown" id="handshape_dropdown" style="display: none;">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuHandshape" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu_handshape" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <span class="content">Any Handshape</span>
                 <span class="caret"></span>
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuHandshape">
+              <div class="dropdown-menu" aria-labelledby="dropdown_menu_handshape">
                 <img id="handshape-select" src="{{ STATIC_URL }}images/handshapes.png" alt="" usemap="#handshape-map" />
                 <map name="handshape-map" id="handshape-map">
 
@@ -142,7 +168,7 @@ $(function() {
                     shape="rect" coords="3,431,155,510" />
                   <area alt="Animal" data-pick="17.1" href="#"
                     shape="rect" coords="159,431,333,510" />
-
+                  
                 </map>
               </div>
             </div>
@@ -151,6 +177,78 @@ $(function() {
           </span>
           <span>
             <label for='id_location'>Location</label>
+
+            <div class="dropdown" id="location_dropdown" style="display: none;">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu_location" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="content">Any Location</span>
+                <span class="caret"></span>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdown_menu_location">
+                <img id="location-select" src="{{ STATIC_URL }}images/locations.png" alt="" usemap="#location-map" />
+                <map name="location-map" id="location-map">
+
+                  <area alt="Top of head" data-pick="1" href="#"
+                    shape="rect" coords="41,105,244,156" />
+                  <area alt="Upper face (forehead/temple)" data-pick="2" href="#"
+                    shape="rect" coords="40,167,245,216" />
+                  <area alt="Eye" data-pick="4" href="#"
+                    shape="rect" coords="73,228,212,264" />
+                  <area alt="Nose" data-pick="5" href="#"
+                    shape="rect" coords="129,249,159,302" />
+                  <area alt="Whole of face" data-pick="6" href="#"
+                    shape="rect" coords="428,40,615,244" />
+                  <area alt="Ear or side of head" data-pick="8" href="#"
+                    shape="rect" coords="37,228,70,305" />
+                  <area alt="Ear or side of head" data-pick="8" href="#"
+                    shape="rect" coords="222,226,252,297" />
+                  <area alt="Cheek" data-pick="9" href="#"
+                    shape="rect" coords="76,277,106,336" />
+                  <area alt="Cheek" data-pick="9" href="#"
+                    shape="rect" coords="180,275,214,335" />
+                  <area alt="Mouth and lips" data-pick="10" href="#"
+                    shape="rect" coords="117,310,169,333" />
+                  <area alt="Chin" data-pick="11" href="#"
+                    shape="rect" coords="116,340,173,367" />
+                  <area alt="Neck" data-pick="12" href="#"
+                    shape="rect" coords="457,250,578,289" />
+                  <area alt="Shoulder" data-pick="13" href="#"
+                    shape="rect" coords="339,285,430,374" />
+                  <area alt="Shoulder" data-pick="13" href="#"
+                    shape="rect" coords="602,280,696,377" />
+                  <area alt="Chest" data-pick="14" href="#"
+                    shape="rect" coords="443,297,584,426" />
+                  <area alt="High neutral space" data-pick="28" href="#"
+                    shape="rect" coords="965,249,1025,371" />
+                  <area alt="Stomach" data-pick="15" href="#"
+                    shape="rect" coords="444,445,581,519" />
+                  <area alt="Neutral space" data-pick="29" href="#"
+                    shape="rect" coords="965,415,1024,724" />
+                  <area alt="Waist" data-pick="16" href="#"
+                    shape="rect" coords="441,535,584,605" />
+                  <area alt="Below waist" data-pick="17" href="#"
+                    shape="rect" coords="427,625,596,830" />
+                  <area alt="Upper arm" data-pick="18" href="#"
+                    shape="rect" coords="338,385,429,502" />
+                  <area alt="Upper arm" data-pick="18" href="#"
+                    shape="rect" coords="602,386,692,499" />
+                  <area alt="Elbow" data-pick="19" href="#"
+                    shape="rect" coords="339,513,429,601" />
+                  <area alt="Elbow" data-pick="19" href="#"
+                    shape="rect" coords="600,513,694,601" />
+                  <area alt="Pronated forearm" data-pick="20" href="#"
+                    shape="rect" coords="323,612,413,736" />
+                  <area alt="Supinated forearm" data-pick="21" href="#"
+                    shape="rect" coords="613,612,710,722" />
+                  <area alt="Pronated wrist" data-pick="22" href="#"
+                    shape="rect" coords="305,742,380,781" />
+                  <area alt="Supinated wrist" data-pick="23" href="#"
+                    shape="rect" coords="635,737,711,781" />
+
+                </map>
+              </div>
+            </div>
+
+
             {{form.location}}
          </span>
          </div>
@@ -191,7 +289,7 @@ $(function() {
              {% for kwd in gloss.translation_set.all %}
                {{ kwd.translation|highlight:query }}{% if not forloop.last %},{% endif %}
              {% endfor %}
-             </p>
+             </p>keyword
         </div>
 
         <div id="feedback">
