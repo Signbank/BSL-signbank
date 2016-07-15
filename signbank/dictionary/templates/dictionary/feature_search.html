@@ -1,5 +1,41 @@
 {% extends "baselayout.html" %}
 {% load extras %}
+{% block pagetitle %}{{ settings_site_title }} - Sign feature search {% endblock %}
+{% block jqueryready %}
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(function() {
+  // Replace the dropdown list with an image map we can click to pick a handshape and location
+  $("#handshape_dropdown").show();
+  $("#id_handshape").hide();
+  // Fill in the existing handshape for this search
+  $('#dropdownMenuHandshape span.content').text($("#id_handshape option:selected").text());
+  // Copy the alt tag to title for a little label tooltip on compatible browsers
+  // Also fill in the href with something meaningful
+  $("#handshape-map area").each(function(event) {
+    var pickAlt = $(this).prop('alt');
+    $(this).prop('title', pickAlt);
+    $(this).prop('href', '#handshape-' + pickAlt);
+  });
+  // When we click the image map fill the select value and display a meaningful value
+  $("#handshape-map area").click(function(event) {
+    event.preventDefault();
+    var pickVal = $(this).data('pick');
+    var pickAlt = $(this).prop('alt');
+    if (pickVal == undefined) {
+      pickVal = 'notset';
+      pickAlt = 'Any Handshape';
+    }
+    $('#id_handshape').val(pickVal);
+    $('#dropdownMenuHandshape span.content').text(pickAlt);
+  });
+});
+</script>
+{% endblock %}
+
+
 
 {% block content %}
  
@@ -17,6 +53,100 @@
          <div class="form-group">
           <span>
             <label for='id_handshape'>Handshape</label>
+
+            <div class="dropdown" id="handshape_dropdown" style="display: none;">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuHandshape" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="content">Any Handshape</span>
+                <span class="caret"></span>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuHandshape">
+                <img id="handshape-select" src="{{ STATIC_URL }}images/handshapes.png" alt="" usemap="#handshape-map" />
+                <map name="handshape-map" id="handshape-map">
+
+                  <area alt="Round" data-pick="0.1" href="#"
+                    shape="rect" coords="3,5,155,100" />
+                  <area alt="Okay" data-pick="0.2" href="#"
+                    shape="rect" coords="159,5,333,100" />
+                  <area alt="Point" data-pick="1.1" href="#"
+                    shape="rect" coords="341,5,534,100" />
+                  <area alt="Hook" data-pick="1.2" href="#"
+                    shape="rect" coords="536,5,665,100" />
+                  <area alt="Two" data-pick="2.1" href="#"
+                    shape="rect" coords="670,5,810,100" />
+                  <area alt="Kneel" data-pick="2.2" href="#"
+                    shape="rect" coords="817,5,981,100" />
+                  <area alt="Perth" data-pick="2.3" href="#"
+                    shape="rect" coords="985,5,1107,100" />
+
+                  <area alt="Spoon" data-pick="2.4" href="#"
+                    shape="rect" coords="3,101,155,180" />
+                  <area alt="Letter-n" data-pick="2.5" href="#"
+                    shape="rect" coords="159,101,333,180" />
+                  <area alt="Wish" data-pick="2.6" href="#"
+                    shape="rect" coords="341,101,534,180" />
+                  <area alt="Three" data-pick="3.1" href="#"
+                    shape="rect" coords="536,101,665,180" />
+                  <area alt="Mother" data-pick="3.2" href="#"
+                    shape="rect" coords="670,101,810,180" />
+                  <area alt="Letter-m" data-pick="3.3" href="#"
+                    shape="rect" coords="817,101,981,180" />
+                  <area alt="Four" data-pick="4.1" href="#"
+                    shape="rect" coords="985,101,1107,180" />
+
+                  <area alt="Spread" data-pick="5.1" href="#"
+                    shape="rect" coords="3,180,155,266" />
+                  <area alt="Ball" data-pick="5.2" href="#"
+                    shape="rect" coords="159,180,333,266" />
+                  <area alt="Flat" data-pick="5.3" href="#"
+                    shape="rect" coords="341,180,534,266" />
+                  <area alt="Thick" data-pick="5.4" href="#"
+                    shape="rect" coords="536,180,665,266" />
+                  <area alt="Cup" data-pick="5.5" href="#"
+                    shape="rect" coords="670,180,810,266" />
+                  <area alt="Good" data-pick="6.1" href="#"
+                    shape="rect" coords="817,180,981,266" />
+                  <area alt="Bad" data-pick="6.2" href="#"
+                    shape="rect" coords="985,180,1107,266" />
+
+                  <area alt="Gun" data-pick="7.1" href="#"
+                    shape="rect" coords="3,267,155,340" />
+                  <area alt="Letter-c" data-pick="7.2" href="#"
+                    shape="rect" coords="159,267,333,340" />
+                  <area alt="Small" data-pick="7.3" href="#"
+                    shape="rect" coords="341,267,534,340" />
+                  <area alt="Seven" data-pick="7.4" href="#"
+                    shape="rect" coords="536,267,665,340" />
+                  <area alt="Eight" data-pick="8.1" href="#"
+                    shape="rect" coords="670,267,810,340" />
+                  <area alt="Nine" data-pick="9.1" href="#"
+                    shape="rect" coords="817,267,981,340" />
+                  <area alt="Fist" data-pick="10.1" href="#"
+                    shape="rect" coords="985,267,1107,340" />
+
+                  <area alt="Soon" data-pick="10.2" href="#"
+                    shape="rect" coords="3,341,155,430" />
+                  <area alt="Ten" data-pick="10.3" href="#"
+                    shape="rect" coords="159,341,333,430" />
+                  <area alt="Write" data-pick="11.1" href="#"
+                    shape="rect" coords="341,341,534,430" />
+                  <area alt="Salt" data-pick="12.1" href="#"
+                    shape="rect" coords="536,341,665,430" />
+                  <area alt="Middle" data-pick="13.1" href="#"
+                    shape="rect" coords="670,341,810,430" />
+                  <area alt="Rude" data-pick="14.1" href="#"
+                    shape="rect" coords="817,341,981,430" />
+                  <area alt="Ambivalent" data-pick="15.1" href="#"
+                    shape="rect" coords="985,341,1107,430" />
+
+                  <area alt="Love" data-pick="16.1" href="#"
+                    shape="rect" coords="3,431,155,510" />
+                  <area alt="Animal" data-pick="17.1" href="#"
+                    shape="rect" coords="159,431,333,510" />
+
+                </map>
+              </div>
+            </div>
+
             {{form.handshape}}
           </span>
           <span>
