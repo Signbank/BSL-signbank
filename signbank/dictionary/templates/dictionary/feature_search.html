@@ -11,7 +11,11 @@ $(function() {
   $("#handshape_dropdown").show();
   $("#id_handshape").hide();
   // Fill in the existing handshape for this search
-  $('#dropdown_menu_handshape span.content').text($("#id_handshape option:selected").text());
+  var existing = $("#id_handshape option:selected").text();
+  if (existing == 'No Value Set') {
+    existing = 'Any Handshape';
+  }
+  $('#dropdown_menu_handshape span.content').text(existing);
   // Copy the alt tag to title for a little label tooltip on compatible browsers
   // Also fill in the href with something meaningful
   $("#handshape-map area").each(function(event) {
@@ -37,7 +41,11 @@ $(function() {
   $("#location_dropdown").show();
   $("#id_location").hide();
   // Fill in the existing location for this search
-  $('#dropdown_menu_location span.content').text($("#id_location option:selected").text());
+  var existing = $("#id_location option:selected").text();
+  if (existing == 'No Value Set') {
+    existing = 'Any Location';
+  }
+  $('#dropdown_menu_location span.content').text(existing);
   // Copy the alt tag to title for a little label tooltip on compatible browsers
   // Also fill in the href with something meaningful
   $("#location-map area").each(function(event) {
@@ -71,13 +79,12 @@ $(function() {
       optionally, an English keyword or start of an English word.</p>	
     
     <div class="searchblock">
-      <form role="search" id="mainSearch" name="mainSearch" method="get" action="/dictionary/featuresearch">
-         <div class="form-group">
-            <label for='query'>Keyword (optional)</label>
-            <input class='form-control' placeholder='Enter keywords (optional)' type="Text" id="query" name="query" value="{{ query }}" maxlength="50">
+      <form role="search" id="featureSearch" name="featureSearch" method="get" action="/dictionary/featuresearch">
+         <div>
+            <input class="form-control" placeholder="Enter keywords (optional)" type="Text" id="query" name="query" value="{{ query }}" maxlength="50">
          </div>
-         <div class="form-group">
-          <span>
+
+         <div>
             <label for='id_handshape'>Handshape</label>
 
             <div class="dropdown" id="handshape_dropdown" style="display: none;">
@@ -169,13 +176,17 @@ $(function() {
                   <area alt="Animal" data-pick="17.1" href="#"
                     shape="rect" coords="159,431,333,510" />
                   
+                  <area alt="Any Handshape" data-pick="notset" href="#"
+                    shape="rect" coords="0,0,1122,528" />
+
                 </map>
               </div>
             </div>
 
             {{form.handshape}}
-          </span>
-          <span>
+         </div>
+
+         <div>
             <label for='id_location'>Location</label>
 
             <div class="dropdown" id="location_dropdown" style="display: none;">
@@ -191,10 +202,10 @@ $(function() {
                     shape="rect" coords="41,105,244,156" />
                   <area alt="Upper face (forehead/temple)" data-pick="2" href="#"
                     shape="rect" coords="40,167,245,216" />
-                  <area alt="Eye" data-pick="4" href="#"
-                    shape="rect" coords="73,228,212,264" />
                   <area alt="Nose" data-pick="5" href="#"
                     shape="rect" coords="129,249,159,302" />
+                  <area alt="Eye" data-pick="4" href="#"
+                    shape="rect" coords="73,228,212,264" />
                   <area alt="Whole of face" data-pick="6" href="#"
                     shape="rect" coords="428,40,615,244" />
                   <area alt="Ear or side of head" data-pick="8" href="#"
@@ -244,13 +255,16 @@ $(function() {
                   <area alt="Supinated wrist" data-pick="23" href="#"
                     shape="rect" coords="635,737,711,781" />
 
+                  <area alt="Any Location" data-pick="-1" href="#"
+                    shape="rect" coords="0,0,1072,986" />
+
                 </map>
               </div>
             </div>
 
 
             {{form.location}}
-         </span>
+         </div>
          </div>
          <div class="form-group">
             <button type="submit" class="btn btn-default">Sign Search</button>
