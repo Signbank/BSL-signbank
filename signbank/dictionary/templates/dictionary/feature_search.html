@@ -72,7 +72,6 @@ $(function() {
 
 
 {% block content %}
- 
 
     <p>Welcome to the Sign Feature Search section of the {{language}} SignBank. Here
       you can search for a sign using the initial hand shape or location and,
@@ -81,12 +80,6 @@ $(function() {
     <div class="searchblock">
       <form role="search" id="featureSearch" name="featureSearch" method="get" action="/dictionary/featuresearch">
          <div>
-            <input class="form-control" placeholder="Enter keywords (optional)" type="Text" id="query" name="query" value="{{ query }}" maxlength="50">
-         </div>
-
-         <div>
-            <label for='id_handshape'>Handshape</label>
-
             <div class="dropdown" id="handshape_dropdown" style="display: none;">
               <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu_handshape" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <span class="content">Any Handshape</span>
@@ -187,8 +180,6 @@ $(function() {
          </div>
 
          <div>
-            <label for='id_location'>Location</label>
-
             <div class="dropdown" id="location_dropdown" style="display: none;">
               <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu_location" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <span class="content">Any Location</span>
@@ -265,7 +256,11 @@ $(function() {
 
             {{form.location}}
          </div>
+         
+          <div>
+            <input class="form-control query" placeholder="Enter keywords (optional)" type="Text" id="query" name="query" value="{{ query }}" maxlength="50">
          </div>
+
          <div class="form-group">
             <button type="submit" class="btn btn-default">Sign Search</button>
          </div>
@@ -273,66 +268,72 @@ $(function() {
       </form>
     </div>
 
-        {% ifequal glosscount 0 %}
-           {% if query_valid %}
-            <p>There is no match.</p>
-            {% endif %}
-        {% else %}
-         {% ifequal glosscount 1 %}
-            <p>{{ glosscount }} full or partial match found</p>       
-         {% else %}
-           <p>{{ glosscount }} full or partial matches found</p>
-         {% endifequal %}
-        {% endifequal %}
- 
-{% if gloss %}
-<div id="definitionblock">
-    <div class='col-md-4 region-left'>
-        <div id="videocontainer">
-           <div id="player">
-              <iframe id='videoiframe' scrolling="no" frameborder='0' allowfullscreen="allowfullscreen"
-                      src="{% url 'signbank.video.views.iframe' gloss.pk %}">
-              </iframe>
-           </div>
-           <div id="replay"></div>
-        </div>
-    
-    
-        <div id="keywords">
-             <p><strong>Keywords:</strong>
-             {% for kwd in gloss.translation_set.all %}
-               {{ kwd.translation|highlight:query }}{% if not forloop.last %},{% endif %}
-             {% endfor %}
-             </p>keyword
+
+
+
+
+
+
+
+
+
+
+    <div id='publicsign' class="view-featuresearch">
+        <div id="signinfo" class="navbar navbar-default navbar-collapse">
+        
+            <div class="pull-right">
+                <span class='navbar-text'>{{glosscount}} matches</span>
+                <div class='btn-group'>
+                {% for p in page_range %}
+                    {% ifequal p page.number %}
+                    <button type="button" class="btn btn-primary navbar-btn">{{p}}</button>
+                    {% else %}{% ifequal p '...' %}
+                    <span type="button" class="btn disabled navbar-btn">{{p}}</span>
+                    {% else %}
+                    <a type="button" class="btn btn-default navbar-btn"
+                      href="?handshape={{handshape}}&location={{location}}&query={{query}}&page={{p}}">{{p}}</a>
+                    {% endifequal %}{% endifequal %}
+                {% endfor %}
+                </div>
+            </div>
+        
         </div>
 
-        <div id="feedback">
-            <ul>
-                <li><a href="{% url 'root_page' %}feedback/gloss/{{gloss.idgloss}}.html?return=/dictionary/gloss/{{gloss.idgloss}}.html&lastmatch={{lastmatch}}">Provide feedback about this sign</a></li>
-                <li><a href="{% url 'root_page' %}feedback/missingsign.html">Report a missing sign</a></li>
-                <li><a href="{% url 'root_page' %}feedback/generalfeedback.html">Provide general site feedback</a></li>
-            </ul>
+        <div id="definitionblock">
+            <div class='col-md-4 region-left'>
+                <div id="videocontainer">
+                   <div id="player">
+                      <iframe id='videoiframe' scrolling="no" frameborder='0' allowfullscreen="allowfullscreen"
+                              src="{% url 'signbank.video.views.iframe' gloss.pk %}">
+                      </iframe>
+                   </div>
+                   <div id="replay"></div>
+                </div>
+            
+            
+                <div id="keywords">
+                     <p><strong>Keywords:</strong>
+                     {% for kwd in gloss.translation_set.all %}
+                       {{ kwd.translation|highlight:query }}{% if not forloop.last %},{% endif %}
+                     {% endfor %}
+                     </p>
+                </div>
+
+                <div id="feedback">
+                    <ul>
+                      <li><a href="{% url 'root_page' %}feedback/gloss/{{gloss.idgloss}}.html?return=/dictionary/gloss/{{gloss.idgloss}}.html&lastmatch={{lastmatch}}">Provide feedback about this sign</a></li>
+                      <li><a href="{% url 'root_page' %}feedback/missingsign.html">Report a missing sign</a></li>
+                      <li><a href="{% url 'root_page' %}feedback/generalfeedback.html">Provide general site feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
+
     </div>
-</div>
-{% endif %}
 
 
 
-
-
-          {% if page.has_next or page.has_previous %} 
-          <p>Jump to results page: 
-          {% for p in paginator.page_range %}
-             {% ifequal p page.number %}
-             <strong>{% ifequal p 0 %}Start{% else %}{{p}}{% endifequal %}</strong>
-             {% else %}
-             <a href='?query={{query}}&page={{p}}'>{% ifequal p 0 %}Start{% else %}{{p}}{% endifequal %}</a>
-             {% endifequal %}
-          {% endfor %}
-          </p>
-
-          {% endif %}
 
 {% endblock %}
 
