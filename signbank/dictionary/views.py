@@ -323,6 +323,76 @@ def gloss(request, idgloss):
                                context_instance=RequestContext(request))
 
 
+@login_required_config
+def feature_search(request):
+    """
+    Search by hand and location features as well as, or instead of, keywords.
+    """
+
+    form = UserSignSearchForm(request.GET.copy())
+
+    if form.is_valid():
+        # need to transcode the query to our encoding
+        term = form.cleaned_data['query']
+        handshape = form.cleaned_data['handshape']
+        location = form.cleaned_data['location']
+        
+        try:
+            term = smart_unicode(term)
+        except:
+            # if the encoding didn't work this is
+            # a strange unicode or other string
+            # and it won't match anything in the dictionary
+            words = []
+
+        if request.user.has_perm('dictionary.search_gloss'):
+            # staff get to see all the words that have at least one translation
+            words = Keyword.objects.filter(text__istartswith=term, translation__isnull=False).distinct()
+        else:
+            # regular users see either everything that's published
+            words = Keyword.objects.filter(text__istartswith=term,
+                                            translation__gloss__inWeb__exact=True).distinct()
+
+        if location != '' and location != "-1":
+            words = words.filter(translation__gloss__locprim__exact=location)
+
+        if handshape != '' and handshape != -1:
+            words = words.filter(translation__gloss__domhndsh__exact=handshape)
+
+            
+    else:
+        term = ''
+        words = []
+
+
+    paginator = Paginator(words, 50)
+    if request.GET.has_key('page'):
+        
+        page = request.GET['page']
+        try:
+            result_page = paginator.page(page)
+        except PageNotAnInteger:
+            result_page = paginator.page(1)
+        except EmptyPage:
+            result_page = paginator.page(paginator.num_pages)
+
+    else:
+        result_page = paginator.page(1)
+
+
+
+    return render_to_response("dictionary/feature_search.html",
+                              {'query' : term,
+                               'form': form,
+                               'paginator' : paginator,
+                               'wordcount' : len(words),
+                               'page' : result_page,
+                               'ANON_SAFE_SEARCH': settings.ANON_SAFE_SEARCH,                                         
+                               'ANON_TAG_SEARCH': settings.ANON_TAG_SEARCH,
+                               'language': settings.LANGUAGE_NAME,
+                               },
+                              context_instance=RequestContext(request))
+
 
 @login_required_config
 def search(request):
