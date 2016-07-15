@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from signbank.dictionary.models import *
 from signbank.dictionary.forms import *
+from signbank.dictionary.views import feature_search
 
 from signbank.dictionary.adminviews import GlossListView, GlossDetailView
 
@@ -27,6 +28,7 @@ urlpatterns = patterns('',
             'signbank.dictionary.views.regional', name='regional_view'),
 
     url(r'^search/$', 'signbank.dictionary.views.search', name="search"),
+    url(r'^featuresearch/$', permission_required('perms.pages.change_page')(feature_search), name='feature_search'),
     url(r'^update/gloss/(?P<glossid>\d+)$', 'signbank.dictionary.update.update_gloss', name='update_gloss'),
     url(r'^update/tag/(?P<glossid>\d+)$', 'signbank.dictionary.update.add_tag', name='add_tag'),
     url(r'^update/definition/(?P<glossid>\d+)$', 'signbank.dictionary.update.add_definition', name='add_definition'),

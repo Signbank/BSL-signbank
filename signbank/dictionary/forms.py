@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.formtools.preview import FormPreview
 from signbank.video.fields import VideoUploadToFLVField
-from signbank.dictionary.models import Dialect, Gloss, Definition, Relation, Region, defn_role_choices
+from signbank.dictionary.models import Dialect, Gloss, Definition, Relation, Region, defn_role_choices, handshapeChoices, locationChoices
 from django.conf import settings
 from tagging.models import Tag
 
@@ -14,7 +14,10 @@ class UserSignSearchForm(forms.Form):
 
     query = forms.CharField(label='Keywords starting with', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     category = forms.ChoiceField(label='Search', choices=CATEGORY_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control'}))
-        
+    handshape = forms.ChoiceField(label='Handshape', choices=handshapeChoices,
+      widget=forms.Select(attrs={'class': 'form-control'}))
+    location = forms.ChoiceField(label='Location', choices=locationChoices,
+      widget=forms.Select(attrs={'class': 'form-control'}))
 
 class GlossModelForm(forms.ModelForm):
     class Meta:
