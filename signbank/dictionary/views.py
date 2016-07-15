@@ -20,7 +20,7 @@ from signbank.feedback.models import *
 from signbank.pages.models import *
 
 from signbank.video.forms import VideoUploadForGlossForm
-
+from signbank.log import debug
 
 def login_required_config(f):
     """like @login_required if the ALWAYS_REQUIRE_LOGIN setting is True"""
@@ -322,7 +322,6 @@ def gloss(request, idgloss):
                                },
                                context_instance=RequestContext(request))
 
-
 @login_required_config
 def feature_search(request):
     """
@@ -330,42 +329,48 @@ def feature_search(request):
     """
 
     form = UserSignSearchForm(request.GET.copy())
-
-    if form.is_valid():
+    if (form.is_valid() and (
+      form.cleaned_data['query'] != '' or
+      form.cleaned_data['location'] != '-1' or
+      form.cleaned_data['handshape'] != 'notset')):
         # need to transcode the query to our encoding
         term = form.cleaned_data['query']
         handshape = form.cleaned_data['handshape']
         location = form.cleaned_data['location']
-        
+        query_valid = True
+      
         try:
             term = smart_unicode(term)
         except:
             # if the encoding didn't work this is
             # a strange unicode or other string
             # and it won't match anything in the dictionary
-            words = []
+            glosses = []
 
         if request.user.has_perm('dictionary.search_gloss'):
-            # staff get to see all the words that have at least one translation
-            words = Keyword.objects.filter(text__istartswith=term, translation__isnull=False).distinct()
+            # staff get to see all the glosses
+            glosses = Gloss.objects.filter(translation__isnull=False)
         else:
             # regular users see either everything that's published
-            words = Keyword.objects.filter(text__istartswith=term,
-                                            translation__gloss__inWeb__exact=True).distinct()
+            glosses = Gloss.objects.filter(inWeb__exact=True)
+
+        if term != '':
+            glosses = glosses.filter(translation__translation__text__istartswith=term)
 
         if location != '' and location != "-1":
-            words = words.filter(translation__gloss__locprim__exact=location)
+            glosses = glosses.filter(locprim__exact=location)
 
-        if handshape != '' and handshape != -1:
-            words = words.filter(translation__gloss__domhndsh__exact=handshape)
+        if handshape != '' and handshape != "notset":
+            glosses = glosses.filter(domhndsh__exact=handshape)
 
-            
+          
     else:
         term = ''
-        words = []
+        glosses = []
+        query_valid = False
 
 
-    paginator = Paginator(words, 50)
+    paginator = Paginator(glosses, 1)
     if request.GET.has_key('page'):
         
         page = request.GET['page']
@@ -379,16 +384,20 @@ def feature_search(request):
     else:
         result_page = paginator.page(1)
 
-
-
+    if len(result_page.object_list) > 0:
+        gloss = result_page.object_list.first()
+    else:
+        gloss = None
+    
+    debug("GLOSSESE" + str(len(glosses)))
     return render_to_response("dictionary/feature_search.html",
-                              {'query' : term,
+                              {'query_valid': query_valid,
+                               'query': term,
                                'form': form,
+                               'glosscount' : len(glosses),
                                'paginator' : paginator,
-                               'wordcount' : len(words),
                                'page' : result_page,
-                               'ANON_SAFE_SEARCH': settings.ANON_SAFE_SEARCH,                                         
-                               'ANON_TAG_SEARCH': settings.ANON_TAG_SEARCH,
+                               'gloss': gloss,
                                'language': settings.LANGUAGE_NAME,
                                },
                               context_instance=RequestContext(request))
@@ -400,7 +409,7 @@ def search(request):
 
     form = UserSignSearchForm(request.GET.copy())
 
-    if form.is_valid():
+    if form.is_valid() and len(form.cleaned_data['query']) > 0:
         # need to transcode the query to our encoding
         term = form.cleaned_data['query']
         category = form.cleaned_data['category']
