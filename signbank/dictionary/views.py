@@ -329,45 +329,47 @@ def feature_search(request):
     """
 
     form = UserSignSearchForm(request.GET.copy())
-    if (form.is_valid() and (
-      form.cleaned_data['query'] != '' or
-      form.cleaned_data['location'] != '-1' or
-      form.cleaned_data['handshape'] != 'notset')):
+
+    term = ''
+    glosses = []
+    query_valid = False
+
+    if form.is_valid():
         # need to transcode the query to our encoding
         term = form.cleaned_data['query']
         handshape = form.cleaned_data['handshape']
         location = form.cleaned_data['location']
-        query_valid = True
-      
-        try:
-            term = smart_unicode(term)
-        except:
-            # if the encoding didn't work this is
-            # a strange unicode or other string
-            # and it won't match anything in the dictionary
-            glosses = []
 
-        if request.user.has_perm('dictionary.search_gloss'):
-            # staff get to see all the glosses
-            glosses = Gloss.objects.filter(translation__isnull=False)
+        if (term == '' and
+          (handshape == '' or handshape == 'notset') and
+          (location == '' or location == '-1')):
+            query_valid = False
         else:
-            # regular users see either everything that's published
-            glosses = Gloss.objects.filter(inWeb__exact=True)
-
-        if term != '':
-            glosses = glosses.filter(translation__translation__text__istartswith=term)
-
-        if location != '' and location != "-1":
-            glosses = glosses.filter(locprim__exact=location)
-
-        if handshape != '' and handshape != "notset":
-            glosses = glosses.filter(domhndsh__exact=handshape)
-
+            query_valid = True
           
-    else:
-        term = ''
-        glosses = []
-        query_valid = False
+            try:
+                term = smart_unicode(term)
+            except:
+                # if the encoding didn't work this is
+                # a strange unicode or other string
+                # and it won't match anything in the dictionary
+                glosses = []
+
+            if request.user.has_perm('dictionary.search_gloss'):
+                # staff get to see all the glosses
+                glosses = Gloss.objects.filter(translation__isnull=False)
+            else:
+                # regular users see either everything that's published
+                glosses = Gloss.objects.filter(inWeb__exact=True)
+
+            if term != '':
+                glosses = glosses.filter(translation__translation__text__istartswith=term)
+
+            if location != '' and location != "-1":
+                glosses = glosses.filter(locprim__exact=location)
+
+            if handshape != '' and handshape != "notset":
+                glosses = glosses.filter(domhndsh__exact=handshape)
 
 
     paginator = Paginator(glosses, 1)
