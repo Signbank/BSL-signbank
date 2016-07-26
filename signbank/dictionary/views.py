@@ -357,10 +357,10 @@ def feature_search(request):
 
             if request.user.has_perm('dictionary.search_gloss'):
                 # staff get to see all the glosses
-                glosses = Gloss.objects.filter(translation__isnull=False)
+                glosses = Gloss.objects.filter(translation__isnull=False).distinct()
             else:
                 # regular users see either everything that's published
-                glosses = Gloss.objects.filter(inWeb__exact=True)
+                glosses = Gloss.objects.filter(inWeb__exact=True).distinct()
 
             if term != '':
                 glosses = glosses.filter(translation__translation__text__istartswith=term)
