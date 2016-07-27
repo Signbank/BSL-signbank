@@ -427,6 +427,7 @@ def feature_search(request):
                                'page' : result_page,
                                'page_range': page_range,
                                'gloss': gloss,
+                               'feature_search_active': True,
                                'language': settings.LANGUAGE_NAME,
                                },
                               context_instance=RequestContext(request))

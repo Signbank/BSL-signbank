@@ -82,12 +82,13 @@ body, html {
   display: inline-block;
 }
 
-#featureSearch div {
-  margin-bottom: 0.5em;
+.form-control-short {
+  display: inline;
+  width: 14em;
 }
 
-#featureSearch input.query {
-  width: 20em;
+.form-control-inline {
+  display: inline;
 }
 
 .alphablock {
