@@ -56,7 +56,7 @@
                 <div class="solution">
                   <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
                   <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
-                  <p class="hidden"><a class="linkout" href="#" target="_blank">Show video with full set of keywords</a></p>
+                  <p class="used">Did you know? This sign is used in <span class="usedin"></span>.</p>
                   <input class="action" type="button" value="Next" onclick="showQuiz();">
                 </div>
               </form>
@@ -415,6 +415,10 @@ $('div#quiz-meaning div.solution').show();
 var otherq = quiz[questionsToAsk[questionIndex]];
 if (otherq.regions.length > 1) {
 showRegionInformation(otherq);
+$('div#quiz-meaning div.solution span.usedin').html(toSentence(otherq.correct));
+$('div#quiz-meaning div.solution p.used').show();
+} else {
+$('div#quiz-meaning div.solution p.used').hide();
 }
 scrollTo('div#quiz-meaning');
 }
