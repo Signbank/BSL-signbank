@@ -39,7 +39,6 @@
             
             
             <div id="quiz">
-              <pre class="quiz-debug"></pre>
               <p class="question"><span class="countq"></span> of <span class="totalq"></span>. What does this sign mean?</p>
               <form action="">
                 <div class="question">
@@ -89,7 +88,6 @@
             
 
             <div id="quiz">
-              <pre class="quiz-debug"></pre>
               <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is <span class="commonest">most often </span>used.</p>
               <form action="">
                 <div class="question">
@@ -183,6 +181,7 @@ This map shows the variation found for this concept from the “What’s your si
           </div>
         </div>
 
+        <pre class="quiz-debug"></pre>
 
 
         <div id="quiz-total" class="quiz-block">
@@ -427,7 +426,7 @@ $('div#quiz-meaning div.solution p.used').show();
 } else {
 $('div#quiz-meaning div.solution p.used').hide();
 }
-scrollTo('div#quiz-meaning');
+scrollTo('div#quiz');
 }
 
 function answerRegional() {
@@ -461,7 +460,7 @@ $('div#quiz-regional div.solution p.used').show();
 $('div#quiz-regional div.solution').show();
 
 showRegionInformation(q);
-scrollTo('div#quiz-regional');
+scrollTo('div#quiz');
 }
 </script>
 
