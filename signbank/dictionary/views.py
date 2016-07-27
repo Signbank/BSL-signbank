@@ -185,31 +185,43 @@ def regional(request, keyword, n):
 def quiz(request):
     """Quiz on meanings and regions, added for the BSL anniversary"""
 
+    # Values are:
+    # 1. Gloss ID
+    # 2. Incorrect answers
+    # 3. True or False - if True and there are multiple regions then a question about
+    #      the commonest region will be added, otherwise the region question will be skipped
     quiz_values = [
-      ['BRISTOL02', "['Cardiff', 'purple', 'France']"],
-      ['FRANCE05',  "['China', 'India', 'Glasgow']"],
-      ['GREY04',    "['Belfast', 'Ireland', 'yellow']"],
-      ['AMERICA03', "['Ireland', 'purple', 'Manchester']"],
-      ['BRITAIN',   "['London', 'Bristol', 'grey']"],
-      ['PURPLE02',  "['green', 'India', 'Germany']"],
-      ['ITALY',     "['China', 'Glasgow', 'grey']"],
-      ['YELLOW04',  "['brown', 'America', 'London']"],
+      ['BRISTOL02', "['Cardiff', 'purple', 'France']", False],
+      ['FRANCE05',  "['China', 'India', 'Glasgow']", False],
+      ['GREY04',    "['Belfast', 'Ireland', 'yellow']", False],
+      ['AMERICA03', "['Ireland', 'purple', 'Manchester']", False],
+      ['BRITAIN',   "['London', 'Bristol', 'grey']", False],
+      ['PURPLE02',  "['green', 'India', 'Germany']", True],
+      ['ITALY',     "['China', 'Glasgow', 'grey']", False],
+      ['YELLOW04',  "['brown', 'America', 'London']", True],
     ]
 
     quiz = []
     for q in quiz_values:
       idgloss = q[0]
-      wrong_answers = q[1]
       gloss = Gloss.objects.filter(idgloss=idgloss)[0]
+      wrong_answers = q[1]
+      commonest_region = q[2]
+      if commonest_region:
+        commonest_region = gloss.region_set.order_by('-frequency').first().dialect.description
 
       quiz.append({
         'video_num': gloss.pk,
         'keyword': gloss.translation_set.first().translation.text,
         'link': "/dictionary/gloss/" + idgloss + ".html",
-        'regions_and_frequencies': [[str(x.dialect.description), str(x.frequency), str(x.traditional).lower()] for x in gloss.region_set.all()],
+        'regions_and_frequencies': [[str(x.dialect.description),
+                                      str(x.frequency),
+                                      str(x.traditional).lower()]
+                                      for x in gloss.region_set.all()],
         'region_list': [str(x.dialect.description) for x in gloss.region_set.all()],
         'region_images': map_image_for_regions(gloss.region_set),
         'wrong_answers': wrong_answers,
+        'commonest_region': commonest_region,
       })
 
     return render_to_response("dictionary/quiz.html",
