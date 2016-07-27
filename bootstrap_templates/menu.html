@@ -112,25 +112,60 @@
     </ul>
     {% endif %}
 
-  
-    <form class="navbar-form navbar-right" role="search" id="frmSearch" name="frmSearch" method="get" action="/dictionary/search">
-       <div class="form-group">
-          <input class='form-control' placeholder='Enter keywords' type="Text" name="query" value="{{ query }}" maxlength="50">
-       </div>
-       
-       <button type="submit" class="btn btn-default">Sign Search</button>
-    </form> 
+    <ul class="nav nav-tabs navbar-nav navbar-right">
+      <li class="active"><a data-toggle="tab" href="#home">Search using English</a></li>
+      <li><a data-toggle="tab" href="#menu1">Search by Sign Features</a></li>
+    </ul>
+
+
+
+
     
     
-    <ul class='nav navbar-nav navbar-right'>
+    <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
       <li><a href="{% url 'logout' %}">Logout ({{ user.first_name }} {{ user.last_name }})</a></li>
     {% else %}
        <li><a href="/accounts/login/?next=/">Login</a></li>
-    {% endif %} 
+    {% endif %}
     </ul>
   
 
   </div><!-- /.navbar-collapse -->
+  <div class="collapse navbar-collapse" id="navbar-collapse-2">
+    <div class="tab-content">
+      <div id="home" class="tab-pane fade in active">
+        <form class="navbar-form navbar-right" role="search" id="frmSearch" name="frmSearch" method="get" action="/dictionary/search">
+           <div class="form-group">
+              <input class='form-control' placeholder='Enter keywords' type="Text" name="query" value="{{ query }}" maxlength="50">
+           </div>
+           
+           <button type="submit" class="btn btn-default">Sign Search</button>
+        </form> 
+      </div>
+      <div id="menu1" class="tab-pane fade">
+        <form class="navbar-form navbar-right" role="search" id="frmSearch" name="frmSearch" method="get" action="/dictionary/search">
+           <div class="form-group">
+              <input class='form-control' placeholder='Enter keywords (optional)' type="Text" name="query" value="{{ query }}" maxlength="50">
+           </div>
+
+
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu_handshape" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="content">Any Handshape</span>
+            <span class="caret"></span>
+          </button>
+
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu_location" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="content">Any Location</span>
+            <span class="caret"></span>
+          </button>
+
+           <button type="submit" class="btn btn-default">Sign Search</button>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
 </nav>
 
