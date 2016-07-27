@@ -99,6 +99,9 @@ body, html {
   margin-left: 0;
 }
 
+.navbar-right {
+  margin-left: 1em;
+}
 
 #publicsign #signinfo {
      max-width: 700px;
