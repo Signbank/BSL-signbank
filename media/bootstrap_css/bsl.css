@@ -145,6 +145,10 @@ body, html {
    width: 664px;
 }
 
+#navbar {
+  margin-bottom: 0.25em;
+}
+
 /* this overrides the bootstrap style for this class since BSL wants the video centred in the page */
 #publicsign #definitionblock .col-md-4 {
     float: none;
@@ -271,7 +275,7 @@ div#quiz input.action { display: block; margin: 1em auto; }
 div#quiz div.solution { text-align: center; }
 div#quiz div.solution p { font-weight: normal; }
 div#quiz div.solution p span.was { font-weight: bold; }
-div#quiz-total p { text-align: center; }
+div#quiz-total p { text-align: center; margin: 0.5em auto; display: block; }
 div#quiz p.hidden { display: none; }
 div#quiz p.scoring { text-align: center; display: none; }
 div#quiz input.answer { font-size: 2em; }
