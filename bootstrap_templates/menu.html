@@ -120,7 +120,9 @@
          <li><a href="/accounts/login/?next=/">Login</a></li>
       {% endif %}
       <li class="{{ feature_search_active|yesno:',active' }}"><a data-toggle="tab" href="#home">Search using English</a></li>
+      {% if user.is_staff %}
       <li class="{{ feature_search_active|yesno:'active,' }}"><a data-toggle="tab" href="#menu1">Search by Sign Features</a></li>
+      {% endif %}
     </ul>
 
 
