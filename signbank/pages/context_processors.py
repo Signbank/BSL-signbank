@@ -1,5 +1,12 @@
 from signbank.pages.models import Page
+from signbank.dictionary.forms import UserSignSearchForm
 from django.conf import settings
+
+def search_form(request):
+    """
+    Return the sign search form.
+    """
+    return { 'search_form': UserSignSearchForm(request.GET.copy()) }
 
 def menu(request):
     """Generate a menu hierarchy from the current set of pages

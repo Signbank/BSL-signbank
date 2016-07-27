@@ -102,6 +102,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.contrib.messages.context_processors.messages",
     "signbank.pages.context_processors.menu",
+    "signbank.pages.context_processors.search_form",
     "signbank.pages.context_processors.configuration",
     "django_mobile.context_processors.flavour",
 )

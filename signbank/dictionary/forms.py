@@ -17,9 +17,9 @@ class UserSignSearchForm(forms.Form):
     category = forms.ChoiceField(label='Search', choices=CATEGORY_CHOICES, required=False,
       widget=forms.Select(attrs={'class': 'form-control'}))
     handshape = forms.ChoiceField(label='Handshape', choices=handshapeChoices, required=False,
-      widget=forms.Select(attrs={'class': 'form-control'}))
+      widget=forms.Select(attrs={'class': 'form-control form-control-short'}))
     location = forms.ChoiceField(label='Location', choices=locationChoices, required=False,
-      widget=forms.Select(attrs={'class': 'form-control'}))
+      widget=forms.Select(attrs={'class': 'form-control form-control-short'}))
 
 class GlossModelForm(forms.ModelForm):
     class Meta:
