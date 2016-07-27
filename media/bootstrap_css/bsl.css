@@ -82,6 +82,10 @@ body, html {
   display: inline-block;
 }
 
+.navbar-collapse {
+  max-height: 640px;
+}
+
 .form-control-short {
   display: inline;
   width: 14em;

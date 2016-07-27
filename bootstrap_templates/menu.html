@@ -112,27 +112,18 @@
     </ul>
     {% endif %}
 
-    <ul class="nav nav-tabs navbar-nav navbar-right">
+ <div class="nav navbar-nav navbar-right" id="search-bar">
+    <ul class="nav nav-tabsx navbar-nav navbar-right">
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}">Logout ({{ user.first_name }} {{ user.last_name }})</a></li>
+      {% else %}
+         <li><a href="/accounts/login/?next=/">Login</a></li>
+      {% endif %}
       <li class="{{ feature_search_active|yesno:',active' }}"><a data-toggle="tab" href="#home">Search using English</a></li>
       <li class="{{ feature_search_active|yesno:'active,' }}"><a data-toggle="tab" href="#menu1">Search by Sign Features</a></li>
     </ul>
 
 
-
-
-    
-    
-    <ul class="nav navbar-nav navbar-right">
-    {% if user.is_authenticated %}
-      <li><a href="{% url 'logout' %}">Logout ({{ user.first_name }} {{ user.last_name }})</a></li>
-    {% else %}
-       <li><a href="/accounts/login/?next=/">Login</a></li>
-    {% endif %}
-    </ul>
-  
-
-  </div><!-- /.navbar-collapse -->
-  <div class="collapse navbar-collapse" id="navbar-collapse-2">
     <div class="tab-content">
       <div id="home" class="tab-pane fade {{ feature_search_active|yesno:',in active' }}">
         <form class="navbar-form navbar-right" role="search" id="frmSearch" name="frmSearch" method="get" action="/dictionary/search">
@@ -339,5 +330,10 @@
 
 
   </div>
+
+  
+
+  </div><!-- /.navbar-collapse -->
+ 
 </nav>
 
