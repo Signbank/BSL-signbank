@@ -16,7 +16,8 @@ class UserSignSearchForm(forms.Form):
       required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     category = forms.ChoiceField(label='Search', choices=CATEGORY_CHOICES, required=False,
       widget=forms.Select(attrs={'class': 'form-control'}))
-    handshape = forms.ChoiceField(label='Handshape', choices=handshapeChoices, required=False,
+    handshapeForUser = [(x,x) if x != 'notset' else (x, 'Any handshape') for x,y in handshapeChoices]
+    handshape = forms.ChoiceField(label='Handshape', choices=handshapeForUser, required=False,
       widget=forms.Select(attrs={'class': 'form-control form-control-short'}))
     location = forms.ChoiceField(label='Location', choices=locationChoices, required=False,
       widget=forms.Select(attrs={'class': 'form-control form-control-short'}))
