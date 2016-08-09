@@ -21,11 +21,14 @@ $(document).ready(function() {
   $("#handshape_dropdown").show();
   $("#id_handshape").hide();
   // Fill in the existing handshape for this search
+  // Fill the text for accessibility and set the image by looking up the coords
   var existing = $("#id_handshape option:selected").text();
   if (existing == 'No Value Set') {
     existing = 'Any Handshape';
   }
   $('#dropdown_menu_handshape span.content').text(existing);
+  var coordClass = $('area[alt="' + existing + '"]').data('xy');
+  $('#dropdown_menu_handshape').addClass(coordClass);
   // Copy the alt tag to title for a little label tooltip on compatible browsers
   // Also fill in the href with something meaningful
   $("#handshape-map area").each(function(event) {
@@ -33,17 +36,21 @@ $(document).ready(function() {
     $(this).prop('title', pickAlt);
     $(this).prop('href', '#handshape-' + pickAlt);
   });
-  // When we click the image map fill the select value and display a meaningful value
+  // When we click the image map fill the select value and display an image
   $("#handshape-map area").click(function(event) {
     event.preventDefault();
     var pickVal = $(this).data('pick');
+    var pickCoords = $(this).data('xy');
     var pickAlt = $(this).prop('alt');
     if (pickVal == undefined) {
       pickVal = 'notset';
       pickAlt = 'Any Handshape';
     }
     $('#id_handshape').val(pickVal);
+    // This text won't be visible but set it for accessibility
     $('#dropdown_menu_handshape span.content').text(pickAlt);
+    // And set the image
+    $('#dropdown_menu_handshape').addClass(pickCoords);
   });
 
 
