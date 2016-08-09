@@ -425,6 +425,7 @@ def feature_search(request):
 
     if len(result_page.object_list) > 0:
         gloss = result_page.object_list.first()
+        keyword, index = gloss.get_keyword_and_index(request)
     else:
         gloss = None
     
@@ -439,6 +440,8 @@ def feature_search(request):
                                'page' : result_page,
                                'page_range': page_range,
                                'gloss': gloss,
+                               'keyword': keyword,
+                               'index': index,
                                'feature_search_active': True,
                                'language': settings.LANGUAGE_NAME,
                                },

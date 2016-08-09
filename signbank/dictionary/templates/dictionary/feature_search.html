@@ -23,7 +23,14 @@
 {% if query_valid and glosscount > 0 %}
     <div id='publicsign' class="view-featuresearch">
         <div id="signinfo" class="navbar navbar-default navbar-collapse">
-        
+            <div class='btn-group'>
+              {% if perms.dictionary.search_gloss %}
+              <a id='editbutton' class='btn btn-default navbar-btn' href="{% url 'dictionary:admin_gloss_view' pk=gloss.id %}">Detail View</a>
+              {% endif %}
+              {% if gloss.region_set.count > 0 %}
+              <a id='regionalbutton' class='btn btn-default navbar-btn' href="{% url 'dictionary:regional_view' keyword=keyword n=index %}">Regional View</a>
+              {% endif %}
+            </div>
             <div class="pull-right">
                 <div class='btn-group'>
                 {% for p in page_range %}
