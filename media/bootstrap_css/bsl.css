@@ -166,6 +166,68 @@ body, html {
   margin-right: 0.1em;
 }
 
+#dropdown_menu_handshape {
+  display: inline-block;
+  background-image: url(/static/images/handshapes.png);
+  background-repeat: no-repeat;
+  background-position: -420px -170px;
+  height: 34px;
+  width: 70px;
+
+  /* Hide the text */
+  text-indent: -999em;
+  letter-spacing: -999em;
+  overflow: hidden;
+}
+
+#dropdown_menu_handshape.x1x1 { background-position: -0px -0px; }
+#dropdown_menu_handshape.x2x1 { background-position: -70px -0px; }
+#dropdown_menu_handshape.x3x1 { background-position: -140px -0px; }
+#dropdown_menu_handshape.x4x1 { background-position: -210px -0px; }
+#dropdown_menu_handshape.x5x1 { background-position: -280px -0px; }
+#dropdown_menu_handshape.x6x1 { background-position: -350px -0px; }
+#dropdown_menu_handshape.x7x1 { background-position: -420px -0px; }
+
+#dropdown_menu_handshape.x1x2 { background-position: -0px -34px; }
+#dropdown_menu_handshape.x2x2 { background-position: -70px -34px; }
+#dropdown_menu_handshape.x3x2 { background-position: -140px -34px; }
+#dropdown_menu_handshape.x4x2 { background-position: -210px -34px; }
+#dropdown_menu_handshape.x5x2 { background-position: -280px -34px; }
+#dropdown_menu_handshape.x6x2 { background-position: -350px -34px; }
+#dropdown_menu_handshape.x7x2 { background-position: -420px -34px; }
+
+#dropdown_menu_handshape.x1x3 { background-position: -0px -68px; }
+#dropdown_menu_handshape.x2x3 { background-position: -70px -68px; }
+#dropdown_menu_handshape.x3x3 { background-position: -140px -68px; }
+#dropdown_menu_handshape.x4x3 { background-position: -210px -68px; }
+#dropdown_menu_handshape.x5x3 { background-position: -280px -68px; }
+#dropdown_menu_handshape.x6x3 { background-position: -350px -68px; }
+#dropdown_menu_handshape.x7x3 { background-position: -420px -68px; }
+
+#dropdown_menu_handshape.x1x4 { background-position: -0px -102px; }
+#dropdown_menu_handshape.x2x4 { background-position: -70px -102px; }
+#dropdown_menu_handshape.x3x4 { background-position: -140px -102px; }
+#dropdown_menu_handshape.x4x4 { background-position: -210px -102px; }
+#dropdown_menu_handshape.x5x4 { background-position: -280px -102px; }
+#dropdown_menu_handshape.x6x4 { background-position: -350px -102px; }
+#dropdown_menu_handshape.x7x4 { background-position: -420px -102px; }
+
+#dropdown_menu_handshape.x1x5 { background-position: -0px -136px; }
+#dropdown_menu_handshape.x2x5 { background-position: -70px -136px; }
+#dropdown_menu_handshape.x3x5 { background-position: -140px -136px; }
+#dropdown_menu_handshape.x4x5 { background-position: -210px -136px; }
+#dropdown_menu_handshape.x5x5 { background-position: -280px -136px; }
+#dropdown_menu_handshape.x6x5 { background-position: -350px -136px; }
+#dropdown_menu_handshape.x7x5 { background-position: -420px -136px; }
+
+#dropdown_menu_handshape.x1x6 { background-position: -0px -170px; }
+#dropdown_menu_handshape.x2x6 { background-position: -70px -170px; }
+#dropdown_menu_handshape.x3x6 { background-position: -140px -170px; }
+#dropdown_menu_handshape.x4x6 { background-position: -210px -170px; }
+#dropdown_menu_handshape.x5x6 { background-position: -280px -170px; }
+#dropdown_menu_handshape.x6x6 { background-position: -350px -170px; }
+#dropdown_menu_handshape.x7x6 { background-position: -420px -170px; }
+
 /* this overrides the bootstrap style for this class since BSL wants the video centred in the page */
 #publicsign #definitionblock .col-md-4 {
     float: none;
