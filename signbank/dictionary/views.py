@@ -428,6 +428,8 @@ def feature_search(request):
         keyword, index = gloss.get_keyword_and_index(request)
     else:
         gloss = None
+        keyword = ''
+        index = 0
     
     return render_to_response("dictionary/feature_search.html",
                               {'query_valid': query_valid,
