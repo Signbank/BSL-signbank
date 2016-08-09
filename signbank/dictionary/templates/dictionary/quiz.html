@@ -190,7 +190,7 @@ This map shows the variation found for this concept from the “What’s your si
               <p>You scored <span class="percent"></span></p>
 
               <div class="quiz-share">
-                <a href="http://www.facebook.com/sharer.php?u={{ request.build_absolute_uri|urlencode }}&t={{ "I scored PERCENTSCORE25 in the BSL Signbank Quiz! Have a go!"|urlencode }}" class="btn btn-primary btn-facebook"><img src="{{ STATIC_URL }}images/social/facebook.png" alt="Twitter"> Share on Facebook</a>
+                <a href="http://www.facebook.com/sharer.php?u={{ request.build_absolute_uri|urlencode }}&t={{ "I scored PERCENTSCORE25 in the BSL Signbank Quiz! Have a go!"|urlencode }}" class="btn btn-primary btn-facebook"><img src="{{ STATIC_URL }}images/social/facebook.png" alt="Facebook"> Share on Facebook</a>
                 <a href="http://twitter.com/share?text={{ "I scored PERCENTSCORE25 in the #BSLSignbank Quiz! Have a go!"|urlencode }}&url={{ request.build_absolute_uri|urlencode }}" class="btn btn-primary btn-twitter"><img src="{{ STATIC_URL }}images/social/twitter.png" alt="Twitter"> Share on Twitter</a>
               </div>
 
@@ -332,7 +332,7 @@ function finishQuiz() {
 $('div.quiz-block').hide();
 $('div#quiz-total span.percent').html(percentageScore());
 $('a.btn-twitter').attr('href', $('a.btn-twitter').attr('href').replace('PERCENTSCORE', percentageScore()));
-$('a.btn-facebook').attr('href', $('a.btn-twitter').attr('href').replace('PERCENTSCORE', percentageScore()));
+$('a.btn-facebook').attr('href', $('a.btn-facebook').attr('href').replace('PERCENTSCORE', percentageScore()));
 $('div#quiz-total').show();
 scrollTo('div#wrap');
 }
