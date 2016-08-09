@@ -149,6 +149,23 @@ body, html {
   margin-bottom: 0.25em;
 }
 
+#navbar #search-bar {
+  background-color: #e7e7e7;
+}
+
+#navbar #search-bar li {
+  background-color: #f8f8f8;
+}
+
+#navbar #search-bar ul.navbar-right {
+  margin-left: 0;
+  border-left: 1em solid #f8f8f8;
+}
+
+#navbar #search-bar form {
+  margin-right: 0.1em;
+}
+
 /* this overrides the bootstrap style for this class since BSL wants the video centred in the page */
 #publicsign #definitionblock .col-md-4 {
     float: none;
