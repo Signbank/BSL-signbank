@@ -449,7 +449,35 @@ minor or insignificant ways that can be ignored.""")
             return set[0]
         else:
             return None     
-             
+    
+    def get_keyword_and_index(self, request_or_staff=False):
+        """
+        Return a keyword and index that will return this gloss in a keyword search.
+        
+        request_or_staff - Either:
+                            - True - User is staff, should see all results
+                            - False - User should only see web dictionary results
+                            - request object - determine results by user permissions
+        """
+
+        show_all_results = request_or_staff
+        if request_or_staff is not True and request_or_staff is not False:
+          show_all_results = request_or_staff.user.has_perm('dictionary.search_gloss')
+
+        # Get an arbitary keyword from the list of keywords for this gloss
+        keyword = str(self.translation_set.first().translation)
+
+        # Get the list of results for that keyword
+        keywords = Keyword.objects.filter(text=keyword).first().translation_set.filter()
+        if not show_all_results:
+            keywords = keywords.filter(gloss__inWeb__exact=True)
+
+        for index, value in enumerate(keywords.values('gloss')):
+            if value['gloss'] == self.id:
+                return (keyword, index + 1)
+
+        return ("UNKNOWN-OR-MISSING-GLOSS", 0)
+    
     def get_absolute_url(self):
         return "/dictionary/gloss/%s.html" % self.idgloss
     
