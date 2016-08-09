@@ -8,6 +8,10 @@
 
 {% block content %}
 
+{% if query_valid and glosscount = 0 %}
+    <p>There is no exact match to the sign features and/or word you chose. Try widening your search. The sign you are looking for may not be in Signbank (yet).</p>	
+{% endif %}
+
 
 
 
