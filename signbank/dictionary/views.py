@@ -399,7 +399,7 @@ def feature_search(request):
         result_page = paginator.page(1)
 
 
-    span = 2
+    span = 4
     page = result_page.number
 
     first_page = page - span
