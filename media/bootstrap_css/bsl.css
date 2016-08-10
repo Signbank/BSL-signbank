@@ -228,6 +228,11 @@ body, html {
 #dropdown_menu_handshape.x6x6 { background-position: -350px -170px; }
 #dropdown_menu_handshape.x7x6 { background-position: -420px -170px; }
 
+#states {
+  width: 250px;
+  margin: 0 auto;
+}
+
 /* this overrides the bootstrap style for this class since BSL wants the video centred in the page */
 #publicsign #definitionblock .col-md-4 {
     float: none;
