@@ -50,7 +50,7 @@ $(document).ready(function() {
     // This text won't be visible but set it for accessibility
     $('#dropdown_menu_handshape span.content').text(pickAlt);
     // And set the image
-    $('#dropdown_menu_handshape').addClass(pickCoords);
+    $('#dropdown_menu_handshape').attr("class", "btn btn-default dropdown-toggle " + pickCoords);
   });
 
 
