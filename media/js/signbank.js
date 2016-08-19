@@ -23,7 +23,7 @@ $(document).ready(function() {
   // Fill in the existing handshape for this search
   // Fill the text for accessibility and set the image by looking up the coords
   var existing = $("#id_handshape option:selected").text();
-  if (existing == 'No Value Set') {
+  if (existing == 'Any handshape') {
     existing = 'Any Handshape';
   }
   $('#dropdown_menu_handshape span.content').text(existing);

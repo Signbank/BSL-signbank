@@ -174,9 +174,8 @@ body, html {
   height: 34px;
   width: 70px;
 
-  /* Hide the text */
-  text-indent: -999em;
-  letter-spacing: -999em;
+  text-indent: -999px;
+  font-size: 0;
   overflow: hidden;
 }
 
@@ -226,7 +225,12 @@ body, html {
 #dropdown_menu_handshape.x4x6 { background-position: -210px -170px; }
 #dropdown_menu_handshape.x5x6 { background-position: -280px -170px; }
 #dropdown_menu_handshape.x6x6 { background-position: -350px -170px; }
-#dropdown_menu_handshape.x7x6 { background-position: -420px -170px; }
+#dropdown_menu_handshape.x7x6 {
+  background-position: -280px -170px;
+  width: 140px;
+  text-indent: 0;
+  font-size: 1em;
+}
 
 #states {
   width: 250px;
