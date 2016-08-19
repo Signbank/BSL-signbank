@@ -447,6 +447,10 @@ var correctAnswer = q.correct[0];
 if (q.commonest_region != 'False') {
 correctAnswer = q.commonest_region;
 }
+if (Debug) {
+$('.quiz-debug').html("User answer was '" + theirAnswer + "' correct answer was '" + correctAnswer + "'");
+$('.quiz-debug').show();
+}
 if (theirAnswer == correctAnswer) {
 score++;
 $('div#quiz-regional div.solution p.right').show();
