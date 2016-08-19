@@ -1,5 +1,7 @@
 {% extends "pages/default.html" %}
 
+{% block bootstrap3_title %}{{ settings_site_title }} Quiz{% endblock %}
+
 {% block extrahead %}<meta property="og:title" content="BSL Signbank Quiz" />
     <meta property="og:description" content="Have a go at the BSL Signbank Quiz!" />
     <meta property="og:image" content="http://bslsignbank.ucl.ac.uk/static/images/bslsignbank.png" />
@@ -256,10 +258,8 @@ video: '/video/iframe/{{q.video_num}}'
 ];
 quiz.pop(); // Just avoiding last comma failing in IE
 
-function scrollTo(elementName) {
-$('html, body').animate({
-scrollTop: $(elementName).offset().top
-}, 100);
+function scrollToTop() {
+$(window).scrollTop(0);
 }
 
 function shuffle(array) {
@@ -338,7 +338,7 @@ $('div.quiz-block').hide();
 $('div#quiz-total span.percent').html(percentageScore());
 $('a.btn-twitter').attr('href', $('a.btn-twitter').attr('href').replace('PERCENTSCORE', percentageScore()));
 $('div#quiz-total').show();
-scrollTo('div#wrap');
+scrollToTop();
 }
 
 function showQuiz() {
@@ -372,7 +372,7 @@ $('div#quiz-meaning label.answer span').eq(i).html(answer);
 });
 $('div#quiz-meaning').show();
 $('div#quiz-meaning div.answer').show();
-scrollTo('div#quiz-meaning');
+scrollToTop();
 
 } else {
 $('div#regionblock').hide();
@@ -393,7 +393,7 @@ $('.commonest').hide();
 } else {
 $('.commonest').show();
 }
-scrollTo('div#quiz-regional');
+scrollToTop();
 }
 }
 }
@@ -430,7 +430,7 @@ $('div#quiz-meaning div.solution p.used').show();
 } else {
 $('div#quiz-meaning div.solution p.used').hide();
 }
-scrollTo('div#quiz');
+scrollToTop();
 }
 
 function answerRegional() {
@@ -464,7 +464,7 @@ $('div#quiz-regional div.solution p.used').show();
 $('div#quiz-regional div.solution').show();
 
 showRegionInformation(q);
-scrollTo('div#quiz');
+scrollToTop();
 }
 </script>
 
