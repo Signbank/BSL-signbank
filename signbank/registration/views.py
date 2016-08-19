@@ -137,7 +137,7 @@ def terms_of_service(request,
   else:
       current_site = RequestSite(request)
   return render_to_response(template_name, {
-        redirect_field_name: redirect_to,
+        redirect_field_name: 'redirect_to',
         'site': current_site,
         'site_name': current_site.name,
         'allow_registration': settings.ALLOW_REGISTRATION,
