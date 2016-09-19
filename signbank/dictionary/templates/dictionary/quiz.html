@@ -188,7 +188,7 @@ This map shows the variation found for this concept from the “What’s your si
         </div>
 
         <pre class="quiz-debug"></pre>
-
+        <div class="s5-fix"></div>
 
         <div id="quiz-total" class="quiz-block">
           <div class="col-md-4 region-left">
@@ -446,8 +446,6 @@ var correctAnswer = q.correct[0];
 if (q.commonest_region != 'False') {
 correctAnswer = q.commonest_region;
 }
-$('.quiz-debug').html("User answer was '" + theirAnswer + "' correct answer was '" + correctAnswer + "'");
-$('.quiz-debug').show();
 if (Debug) {
 $('.quiz-debug').html("User answer was '" + theirAnswer + "' correct answer was '" + correctAnswer + "'");
 $('.quiz-debug').show();
