@@ -368,4 +368,5 @@ div#quiz p.hidden { display: none; }
 div#quiz p.scoring { text-align: center; display: none; }
 div#quiz input.answer { font-size: 2em; }
 .quiz-debug { display: none; }
+.s5-fix { display: block; min-height: 400px; }
 
