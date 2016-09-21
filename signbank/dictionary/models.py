@@ -224,7 +224,6 @@ locationChoices = ( (-1, 'No Value Set'),
                     (12, 'Neck'),
                     (13, 'Shoulder'),
                     (14, 'Chest'),
-                    (28, 'High neutral space'),  # should be after 14
                     (15, 'Stomach'),
                     (29, 'Neutral space'),  # should be after 15
                     (16, 'Waist'),
