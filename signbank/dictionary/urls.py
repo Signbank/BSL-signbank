@@ -28,7 +28,7 @@ urlpatterns = patterns('',
             'signbank.dictionary.views.regional', name='regional_view'),
 
     url(r'^search/$', 'signbank.dictionary.views.search', name="search"),
-    url(r'^featuresearch/$', permission_required('perms.pages.change_page')(feature_search), name='feature_search'),
+    url(r'^featuresearch/$', 'signbank.dictionary.views.feature_search', name='feature_search'),
     url(r'^update/gloss/(?P<glossid>\d+)$', 'signbank.dictionary.update.update_gloss', name='update_gloss'),
     url(r'^update/tag/(?P<glossid>\d+)$', 'signbank.dictionary.update.add_tag', name='add_tag'),
     url(r'^update/definition/(?P<glossid>\d+)$', 'signbank.dictionary.update.add_definition', name='add_definition'),
