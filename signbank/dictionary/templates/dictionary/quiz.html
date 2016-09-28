@@ -94,7 +94,7 @@
             
 
             <div id="quiz">
-              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is <span class="commonest">most often </span>used.</p>
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is <span class="commonest">MOST OFTEN </span>used.</p>
               <form action="">
                 <div class="question">
                 <label><input class="answer" type="radio" name="answer" value="0"> <span>Belfast</span></label>
@@ -459,6 +459,9 @@ $('div#quiz-regional div.solution p.wrong').show();
 updateScore();
 $('div#quiz-regional div.solution span.was').html(correctAnswer);
 $('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct));
+if (q.commonest_region != 'False') {
+$('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct) + " and of those it is used <b>most often</b> in " + q.commonest_region);
+}
 if (q.correct.length <= 1) {
 $('div#quiz-regional div.solution p.used').hide();
 } else {
