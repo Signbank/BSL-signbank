@@ -458,9 +458,10 @@ $('div#quiz-regional div.solution p.wrong').show();
 }
 updateScore();
 $('div#quiz-regional div.solution span.was').html(correctAnswer);
-$('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct));
 if (q.commonest_region != 'False') {
-$('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct.slice(1).join(', ')) + ", but is used MOST OFTEN in " + q.commonest_region);
+$('div#quiz-regional div.solution span.usedin').html(q.correct.slice(1).join(', ') + ", but is used <b>most often</b> in " + q.commonest_region);
+} else {
+$('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct));
 }
 if (q.correct.length <= 1) {
 $('div#quiz-regional div.solution p.used').hide();
