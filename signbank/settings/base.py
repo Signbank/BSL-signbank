@@ -222,7 +222,7 @@ DEFINITION_FIELDS = ['general', 'noun', 'verb', 'interact', 'diectic', 'modifier
 
 DEFINITION_ROLE_CHOICES = (('general', 'General Definition'),
     ('noun', 'As a Noun'),
-    ('verb', 'As a Verb or Adjective'), 
+    ('verb', 'As a Verb or Adjective'),
     ('deictic', 'As a Pointing Sign'),
     ('interact', 'Interactive'),
     ('modifier', 'As Modifier'),
@@ -298,7 +298,7 @@ VIDEO_ASPECT_RATIO = 3.0/4.0
 FORCE_LOWERCASE_TAGS = True
 
 # a list of tags we're allowed to use
-ALLOWED_TAGS = [ '', 
+ALLOWED_TAGS = [ '',
                  'b92:directional',
                  'b92:regional',
                  'corpus:attested',
@@ -392,9 +392,8 @@ ALLOWED_TAGS = [ '',
                  'semantic:weather',
                  'semantic:work',
                  'school:state school',
-                 'workflow:needs video',
+                 'workflow:unlemmatised',
+                 'workflow:lemmatised',
                  'workflow:redo video',
                  'workflow:problematic',
                  ]
-
-

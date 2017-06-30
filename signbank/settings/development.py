@@ -75,12 +75,13 @@ LOG_FILENAME = "debug.log"
 
 import mimetypes
 mimetypes.add_type("video/mp4", ".mov", True)
-    
+
 
 
 # a list of tags we're allowed to use
-XALLOWED_TAGS = [ '', 
-                 'workflow:needs video',
+XALLOWED_TAGS = [ '',
+                 'workflow:unlemmatised',
+                 'workflow:lemmatised',
                  'workflow:redo video',
                  'workflow:problematic',
                  'b92:directional',
@@ -98,5 +99,3 @@ XALLOWED_TAGS = [ '',
                  'phonology:symmetrical',
                  'phonology:two handed',
                 ]
-
-    
