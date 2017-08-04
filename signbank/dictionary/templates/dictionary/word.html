@@ -29,26 +29,26 @@
     {% endif %}
 
     <div id="signinfo" class='navbar navbar-default navbar-collapse'>
-    
+
         <div class='btn-group'>
             {% if SIGN_NAVIGATION %}
-        
+
                 {% if navigation.prev %}
                 <a class='btn navbar-btn btn-default' href="{% url 'root_page' %}dictionary/gloss/{{navigation.prev.idgloss}}.html?lastmatch={{lastmatch}}">&laquo; <span class='hidden-xs'>Previous Sign</span></a>
-           
+
                 {% endif %}
-            
+
                 <button class='btn navbar-btn'>Sign {{glossposn}} of {{glosscount}} <span class='hidden-xs'>in the Auslan Dictionary</span></button>
-            
+
                 {% if navigation.next %}
                 <a class="btn navbar-btn btn-default"
                    href="{% url 'root_page' %}dictionary/gloss/{{navigation.next.idgloss}}.html?lastmatch={{lastmatch}}"><span class='hidden-xs'>Next Sign</span> &raquo;</a>
                 {% endif %}
              {% else %}
-           
+
              {% endif %}
         </div>
-   
+
         <div class="pull-right">
             {% if viewname == "words" or viewname == "regional" %}
             <span class='navbar-text'>Matches for the word <em>{{ translation.translation }}</em></span>
@@ -67,8 +67,8 @@
                 {% endif %}
             {% endif %}
         </div>
-    
-    
+
+
         <div class='btn-group'>
            {% if perms.dictionary.search_gloss %}
            <a id='editbutton' class='btn btn-default navbar-btn' href="{% url 'dictionary:admin_gloss_view' pk=gloss.id %}">Detail View</a>
@@ -79,10 +79,11 @@
            <a id='regionalbutton' class='btn btn-default navbar-btn' href="{% url 'dictionary:word_view' keyword=translation.translation n=n %}">Entry View</a>
            {% endif %}
         </div>
-    
+
     </div>
 
     <div id="definitionblock">
+      <div class="container-fluid">
         <div class='col-md-4 region-left'>
             <div id="videocontainer">
                <div id="player">
@@ -92,8 +93,8 @@
                </div>
                <div id="replay"></div>
             </div>
-        
-        
+
+
             <div id="keywords">
                  <p><strong>Keywords:</strong>
                  {% for kwd in allkwds %}
@@ -150,11 +151,14 @@
             {% endif %}
             {% endif %}
         </div>
+      </div>
         
         {% if viewname == "regional" %}
         {% if regional_template_content %}
-        <div  class='col-md-12'>
-          {{ regional_template_content }}
+        <div class="container-fluid">
+          <div  class='col-md-12'>
+            {{ regional_template_content }}
+          </div>
         </div>
         {% endif %}
         {% endif %}
@@ -164,31 +168,30 @@
             <h2>Sign Definition</h2>
 
             {% for deftype in DEFINITION_FIELDS %}
-        
+
                  {% regroup gloss.published_definitions by role as roles %}
-        
+
                  {% for role in roles %}
-              
-                      {% ifequal deftype role.grouper %}  
-                  
+
+                      {% ifequal deftype role.grouper %}
+
                           <h3>{{role.list.0.get_role_display}}</h3>
-                  
+
                           <ol>
-                          {% for def in role.list %}     
+                          {% for def in role.list %}
                             <li>{{def.text}}</li>
                           {% endfor %}
                           </ol>
-                  
+
                       {% endifequal %}
                  {% endfor %}
             {% endfor %}
-        
+
         </div>
         {% endif %}
-    
+
     </div>
 
 </div>
 
 {% endblock %}
-
