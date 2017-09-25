@@ -227,7 +227,15 @@ class GlossListView(ListView):
                         row.append(defi.get_role_display())
                         row.append(defi.text)
 
-            writer.writerow(row)
+            # Make it safe for weird chars
+            safe_row = [];
+            for column in row:
+                try:
+                    safe_row.append(column.encode('utf-8').decode())
+                except AttributeError:
+                    safe_row.append(None);
+
+            writer.writerow(safe_row)
 
         return response
 
