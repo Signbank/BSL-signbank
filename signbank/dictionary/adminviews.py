@@ -231,7 +231,11 @@ class GlossListView(ListView):
             # Make it safe for non-ascii
             safe_row = [];
             for column in row:
-                safe_row.append(str(column).decode('utf8').encode('ascii', 'ignore'))
+                if type(column) is unicode:
+                    col = column.encode('utf8').decode('ascii', 'ignore')
+                else:
+                    col = str(column)
+                safe_row.append(col)
 
             writer.writerow(safe_row)
 
