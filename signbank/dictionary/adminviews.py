@@ -219,7 +219,7 @@ class GlossListView(ListView):
                 for defi in gloss.definition_set.all():
                     count += 1
                     if defi.published or self.request.user.has_perm('dictionary.can_view_unpub_defs'):
-                        row.append(count)
+                        row.append(str(count))
                         if defi.published:
                             row.append("Published")
                         else:
