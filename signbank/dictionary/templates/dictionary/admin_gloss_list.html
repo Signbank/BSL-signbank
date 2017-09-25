@@ -7,7 +7,7 @@
 {% block extrajs %}
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/typeahead.bundle.min.js"></script>
-    
+
     <script type='text/javascript'>
 
     // Submit the search form again if the user changes results per page
@@ -16,10 +16,10 @@
         $("#search_submit_button").click();
       });
     });
-    
+
     $(document).ready(function(){
-        
-        
+
+
         $('.collapsetoggle').click(function() {
             if ($(this).text() == 'Show') {
                 $(this).text('Hide');
@@ -27,8 +27,8 @@
                 $(this).text('Show');
             }
         });
-        
-        
+
+
     });
 
 
@@ -42,29 +42,29 @@ function clearForm(myFormElement) {
   for(i=0; i<elements.length; i++) {
 
       field_type = elements[i].type.toLowerCase();
-    
+
       switch(field_type) {
-    
+
         case "text":
         case "password":
         case "textarea":
         case "hidden":
-    
+
           elements[i].value = "";
           break;
-    
+
         case "radio":
         case "checkbox":
             if (elements[i].checked) {
               elements[i].checked = false;
           }
           break;
-    
+
         case "select-one":
         case "select-multiple":
                     elements[i].selectedIndex = -1;
           break;
-    
+
         default:
           break;
       }
@@ -80,7 +80,7 @@ function clearForm(myFormElement) {
 
 <div id='searchformwell' class='well'>
     <form name='adminsearch' id='adminsearch'>
-        
+
         <div>
             <table class='table' id='searchfields'>
                 <tr>
@@ -95,12 +95,12 @@ function clearForm(myFormElement) {
                 </tr>
             </table>
         </div>
-        
+
         <div  class="panel panel-default">
             <div class="panel-heading">Search by Tags
                     {% if perms.dictionary.view_advanced_properties %}, Dialect and Language{% endif %}
                 (<a class='collapsetoggle' href="#" data-toggle="collapse"  data-target='#searchpanels'>Show</a></a>)</div>
-          
+
             <div id='searchpanels' class='collapse'>
             <table class='table'>
                 <tr>
@@ -115,9 +115,9 @@ function clearForm(myFormElement) {
                             <label class='input-group-addon' for='id_nottags'>Not Tagged</label>
                             {{searchform.nottags}}
                         </div>
-                    </td>    
+                    </td>
                   </tr>
-                  
+
                   {% if perms.dictionary.view_advanced_properties %}
                   <tr>
                     <td>
@@ -125,7 +125,7 @@ function clearForm(myFormElement) {
                             <label class='input-group-addon' for='id_dialect'>{{searchform.dialect.label}}</label>
                             {{searchform.dialect}}
                         </div>
-                    </td> 
+                    </td>
                     <td>
                         <div class='input-group'>
                             <label class='input-group-addon' for='id_language'>{{searchform.language.label}}</label>
@@ -137,15 +137,15 @@ function clearForm(myFormElement) {
             </table>
             </div>
           </div>
-              
+
         <div  class="panel panel-default">
           <div class="panel-heading">Search by Publication and Phonology
                 (<a class='collapsetoggle' href="#" data-toggle="collapse"  data-target='#advsearchpanels'>Show</a></a>)</div>
-          
+
           <div id='advsearchpanels' class='collapse'>
           <table class='table'>
             <tr>
-      
+
               <td>
                 <table>
                     <tr><td><label for='id_inWeb'>{{searchform.inWeb.label}}</label></td><td>{{searchform.inWeb}}</td></tr>
@@ -168,11 +168,11 @@ function clearForm(myFormElement) {
                     <tr><td><label for='id_domhndsh'>{{searchform.domhndsh.label}}</label></td><td>{{searchform.domhndsh}}</td></tr>
                     <tr><td><label for='id_subhndsh'>{{searchform.subhndsh.label}}</label></td><td>{{searchform.subhndsh}}</td></tr>
                     <tr><td><label for='id_locprim'>{{searchform.locprim.label}}</label></td><td>{{searchform.locprim}}</td></tr>
-                    
+
                     <!--
                     <tr><td><label for='id_locsecond'>{{searchform.locsecond.label}}</label></td><td>{{searchform.locsecond}}</td></tr>
                     -->
-                    
+
                     <tr><td><label for='id_final_domhndsh'>{{searchform.final_domhndsh.label}}</label></td><td>{{searchform.final_domhndsh}}</td></tr>
                     <tr><td><label for='id_final_subhndsh'>{{searchform.final_subhndsh.label}}</label></td><td>{{searchform.final_subhndsh}}</td></tr>
                     <tr><td><label for='id_final_loc'>{{searchform.final_loc.label}}</label></td><td>{{searchform.final_loc}}</td></tr>
@@ -182,14 +182,14 @@ function clearForm(myFormElement) {
           </table>
         </div>
         </div>
- 
+
         <div  class="panel panel-default">
-            <div class="panel-heading">Search Definitions and Notes 
+            <div class="panel-heading">Search Definitions and Notes
                 (<a class='collapsetoggle' href="#" data-toggle="collapse"  data-target='#searchdefs'>Show</a></a>)</div>
-             
-             
+
+
              <div id='searchdefs' class='collapse'>
-                     
+
                  <div class='input-group'>
                     <label class='input-group-addon' for='id_defsearch'>{{searchform.defsearch.label}}</label>
                     <input name='defsearch' class='form-control' {% if searchform.defsearch.value %}value='{{searchform.defsearch.value}}'{% endif %}>
@@ -197,15 +197,18 @@ function clearForm(myFormElement) {
                  <div class='input-group'>
                      <label class='input-group-addon' for='id_defrole'>{{searchform.defrole.label}}</label>
                      {{searchform.defrole}}
-                 </div>     
-             </div>  
+                 </div>
+             </div>
         </div>
- 
- 
-        <div class='btn-group'>  
+
+
+        <div class='btn-group'>
             <input class='btn btn-primary' type='submit' name='submit' id="search_submit_button" value='Search'>
             {% if perms.dictionary.export_csv %}
             <input class='btn btn-default' type='submit' name='format' value='CSV'>
+            {% endif %}
+            {% if perms.dictionary.export_ecv %}
+            <input class='btn btn-default' type='submit' name='export_ecv' value='ECV'>
             {% endif %}
             <input class='btn btn-default' type='submit' onclick="clearForm(document.adminsearch);" value='Reset'>
         </div>
@@ -229,7 +232,7 @@ function clearForm(myFormElement) {
    {% if perms.dictionary.add_gloss %}
    <div  class="panel panel-default">
       <div class="panel-heading" data-toggle="collapse"  data-target='#add_gloss_form'>Add New Sign</div>
-      
+
          <div id='add_gloss_form' class='collapse'>
              <form action='{% url "dictionary:add_gloss" %}' method='post'>
                  {% csrf_token %}
@@ -247,16 +250,16 @@ function clearForm(myFormElement) {
                          <td><input class='btn btn-primary' type='submit' value='Add New Sign'></td>
                      </tr>
                  </table>
-                 
+
              </form>
          </div>
       </div>
       {% endif %}
-                
-             
-             
 
-  
+
+
+
+
 
 <p>Number of matches: {{page_obj.paginator.count}} out of {{glosscount}}.</p>
 
@@ -267,13 +270,13 @@ function clearForm(myFormElement) {
          {% for name, value in object_list.0.admin_fields %}
            <th>{{ name }}</th>
          {% endfor %}
-        <th>Tags</th> 
+        <th>Tags</th>
       </tr>
     </thead>
     <tbody>
     {% for gloss in object_list %}
         <tr>
-            
+
             {% for name, value in gloss.admin_fields %}
               {% if forloop.first %}
                 <td><a href="/dictionary/gloss/{{gloss.pk}}/">{{value}}</a></td>
@@ -281,9 +284,9 @@ function clearForm(myFormElement) {
               <td>{{ value }}</td>
               {% endif %}
             {% endfor %}
-            
+
             <td>{% for tag in gloss.tags %}<span class='tag'>{{tag}}</span> {% endfor %}</td>
-            
+
         </tr>
     {% endfor %}
   </tbody>
@@ -296,32 +299,32 @@ function clearForm(myFormElement) {
         {% if page_obj.has_previous %}
             <li><a href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
         {% endif %}
-          
+
           {% if  page_obj.number > 10 %}
             <li><a>...</a></li>
           {% endif %}
 
           {% for p in page_obj.paginator.page_range %}
-          
+
              {% if p < page_obj.number|add:"10" and  p > page_obj.number|add:"-10" %}
              <li {% ifequal p page_obj.number %}class='active'{% endifequal %}>
              <a href='?page={{ p }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}'>{% ifequal p 0 %}Start{% else %}{{p}}{% endifequal %}</a>
              </li>
              {% endif %}
-         
+
           {% endfor %}
-  
+
           {% if page_obj.paginator.num_pages > page_obj.number|add:"10" %}
             <li><a>...</a></li>
             <li>
             <a href='?page={{ page_obj.paginator.num_pages }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}'>{{page_obj.paginator.num_pages}}</a>
             </li>
           {% endif %}
-      
+
         {% if page_obj.has_next %}
             <li><a href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
 
-            
+
       </ul>
 
 

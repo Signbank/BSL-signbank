@@ -39,6 +39,12 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, "test-media")
 MEDIA_URL = '/media/'
 MEDIA_MOBILE_URL = MEDIA_URL
 
+ECV_FILE = MEDIA_ROOT+'ecv/ecv.ecv'
+ECV_SETTINGS = {
+    'CV_ID': '',
+    'include_phonology_and_frequencies': False,
+    'languages': []
+}
 
 # Ditto for static files from the Auslan site (css, etc) with trailing slash
 AUSLAN_STATIC_PREFIX = "/static/"

@@ -36,10 +36,12 @@ urlpatterns = patterns('',
     url(r'^update/region/(?P<glossid>\d+)$', 'signbank.dictionary.update.add_region', name='add_region'),
     url(r'^update/gloss/', 'signbank.dictionary.update.add_gloss', name='add_gloss'),
 
+    url(r'^update_ecv/', GlossListView.as_view(only_export_ecv=True)),
+
     url(r'^ajax/keyword/(?P<prefix>.*)$', 'signbank.dictionary.views.keyword_value_list'),
     url(r'^ajax/tags/$', 'signbank.dictionary.tagviews.taglist_json'),
     url(r'^ajax/gloss/(?P<prefix>.*)$', 'signbank.dictionary.adminviews.gloss_ajax_complete', name='gloss_complete'),
-    
+
     url(r'^missingvideo.html$', 'signbank.dictionary.views.missing_video_view'),
 
     # Admin views
@@ -47,5 +49,3 @@ urlpatterns = patterns('',
     url(r'^gloss/(?P<pk>\d+)', permission_required('dictionary.search_gloss')(GlossDetailView.as_view()), name='admin_gloss_view'),
 
 )
-
-

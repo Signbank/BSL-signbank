@@ -77,6 +77,23 @@ import mimetypes
 mimetypes.add_type("video/mp4", ".mov", True)
 
 
+ECV_FILE = MEDIA_ROOT+'ecv/bsl.ecv'
+ECV_SETTINGS = {
+    'CV_ID': 'BSL-lexicon',
+    'include_phonology_and_frequencies': True,
+    'languages': [
+        {
+            'id': 'eng',
+            'description': 'The glosses CV for the BSL',
+            'annotation_idgloss_fieldname': 'annotation_idgloss_en',
+            'attributes': {
+                'LANG_DEF': 'http://cdb.iso.org/lg/CDB-00138502-001',
+                'LANG_ID': 'eng',
+                'LANG_LABEL': 'English (eng)'
+            }
+        },
+    ]
+}
 
 # a list of tags we're allowed to use
 XALLOWED_TAGS = [ '',

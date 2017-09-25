@@ -15,20 +15,21 @@ from signbank.dictionary.forms import *
 @permission_required('dictionary.add_gloss')
 def add_gloss(request):
     """Create a new gloss and redirect to the edit view"""
-    
+
     if request.method == "POST":
-        
+
         form = GlossCreateForm(request.POST)
         if form.is_valid():
-            
+
             gloss = form.save()
-            
+            gloss.excludeFromEcv = False
+
             return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': gloss.id})+'?edit')
         else:
-            return render_to_response('dictionary/add_gloss_form.html', 
+            return render_to_response('dictionary/add_gloss_form.html',
                                       {'add_gloss_form': form},
                                       context_instance=RequestContext(request))
-        
+
     return HttpResponseRedirect(reverse('dictionary:admin_gloss_list'))
 
 
@@ -46,34 +47,34 @@ def update_gloss(request, glossid):
 
         field = request.POST.get('id', '')
         value = request.POST.get('value', '')
-        values = request.POST.getlist('value[]')   # in case we need multiple values 
-        
+        values = request.POST.getlist('value[]')   # in case we need multiple values
+
         # validate
         # field is a valid field
         # value is a valid value for field
-        
+
         if field == 'deletegloss':
             if value == 'confirmed':
                 # delete the gloss and redirect back to gloss list
                 gloss.delete()
                 return HttpResponseRedirect(reverse('dictionary:admin_gloss_list'))
-        
+
         if field.startswith('definition'):
-            
+
             return update_definition(request, gloss, field, value)
 
         elif field == 'keywords':
 
             return update_keywords(gloss, field, value)
-            
+
         elif field.startswith('relation'):
-            
+
             return update_relation(gloss, field, value)
-            
+
         elif field != 'regional_template' and field.startswith('region'):
-            
+
             return update_region(gloss, field, value)
-        
+
         elif field == 'language':
             # expecting possibly multiple values
 
@@ -84,9 +85,9 @@ def update_gloss(request, glossid):
                     gloss.language.add(lang)
                 gloss.save()
                 newvalue = ", ".join([str(g) for g in gloss.language.all()])
-            except:                
+            except:
                 return HttpResponseBadRequest("Unknown Language %s" % values, {'content-type': 'text/plain'})
-                
+
         elif field == 'dialect':
             # expecting possibly multiple values
 
@@ -97,13 +98,13 @@ def update_gloss(request, glossid):
                     gloss.dialect.add(lang)
                 gloss.save()
                 newvalue = ", ".join([str(g.name) for g in gloss.dialect.all()])
-            except:                
+            except:
                 return HttpResponseBadRequest("Unknown Dialect %s" % values, {'content-type': 'text/plain'})
-                
+
         elif field == "sn":
-            # sign number must be unique, return error message if this SN is 
+            # sign number must be unique, return error message if this SN is
             # already taken
-            
+
             if value == '':
                 gloss.__setattr__(field, None)
                 gloss.save()
@@ -113,7 +114,7 @@ def update_gloss(request, glossid):
                     value = int(value)
                 except:
                     return HttpResponseBadRequest("SN value must be integer", {'content-type': 'text/plain'})
-                
+
                 existing_gloss = Gloss.objects.filter(sn__exact=value)
                 if existing_gloss.count() > 0:
                     g = existing_gloss[0].idgloss
@@ -122,31 +123,42 @@ def update_gloss(request, glossid):
                     gloss.sn = value
                     gloss.save()
                     newvalue = value
-            
-        
+
+
         elif field == 'inWeb':
             # only modify if we have publish permission
             if request.user.has_perm('dictionary.can_publish'):
                 gloss.inWeb = (value == 'Yes')
-                gloss.save() 
-            
+                gloss.save()
+
             if gloss.inWeb:
                 newvalue = 'Yes'
             else:
                 newvalue = 'No'
-                
+
+        elif field in 'excludeFromEcv':
+            # only modify if we have publish permission
+
+            gloss.excludeFromEcv = value.lower() in [_('Yes').lower(),'true',True,1]
+            gloss.save()
+
+            if gloss.excludeFromEcv:
+                newvalue = _('Yes')
+            else:
+                newvalue = _('No')
+
         else:
-            
+
 
             if not field in Gloss._meta.get_all_field_names():
                 return HttpResponseBadRequest("Unknown field", {'content-type': 'text/plain'})
-            
-            # special cases 
+
+            # special cases
             # - Foreign Key fields (Language, Dialect)
             # - keywords
             # - videos
             # - tags
-            
+
             # special value of 'notset' or -1 means remove the value
             if value == 'notset' or value == -1 or value == '':
                 if field == 'regional_template':
@@ -155,15 +167,15 @@ def update_gloss(request, glossid):
                     gloss.__setattr__(field, None)
                 gloss.save()
                 newvalue = ''
-            else: 
-            
+            else:
+
                 gloss.__setattr__(field, value)
                 gloss.save()
-                
+
                 f = Gloss._meta.get_field(field)
-                
-                
-                # for choice fields we want to return the 'display' version of 
+
+
+                # for choice fields we want to return the 'display' version of
                 # the value
                 valdict = dict(f.flatchoices)
                 # some fields take ints
@@ -173,14 +185,14 @@ def update_gloss(request, glossid):
                     # either it's not an int or there's no flatchoices
                     # so here we use get with a default of the value itself
                     newvalue = valdict.get(value, value)
-        
+
         return HttpResponse(newvalue, {'content-type': 'text/plain'})
 
 def update_keywords(gloss, field, value):
     """Update the keyword field"""
 
     kwds = [k.strip() for k in value.split(',')]
-    # remove current keywords 
+    # remove current keywords
     current_trans = gloss.translation_set.all()
     #current_kwds = [t.translation for t in current_trans]
     current_trans.delete()
@@ -189,16 +201,16 @@ def update_keywords(gloss, field, value):
         (kobj, created) = Keyword.objects.get_or_create(text=kwds[i])
         trans = Translation(gloss=gloss, translation=kobj, index=i)
         trans.save()
-    
+
     newvalue = ", ".join([t.translation.text for t in gloss.translation_set.all()])
-    
+
     return HttpResponse(newvalue, {'content-type': 'text/plain'})
 
 def update_region(gloss, field, value):
     """Update one of the regions for this gloss"""
-    
+
     (what, regid) = field.split('_')
-    
+
     try:
         region = Region.objects.get(id=regid)
     except:
@@ -206,7 +218,7 @@ def update_region(gloss, field, value):
 
     if not gloss == region.gloss:
         return HttpResponseBadRequest("Region doesn't match gloss", {'content-type': 'text/plain'})
-    
+
     if what == 'regiondelete':
         region.delete()
         return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': gloss.id}) + "#regions")
@@ -230,12 +242,12 @@ def update_region(gloss, field, value):
             region.traditional = False
             value = "attested"
         region.save()
-        
+
     return HttpResponse(value, {'content-type': 'text/plain'})
 
 def update_relation(gloss, field, value):
     """Update one of the relations for this gloss"""
-    
+
     (what, relid) = field.split('_')
 
     try:
@@ -245,7 +257,7 @@ def update_relation(gloss, field, value):
 
     if not rel.source == gloss:
         return HttpResponseBadRequest("Relation doesn't match gloss", {'content-type': 'text/plain'})
-    
+
     if what == 'relationdelete':
         print "DELETE: ", rel
         rel.delete()
@@ -255,7 +267,7 @@ def update_relation(gloss, field, value):
         rel.save()
         newvalue = rel.get_role_display()
     elif what == 'relationtarget':
-        
+
         target = gloss_from_identifer(value)
         if target:
             rel.target = target
@@ -264,34 +276,34 @@ def update_relation(gloss, field, value):
         else:
             return HttpResponseBadRequest("Badly formed gloss identifier '%s'" % value, {'content-type': 'text/plain'})
     else:
-        
-        return HttpResponseBadRequest("Unknown form field '%s'" % field, {'content-type': 'text/plain'})           
-    
+
+        return HttpResponseBadRequest("Unknown form field '%s'" % field, {'content-type': 'text/plain'})
+
     return HttpResponse(newvalue, {'content-type': 'text/plain'})
-            
+
 def gloss_from_identifier(value):
     """Given an id of the form idgloss (pk) return the
     relevant gloss or None if none is found"""
-    
-    
+
+
     match = re.match('(.*) \((\d+)\)', value)
     if match:
         print "MATCH: ", match
         idgloss = match.group(1)
         pk = match.group(2)
         print "INFO: ", idgloss, pk
-        
+
         target = Gloss.objects.get(pk=int(pk))
         print "TARGET: ", target
         return target
     else:
         return None
-            
-            
+
+
 
 def update_definition(request, gloss, field, value):
     """Update one of the definition fields"""
-    
+
     (what, defid) = field.split('_')
     try:
         defn = Definition.objects.get(id=defid)
@@ -300,11 +312,11 @@ def update_definition(request, gloss, field, value):
 
     if not defn.gloss == gloss:
         return HttpResponseBadRequest("Definition doesn't match gloss", {'content-type': 'text/plain'})
-    
+
     if what == 'definitiondelete':
         defn.delete()
         return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': gloss.id})+'?editdef')
-    
+
     if what == 'definition':
         # update the definition
         defn.text = value
@@ -315,11 +327,11 @@ def update_definition(request, gloss, field, value):
         defn.save()
         newvalue = defn.count
     elif what == 'definitionpub':
-        
+
         if request.user.has_perm('dictionary.can_publish'):
             defn.published = value == 'Yes'
             defn.save()
-        
+
         if defn.published:
             newvalue = 'Yes'
         else:
@@ -345,38 +357,38 @@ def add_region(request, glossid):
             traditional = True
         else:
             traditional = False
-        
+
         # Make sure there isn't already a dialect of this type
         if gloss.dialect.filter(name=dialect.name):
             return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': glossid})+'?editrel&error=DialectExists#regions')
-        
+
         region = Region(gloss=gloss, dialect=dialect, frequency=frequency, traditional=traditional)
         region.save()
-        
+
         return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': glossid})+'?editrel#regions')
 
 def add_relation(request):
     """Add a new relation instance"""
-    
+
     if request.method == "POST":
-        
+
         form = RelationForm(request.POST)
         if form.is_valid():
-            
+
             role = form.cleaned_data['role']
             sourceid = form.cleaned_data['sourceid']
             targetid = form.cleaned_data['targetid']
-            
+
             try:
                 source = Gloss.objects.get(pk=int(sourceid))
             except:
                 return HttpResponseBadRequest("Source gloss not found.", {'content-type': 'text/plain'})
-            
+
             target = gloss_from_identifier(targetid)
             if target:
                 rel = Relation(source=source, target=target, role=role)
                 rel.save()
-                
+
                 return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': source.id})+'?editrel#relations')
             else:
                 return HttpResponseBadRequest("Target gloss not found.", {'content-type': 'text/plain'})
@@ -389,24 +401,24 @@ def add_relation(request):
 
 def add_definition(request, glossid):
     """Add a new definition for this gloss"""
-    
-    
+
+
     thisgloss = get_object_or_404(Gloss, id=glossid)
-    
+
     if request.method == "POST":
         form = DefinitionForm(request.POST)
-        
+
         if form.is_valid():
-            
-            
+
+
             count = form.cleaned_data['count']
             role = form.cleaned_data['role']
             text = form.cleaned_data['text']
-            
+
             # create definition, default to not published
             defn = Definition(gloss=thisgloss, count=count, role=role, text=text, published=False)
             defn.save()
-            
+
     return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': thisgloss.id})+'?editdef')
 
 @permission_required('dictionary.change_gloss')
@@ -441,10 +453,5 @@ def add_tag(request, glossid):
         else:
             print "invalid form"
             print form.as_table()
-            
+
     return response
-
-
-
-
-
