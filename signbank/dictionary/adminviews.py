@@ -231,7 +231,7 @@ class GlossListView(ListView):
             # Make it safe for non-ascii
             safe_row = [];
             for column in row:
-                safe_row.append(str(column).encode('ascii', 'ignore'))
+                safe_row.append(str(column).decode('utf8').encode('ascii', 'ignore'))
 
             writer.writerow(safe_row)
 
