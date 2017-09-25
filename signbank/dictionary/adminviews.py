@@ -224,14 +224,15 @@ class GlossListView(ListView):
                             row.append("Published")
                         else:
                             row.append("Unpublished")
-                        row.append(defi.get_role_display())
-                        row.append(defi.text)
+                        rd = defi.get_role_display()
+                        row.append(string.replace(rd, ';', ','))
+                        row.append(string.replace(defi.text, ';', ','))
 
-            # Make it safe for weird chars
+            # Make it safe for non-ascii
             safe_row = [];
             for column in row:
                 try:
-                    safe_row.append(column.encode('utf-8').decode())
+                    safe_row.append(''.join([i if ord(i) < 128 else ' ' for i in str(column)]))
                 except AttributeError:
                     safe_row.append(None);
 
