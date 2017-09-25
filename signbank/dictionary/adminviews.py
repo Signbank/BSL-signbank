@@ -3,8 +3,11 @@ from django.views.generic.detail import DetailView
 from django.db.models import Q
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
+import datetime
 import csv
 import re
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
 from signbank.dictionary.models import *
 from signbank.dictionary.forms import *
@@ -56,7 +59,7 @@ class GlossListView(ListView):
         cve_value    = 'CVE_VALUE'
 
         topattributes = {'xmlns:xsi':"http://www.w3.org/2001/XMLSchema-instance",
-                         'DATE':str(DT.date.today())+ 'T'+str(DT.datetime.now().time()),
+                         'DATE':str(datetime.date.today())+ 'T'+str(datetime.datetime.now().time()),
                          'AUTHOR':'',
                          'VERSION':'0.2',
                          'xsi:noNamespaceSchemaLocation':"http://www.mpi.nl/tools/elan/EAFv2.8.xsd"}
@@ -67,14 +70,14 @@ class GlossListView(ListView):
 
         cv_element = ET.SubElement(top, 'CONTROLLED_VOCABULARY', {'CV_ID':settings.ECV_SETTINGS['CV_ID']})
 
-        # description f0r cv_element
+        # description for cv_element
         for lang in settings.ECV_SETTINGS['languages']:
             myattributes = {lang_ref: lang['id']}
             desc_element = ET.SubElement(cv_element, description, myattributes)
             desc_element.text = lang['description']
 
-        # Make sure we iterate only over the none-Morpheme glosses
-        for gloss in Gloss.none_morpheme_objects().filter(excludeFromEcv=False):
+        # TODO: instead of Gloss.objects this was Gloss.none_morpheme_objects
+        for gloss in Gloss.objects.filter(excludeFromEcv=False):
             glossid = str(gloss.pk)
             myattributes = {cve_id: glossid, 'EXT_REF':'signbank-ecv'}
             cve_entry_element = ET.SubElement(cv_element, cv_entry_ml, myattributes)
@@ -82,12 +85,12 @@ class GlossListView(ListView):
             for lang in settings.ECV_SETTINGS['languages']:
                 langId = lang['id']
                 if len(langId) == 3:
-                    langId = [c[2] for c in LANGUAGE_CODE_MAP if c[3] == langId][0]
+                    langId = [c[2] for c in settings.LANGUAGE_CODE_MAP if c[3] == langId][0]
                 desc = self.get_ecv_descripion_for_gloss(gloss, langId, settings.ECV_SETTINGS['include_phonology_and_frequencies'])
                 cve_value_element = ET.SubElement(cve_entry_element, cve_value, {description:desc, lang_ref:lang['id']})
                 cve_value_element.text = self.get_value_for_ecv(gloss, lang['annotation_idgloss_fieldname'])
 
-        ET.SubElement(top, 'EXTERNAL_REF', {'EXT_REF_ID':'signbank-ecv', 'TYPE':'resource_url', 'VALUE':URL + "/dictionary/gloss/"})
+        ET.SubElement(top, 'EXTERNAL_REF', {'EXT_REF_ID':'signbank-ecv', 'TYPE':'resource_url', 'VALUE': settings.URL + "/dictionary/gloss/"})
 
         xmlstr = minidom.parseString(ET.tostring(top,'utf-8')).toprettyxml(indent="   ")
         import codecs
@@ -101,34 +104,35 @@ class GlossListView(ListView):
 
     def get_ecv_descripion_for_gloss(self, gloss, lang, include_phonology_and_frequencies=False):
         desc = ""
-        if include_phonology_and_frequencies:
-            description_fields = ['handedness','domhndsh', 'subhndsh', 'handCh', 'locprim', 'relOriMov', 'movDir','movSh', 'tokNo',
-                          'tokNoSgnr']
-
-            for f in description_fields:
-                if f in FIELDS['phonology']:
-                    choice_list = FieldChoice.objects.filter(field__iexact=fieldname_to_category(f))
-                    machine_value = getattr(gloss,f)
-                    value = machine_value_to_translated_human_value(machine_value,choice_list,lang)
-                    if value is None:
-                        value = ' '
-                else:
-                    value = self.get_value_for_ecv(gloss,f)
-
-                if f == 'handedness':
-                    desc = value
-                elif f == 'domhndsh':
-                    desc = desc+ ', ('+ value
-                elif f == 'subhndsh':
-                    desc = desc+','+value
-                elif f == 'handCh':
-                    desc = desc+'; '+value+')'
-                elif f == 'tokNo':
-                    desc = desc+' ['+value
-                elif f == 'tokNoSgnr':
-                    desc = desc+'/'+value+']'
-                else:
-                    desc = desc+', '+value
+        # TODO: Add support for ECV phonology and frequencies
+        # if include_phonology_and_frequencies:
+        #     description_fields = ['handedness','domhndsh', 'subhndsh', 'handCh', 'locprim', 'relOriMov', 'movDir','movSh', 'tokNo',
+        #                   'tokNoSgnr']
+        #
+        #     for f in description_fields:
+        #         if f in settings.FIELDS['phonology']:
+        #             choice_list = FieldChoice.objects.filter(field__iexact=fieldname_to_category(f))
+        #             machine_value = getattr(gloss,f)
+        #             value = machine_value_to_translated_human_value(machine_value,choice_list,lang)
+        #             if value is None:
+        #                 value = ' '
+        #         else:
+        #             value = self.get_value_for_ecv(gloss,f)
+        #
+        #         if f == 'handedness':
+        #             desc = value
+        #         elif f == 'domhndsh':
+        #             desc = desc+ ', ('+ value
+        #         elif f == 'subhndsh':
+        #             desc = desc+','+value
+        #         elif f == 'handCh':
+        #             desc = desc+'; '+value+')'
+        #         elif f == 'tokNo':
+        #             desc = desc+' ['+value
+        #         elif f == 'tokNoSgnr':
+        #             desc = desc+'/'+value+']'
+        #         else:
+        #             desc = desc+', '+value
 
         if desc:
             desc += ", "

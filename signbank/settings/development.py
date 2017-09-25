@@ -76,8 +76,9 @@ LOG_FILENAME = "debug.log"
 import mimetypes
 mimetypes.add_type("video/mp4", ".mov", True)
 
+MEDIA_ROOT = os.path.join(PROJECT_DIR, "media")
 
-ECV_FILE = MEDIA_ROOT+'ecv/bsl.ecv'
+ECV_FILE = os.path.join(MEDIA_ROOT, 'bsl.ecv')
 ECV_SETTINGS = {
     'CV_ID': 'BSL-lexicon',
     'include_phonology_and_frequencies': True,
@@ -85,7 +86,7 @@ ECV_SETTINGS = {
         {
             'id': 'eng',
             'description': 'The glosses CV for the BSL',
-            'annotation_idgloss_fieldname': 'annotation_idgloss_en',
+            'annotation_idgloss_fieldname': 'annotation_idgloss',
             'attributes': {
                 'LANG_DEF': 'http://cdb.iso.org/lg/CDB-00138502-001',
                 'LANG_ID': 'eng',

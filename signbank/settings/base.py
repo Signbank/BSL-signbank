@@ -5,6 +5,7 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 
+URL = 'http://bslsignbank.ucl.ac.uk/'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -29,6 +30,16 @@ TIME_ZONE = 'Australia/Sydney'
 
 LANGUAGE_CODE = 'en-us'
 
+
+# This is a short mapping between 2 and 3 letter language code
+# This needs more complete solution (perhaps a library),
+# but then the code cn for Chinese should changed to zh.
+LANGUAGE_CODE_MAP = [
+    {2:'nl',3:'nld'},
+    {2:'en',3:'eng'},
+    {2:'zh-hans',3:'chi'}
+]
+
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
@@ -39,7 +50,7 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, "test-media")
 MEDIA_URL = '/media/'
 MEDIA_MOBILE_URL = MEDIA_URL
 
-ECV_FILE = MEDIA_ROOT+'ecv/ecv.ecv'
+ECV_FILE = os.path.join(MEDIA_ROOT, 'bsl.ecv')
 ECV_SETTINGS = {
     'CV_ID': '',
     'include_phonology_and_frequencies': False,
