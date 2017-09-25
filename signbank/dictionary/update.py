@@ -139,13 +139,13 @@ def update_gloss(request, glossid):
         elif field in 'excludeFromEcv':
             # only modify if we have publish permission
 
-            gloss.excludeFromEcv = value.lower() in [_('Yes').lower(),'true',True,1]
+            gloss.excludeFromEcv = value.lower() in ['Yes','yes','true',True,1]
             gloss.save()
 
             if gloss.excludeFromEcv:
-                newvalue = _('Yes')
+                newvalue = 'Yes'
             else:
-                newvalue = _('No')
+                newvalue = 'No'
 
         else:
 
