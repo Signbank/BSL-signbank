@@ -179,11 +179,26 @@ class GlossListView(ListView):
 
         fields = [f.name for f in Gloss._meta.fields]
 
+
         writer = csv.writer(response)
         header = [Gloss._meta.get_field(f).verbose_name for f in fields]
         header.append("Keywords")
         header.append("Tags")
+        if self.request.user.has_perm('dictionary.view_advanced_properties'):
+            # Find out how many extra rows there are for notes
+            note_count = 0
+            for gloss in self.get_queryset():
+                new_max = gloss.definition_set.count()
+                if new_max > note_count:
+                    note_count = new_max
+            # Add headers for them
+            for _ in range(note_count):
+                header.append("Note ID")
+                header.append("Note Published")
+                header.append("Note Role")
+                header.append("Note Text")
         writer.writerow(header)
+
 
         for gloss in self.get_queryset():
             row = []
@@ -197,6 +212,20 @@ class GlossListView(ListView):
             # get tags
             tags = [t.name for t in gloss.tags.all()]
             row.append(", ".join(tags))
+
+            # Add definitions/notes
+            if self.request.user.has_perm('dictionary.view_advanced_properties'):
+                count = 0
+                for defi in gloss.definition_set.all():
+                    count += 1
+                    if defi.published or self.request.user.has_perm('dictionary.can_view_unpub_defs'):
+                        row.append(count)
+                        if defi.published:
+                            row.append("Published")
+                        else:
+                            row.append("Unpublished")
+                        row.append(defi.get_role_display())
+                        row.append(defi.text)
 
             writer.writerow(row)
 
