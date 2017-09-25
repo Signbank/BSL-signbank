@@ -231,10 +231,7 @@ class GlossListView(ListView):
             # Make it safe for non-ascii
             safe_row = [];
             for column in row:
-                try:
-                    safe_row.append(''.join([i if ord(i) < 128 else ' ' for i in str(column)]))
-                except AttributeError:
-                    safe_row.append(None);
+                safe_row.append(str(column).encode('ascii', 'ignore'))
 
             writer.writerow(safe_row)
 
