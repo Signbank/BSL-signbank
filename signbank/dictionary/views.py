@@ -13,11 +13,14 @@ from django.utils.safestring import mark_safe
 from django.utils.encoding import smart_unicode
 
 import os
+import json
+import time
 
 from signbank.dictionary.models import *
 from signbank.dictionary.forms import *
 from signbank.feedback.models import *
 from signbank.pages.models import *
+import signbank.tools
 
 from signbank.video.forms import VideoUploadForGlossForm
 from signbank.log import debug
@@ -50,7 +53,7 @@ def index(request):
 def map_image_for_regions(regions):
     """Get the right map images for this region set
     """
-    
+
     # Add a map for every unique language and dialect we have
     # regional information on
     # This may look odd if there is more than one language
@@ -61,17 +64,17 @@ def map_image_for_regions(regions):
         dialect_extension = ""
         if region.traditional:
             dialect_extension = "-traditional"
-        
+
         language_filename = "images/maps/" + language_name + ".png"
         dialect_filename = "images/maps/" + language_name + "/" + dialect_name + dialect_extension + ".png"
-        
+
         if language_filename not in images:
             images.append(language_filename)
         if dialect_filename not in images:
             images.append(dialect_filename)
-        
+
     return images
-    
+
 
 @login_required_config
 def word_and_regional_view(request, keyword, n, viewname):
@@ -134,7 +137,7 @@ def word_and_regional_view(request, keyword, n, viewname):
         regional_template_content = mark_safe(page.content)
     except:
         regional_template_content = None
-        
+
     # If we asked for a regional view but there is no regional information available redirect to non regional view
     if viewname == "regional" and len(regions) == 0:
         return HttpResponseRedirect('/dictionary/words/'+keyword+'-'+str(n)+'.html' )
@@ -173,13 +176,13 @@ def word_and_regional_view(request, keyword, n, viewname):
 @login_required_config
 def word(request, keyword, n):
     """View of a single keyword that may have more than one sign"""
-    
+
     return word_and_regional_view(request, keyword, n, "words")
 
 @login_required_config
 def regional(request, keyword, n):
     """View of a single keyword that may have more than one sign alongside regional information"""
-    
+
     return word_and_regional_view(request, keyword, n, "regional")
 
 def quiz(request):
@@ -358,7 +361,7 @@ def feature_search(request):
             query_valid = False
         else:
             query_valid = True
-          
+
             try:
                 term = smart_unicode(term)
             except:
@@ -386,7 +389,7 @@ def feature_search(request):
 
     paginator = Paginator(glosses, 1)
     if request.GET.has_key('page'):
-        
+
         page = request.GET['page']
         try:
             result_page = paginator.page(page)
@@ -430,7 +433,7 @@ def feature_search(request):
         gloss = None
         keyword = ''
         index = 0
-    
+
     return render_to_response("dictionary/feature_search.html",
                               {'query_valid': query_valid,
                                'query': term,
@@ -460,7 +463,7 @@ def search(request):
         # need to transcode the query to our encoding
         term = form.cleaned_data['query']
         category = form.cleaned_data['category']
-        
+
         # safe search for authenticated users if the setting says so
         safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
 
@@ -484,9 +487,9 @@ def search(request):
             crudetag = Tag.objects.get(name='lexis:crude')
         except:
             crudetag = None
-        
+
         if safe and crudetag != None:
-            
+
             crude = TaggedItem.objects.get_by_model(Gloss, crudetag)
             # remove crude words from result
 
@@ -495,17 +498,17 @@ def search(request):
                 # remove word if all glosses for any translation are tagged crude
                 trans = w.translation_set.all()
                 glosses = [t.gloss for t in trans]
-                
+
                 if not all([g in crude for g in glosses]):
                     result.append(w)
-            
+
             words = result
-            
-            
+
+
         if not category in ['all', '']:
-            
+
             tag = Tag.objects.get(name=category)
-            
+
             result = []
             for w in words:
                 trans = w.translation_set.all()
@@ -527,7 +530,7 @@ def search(request):
 
     paginator = Paginator(words, 50)
     if request.GET.has_key('page'):
-        
+
         page = request.GET['page']
         try:
             result_page = paginator.page(page)
@@ -547,7 +550,7 @@ def search(request):
                                'paginator' : paginator,
                                'wordcount' : len(words),
                                'page' : result_page,
-                               'ANON_SAFE_SEARCH': settings.ANON_SAFE_SEARCH,                                         
+                               'ANON_SAFE_SEARCH': settings.ANON_SAFE_SEARCH,
                                'ANON_TAG_SEARCH': settings.ANON_TAG_SEARCH,
                                'language': settings.LANGUAGE_NAME,
                                },
@@ -585,5 +588,51 @@ def missing_video_view(request):
     return render_to_response("dictionary/missingvideo.html",
                               {'glosses': glosses})
 
+@login_required_config
+def package(request):
+    first_part_of_file_name = 'signbank_pa'
 
+    timestamp_part_of_file_name = str(int(time.time()))
 
+    if 'since_timestamp' in request.GET:
+        first_part_of_file_name += 'tch'
+        since_timestamp = int(request.GET['since_timestamp'])
+        timestamp_part_of_file_name = request.GET['since_timestamp']+'-'+timestamp_part_of_file_name
+    else:
+        first_part_of_file_name += 'ckage'
+        since_timestamp = 0
+
+    video_and_image_folder = settings.MEDIA_ROOT + "/" + settings.GLOSS_VIDEO_DIRECTORY
+
+    try:
+        if request.GET['small_videos'] not in [0,False,'false']:
+            video_folder_name+= '_small'
+    except KeyError:
+        pass
+
+    archive_file_name = '.'.join([first_part_of_file_name,timestamp_part_of_file_name,'zip'])
+    archive_file_path = settings.SIGNBANK_PACKAGES_FOLDER + archive_file_name
+
+    video_urls = signbank.tools.get_static_urls_of_files(video_and_image_folder,'mp4',since_timestamp)
+    image_urls = signbank.tools.get_static_urls_of_files(video_and_image_folder,'jpg',since_timestamp)
+    # Filter out all backup files
+    video_urls = dict([(gloss_id, url) for (gloss_id, url) in video_urls.items() if not re.match('.*_\d+', url)])
+    image_urls = dict([(gloss_id, url) for (gloss_id, url) in image_urls.items() if not re.match('.*_\d+', url)])
+
+    collected_data = {'video_urls':video_urls,
+                      'image_urls':image_urls,
+                      'glosses':signbank.tools.get_gloss_data(since_timestamp)}
+
+    if since_timestamp != 0:
+        collected_data['deleted_glosses'] = signbank.tools.get_deleted_gloss_or_media_data('gloss',since_timestamp)
+        collected_data['deleted_videos'] = signbank.tools.get_deleted_gloss_or_media_data('video',since_timestamp)
+        collected_data['deleted_images'] = signbank.tools.get_deleted_gloss_or_media_data('image',since_timestamp)
+
+    signbank.tools.create_zip_with_json_files(collected_data,archive_file_path)
+
+    response = HttpResponse(FileWrapper(open(archive_file_path,'rb')), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename='+archive_file_name
+    return response
+
+def info(request):
+    return HttpResponse(json.dumps([ settings.LANGUAGE_NAME, settings.COUNTRY_NAME ]), content_type='application/json')

@@ -46,9 +46,12 @@ USE_L10N = True
 USE_TZ = True
 
 
-MEDIA_ROOT = os.path.join(PROJECT_DIR, "test-media")
+MEDIA_ROOT = os.path.join(PROJECT_DIR, "media")
+WRITABLE_FOLDER = os.path.join(PROJECT_DIR, "files") + "/"
 MEDIA_URL = '/media/'
 MEDIA_MOBILE_URL = MEDIA_URL
+
+SIGNBANK_PACKAGES_FOLDER = WRITABLE_FOLDER+'packages/'
 
 ECV_FILE = os.path.join(MEDIA_ROOT, 'bsl.ecv')
 ECV_SETTINGS = {

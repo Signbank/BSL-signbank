@@ -21,16 +21,16 @@ def addvideo(request):
 
             gloss_id = form.cleaned_data['gloss_id']
             gloss = get_object_or_404(Gloss, pk=gloss_id)
-            
+
             vfile = form.cleaned_data['videofile']
-            
+
             # construct a filename for the video, use sn
             # if present, otherwise use idgloss+gloss id
             if gloss.sn != None:
                 vfile.name = str(gloss.sn) + ".mp4"
             else:
                 vfile.name = gloss.idgloss + "-" + str(gloss.pk) + ".mp4"
-            
+
             redirect_url = form.cleaned_data['redirect']
 
             # deal with any existing video for this sign
@@ -40,7 +40,7 @@ def addvideo(request):
 
             video = GlossVideo(videofile=vfile, gloss=gloss)
             video.save()
-        
+
             # TODO: provide some feedback that it worked (if
             # immediate display of video isn't working)
             return redirect(redirect_url)
@@ -98,16 +98,16 @@ def video(request, videoid):
 
 def iframe(request, videoid):
     """Generate an iframe with a player for this video"""
-    
+
     try:
         gloss = Gloss.objects.get(pk=videoid)
         glossvideo = gloss.get_video()
-        
+
         if django_mobile.get_flavour(request) == 'mobile':
             videourl = glossvideo.get_mobile_url()
         else:
             videourl = glossvideo.get_absolute_url()
-                
+
         posterurl = glossvideo.poster_url()
     except:
         gloss = None
@@ -122,6 +122,3 @@ def iframe(request, videoid):
                                'aspectRatio': settings.VIDEO_ASPECT_RATIO,
                                },
                                context_instance=RequestContext(request))
-
-
-

@@ -48,7 +48,7 @@ SIGN_NAVIGATION = False
 #ADMIN_RESULT_FIELDS = ['idgloss', 'annotation_idgloss']
 
 
-GLOSS_VIDEO_DIRECTORY = 'glossvideo'
+GLOSS_VIDEO_DIRECTORY = 'bsl-video'
 
 
 LOGGING = {

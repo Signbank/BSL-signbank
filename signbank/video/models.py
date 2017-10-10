@@ -70,7 +70,7 @@ class VideoPosterMixin:
         # then move it into place
 
         #print "ENSURE: ", self.videofile.path
-        
+
         (basename, ext) = os.path.splitext(self.videofile.path)
         tmploc = basename + "-conv.mp4"
         err = convert_video(self.videofile.path, tmploc, force=True)
@@ -114,7 +114,7 @@ class GlossVideoStorage(FileSystemStorage):
         first two digits in the filename to partition the videos"""
 
         (targetdir, basename) = os.path.split(name)
-        
+
         path = os.path.join(str(basename)[:2], str(basename))
 
         result = os.path.join(targetdir, path)
@@ -129,9 +129,9 @@ class GlossVideo(models.Model, VideoPosterMixin):
 
     videofile = models.FileField("video file", upload_to=settings.GLOSS_VIDEO_DIRECTORY, storage=storage)
     gloss = models.ForeignKey(Gloss)
-    
-    
-    
+
+
+
     ## video version, version = 0 is always the one that will be displayed
     # we will increment the version (via reversion) if a new video is added
     # for this gloss
@@ -178,7 +178,7 @@ class GlossVideo(models.Model, VideoPosterMixin):
                 newname = newname + ".bak"
 
         # now do the renaming
-        
+
         os.rename(os.path.join(storage.location, self.videofile.name), os.path.join(storage.location, newname))
         # also remove the post image if present, it will be regenerated
         poster = self.poster_path(create=False)
@@ -190,7 +190,3 @@ class GlossVideo(models.Model, VideoPosterMixin):
 
     def __unicode__(self):
         return self.videofile.name
-
-
-
-
