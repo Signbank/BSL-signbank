@@ -5,41 +5,44 @@ Views which allow users to create and activate accounts.
 
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.middleware.csrf import get_token
 
 from forms import RegistrationForm, EmailAuthenticationForm
 from models import RegistrationProfile, UserProfile
 from signbank.log import debug
 
+import json
+
 def activate(request, activation_key, template_name='registration/activate.html'):
     """
     Activates a ``User``'s account, if their key is valid and hasn't
     expired.
-    
+
     By default, uses the template ``registration/activate.html``; to
     change this, pass the name of a template as the keyword argument
     ``template_name``.
-    
+
     Context:
-    
+
         account
             The ``User`` object corresponding to the account, if the
             activation was successful. ``False`` if the activation was
             not successful.
-    
+
         expiration_days
             The number of days for which activation keys stay valid
             after registration.
-    
+
     Template:
-    
+
         registration/activate.html or ``template_name`` keyword
         argument.
-    
+
     """
     activation_key = activation_key.lower() # Normalize before trying anything with it.
     account = RegistrationProfile.objects.activate_user(activation_key)
@@ -59,38 +62,38 @@ def register(request, success_url='/accounts/register/complete/',
              template_name='registration/registration_form.html'):
     """
     Allows a new user to register an account.
-    
+
     Following successful registration, redirects to either
     ``/accounts/register/complete/`` or, if supplied, the URL
     specified in the keyword argument ``success_url``.
-    
+
     By default, ``registration.forms.RegistrationForm`` will be used
     as the registration form; to change this, pass a different form
     class as the ``form_class`` keyword argument. The form class you
     specify must have a method ``save`` which will create and return
     the new ``User``, and that method must accept the keyword argument
     ``profile_callback`` (see below).
-    
+
     To enable creation of a site-specific user profile object for the
     new user, pass a function which will create the profile object as
     the keyword argument ``profile_callback``. See
     ``RegistrationManager.create_inactive_user`` in the file
     ``models.py`` for details on how to write this function.
-    
+
     By default, uses the template
     ``registration/registration_form.html``; to change this, pass the
     name of a template as the keyword argument ``template_name``.
-    
+
     Context:
-    
+
         form
             The registration form.
-    
+
     Template:
-    
+
         registration/registration_form.html or ``template_name``
         keyword argument.
-    
+
     """
     if request.method == 'POST':
         form = form_class(request.POST)
@@ -102,7 +105,7 @@ def register(request, success_url='/accounts/register/complete/',
     return render_to_response(template_name,
                               { 'form': form },
                               context_instance=RequestContext(request))
-                              
+
 
 # a copy of the login view since we need to change the form to allow longer
 # userids (> 30 chars) since we're using email addresses
@@ -130,12 +133,13 @@ def terms_of_service(request,
     else:
         messages.error(request, "You must agree to the data protection terms to login.")
         return HttpResponseRedirect("/")
-  
+
   request.session.set_test_cookie()
   if Site._meta.installed:
       current_site = Site.objects.get_current()
   else:
       current_site = RequestSite(request)
+
   return render_to_response(template_name, {
         redirect_field_name: 'redirect_to',
         'site': current_site,
@@ -146,11 +150,11 @@ terms_of_service = never_cache(terms_of_service)
 
 def mylogin(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Displays the login form and handles the login action."
-    
+
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     if request.method == "POST":
         form = EmailAuthenticationForm(data=request.POST)
-        if form.is_valid(): 
+        if form.is_valid():
             # Light security check -- make sure redirect_to isn't garbage.
             if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
                 redirect_to = settings.LOGIN_REDIRECT_URL
@@ -162,12 +166,20 @@ def mylogin(request, template_name='registration/login.html', redirect_field_nam
               login(request, form.get_user())
               if request.session.test_cookie_worked():
                   request.session.delete_test_cookie()
+
+              # For logging in API clients
+              if "api" in request.GET and request.GET['api'] == 'yes':
+                  return HttpResponse(json.dumps({'success': 'true'}), content_type='application/json')
+
               return HttpResponseRedirect(redirect_to)
             else:
               request.session['tos_user'] = user.pk
               request.session['tos_backend'] = user.backend
               return render_to_response('registration/tos.html', {},
                   context_instance=RequestContext(request))
+        else:
+            if "api" in request.GET and request.GET['api'] == 'yes':
+                return HttpResponse(json.dumps({'success': 'false'}), content_type='application/json')
     else:
         form = EmailAuthenticationForm(request)
     request.session.set_test_cookie()
@@ -175,6 +187,12 @@ def mylogin(request, template_name='registration/login.html', redirect_field_nam
         current_site = Site.objects.get_current()
     else:
         current_site = RequestSite(request)
+
+    # For logging in API clients
+    if request.method == "GET" and "api" in request.GET and request.GET['api'] == 'yes':
+        token = get_token(request)
+        return HttpResponse(json.dumps({'csrfmiddlewaretoken': token}), content_type='application/json')
+
     return render_to_response(template_name, {
         'form': form,
         redirect_field_name: redirect_to,
@@ -183,5 +201,3 @@ def mylogin(request, template_name='registration/login.html', redirect_field_nam
         'allow_registration': settings.ALLOW_REGISTRATION,
     }, context_instance=RequestContext(request))
 mylogin = never_cache(mylogin)
-    
-                              
