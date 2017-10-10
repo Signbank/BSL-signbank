@@ -13,8 +13,10 @@ from django.utils.safestring import mark_safe
 from django.utils.encoding import smart_unicode
 
 import os
+import re
 import json
 import time
+from wsgiref.util import FileWrapper
 
 from signbank.dictionary.models import *
 from signbank.dictionary.forms import *
@@ -590,25 +592,16 @@ def missing_video_view(request):
 
 @login_required_config
 def package(request):
+    # Don't support small videos or since_timestamp at the moment
+
     first_part_of_file_name = 'signbank_pa'
 
     timestamp_part_of_file_name = str(int(time.time()))
 
-    if 'since_timestamp' in request.GET:
-        first_part_of_file_name += 'tch'
-        since_timestamp = int(request.GET['since_timestamp'])
-        timestamp_part_of_file_name = request.GET['since_timestamp']+'-'+timestamp_part_of_file_name
-    else:
-        first_part_of_file_name += 'ckage'
-        since_timestamp = 0
+    first_part_of_file_name += 'ckage'
+    since_timestamp = 0
 
-    video_and_image_folder = settings.MEDIA_ROOT + "/" + settings.GLOSS_VIDEO_DIRECTORY
-
-    try:
-        if request.GET['small_videos'] not in [0,False,'false']:
-            video_folder_name+= '_small'
-    except KeyError:
-        pass
+    video_and_image_folder = settings.MEDIA_ROOT + "/" + settings.GLOSS_VIDEO_DIRECTORY + "/"
 
     archive_file_name = '.'.join([first_part_of_file_name,timestamp_part_of_file_name,'zip'])
     archive_file_path = settings.SIGNBANK_PACKAGES_FOLDER + archive_file_name
@@ -621,12 +614,7 @@ def package(request):
 
     collected_data = {'video_urls':video_urls,
                       'image_urls':image_urls,
-                      'glosses':signbank.tools.get_gloss_data(since_timestamp)}
-
-    if since_timestamp != 0:
-        collected_data['deleted_glosses'] = signbank.tools.get_deleted_gloss_or_media_data('gloss',since_timestamp)
-        collected_data['deleted_videos'] = signbank.tools.get_deleted_gloss_or_media_data('video',since_timestamp)
-        collected_data['deleted_images'] = signbank.tools.get_deleted_gloss_or_media_data('image',since_timestamp)
+                      'glosses':signbank.tools.get_gloss_data()}
 
     signbank.tools.create_zip_with_json_files(collected_data,archive_file_path)
 

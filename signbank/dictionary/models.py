@@ -405,6 +405,33 @@ minor or insignificant ways that can be ignored.""")
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in Gloss._meta.fields]
 
+
+    def get_fields_dict(self):
+        fields = {}
+        for field in Gloss._meta.fields:
+            if field.name in settings.API_FIELDS:
+                category = fieldname_to_category(field.name)
+                if category != field.name:
+                    if not category in fields:
+                        fields[category] = {}
+                    fields[category][field.verbose_name.title()] = field.value_to_string(self)
+                else:
+                    fields[field.verbose_name.title()] = field.value_to_string(self)
+
+        # Get all the keywords associated with this sign
+        allkwds = ", ".join([x.translation.text for x in self.translation_set.all()])
+        fields[Translation.__name__ + "s"] = allkwds
+
+        # Get morphology
+        #fields[Morpheme.__name__ + "s"] = ", ".join([x.__str__() for x in self.morphemePart.all()])
+
+        #
+        #fields["Parent glosses"] = ", ".join([x.__str__() for x in self.parent_glosses.all()])
+
+        fields["Link"] = settings.URL + '/dictionary/gloss/' + str(self.pk)
+
+        return fields
+
     def navigation(self, is_staff):
         """Return a gloss navigation structure that can be used to
         generate next/previous links from within a template page"""
@@ -664,3 +691,56 @@ class Relation(models.Model):
 
     class Meta:
         ordering = ['source']
+
+
+
+def fieldname_to_category(fieldname):
+
+    if fieldname in ['domhndsh','subhndsh','final_domdndsh','final_subhndsh']:
+        field_category = 'Handshape'
+    elif fieldname in ['locprim','locPrimLH','final_loc','loc_second','initial_secondary_loc','final_secondary_loc']:
+        field_category = 'Location'
+    elif fieldname == 'handCh':
+        field_category = 'handshapeChange'
+    elif fieldname == 'oriCh':
+        field_category = 'oriChange'
+    elif fieldname == 'movSh':
+        field_category = 'MovementShape'
+    elif fieldname == 'movDir':
+        field_category = 'MovementDir'
+    elif fieldname == 'movMan':
+        field_category = 'MovementMan'
+    elif fieldname == 'contType':
+        field_category = 'ContactType'
+    elif fieldname == 'namEnt':
+        field_category = 'NamedEntity'
+    elif fieldname == 'iconType':
+        field_category = 'iconicity'
+    elif fieldname == 'mrpType':
+        field_category = 'MorphemeType'
+    elif fieldname == 'domFlex':
+        field_category = 'DominantHandFlexion'
+    elif fieldname == 'domSF':
+        field_category = 'DominantHandSelectedFingers'
+    elif fieldname in ['wordClass', 'wordClass2']:
+        field_category = 'WordClass'
+    elif fieldname == 'hasComponentOfType':
+        field_category = 'MorphologyType'
+    elif fieldname == 'hasMorphemeOfType':
+        field_category = 'MorphemeType'
+    elif fieldname in ['hsFingSel', 'hsFingSel2', 'hsFingUnsel']:
+        field_category = 'FingerSelection'
+    elif fieldname in ['hsFingConf', 'hsFingConf2']:
+        field_category = 'JointConfiguration'
+    elif fieldname == 'hsNumSel':
+        field_category = 'Quantity'
+    elif fieldname == 'hsAperture':
+        field_category = 'Aperture'
+    elif fieldname == 'hsThumb':
+        field_category = 'Thumb'
+    elif fieldname == 'hsSpread':
+        field_category = 'Spreading'
+    else:
+        field_category = fieldname
+
+    return field_category

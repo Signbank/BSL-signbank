@@ -1,5 +1,6 @@
 from signbank.settings.base import *
 
+URL = "http://127.0.0.1:8000"
 
 DATABASES = {
     'default': {

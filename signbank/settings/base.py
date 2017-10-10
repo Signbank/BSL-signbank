@@ -63,6 +63,10 @@ ECV_SETTINGS = {
 # Ditto for static files from the Auslan site (css, etc) with trailing slash
 AUSLAN_STATIC_PREFIX = "/static/"
 
+API_FIELDS = [
+    'idgloss',
+    'annotation_idgloss',
+]
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
