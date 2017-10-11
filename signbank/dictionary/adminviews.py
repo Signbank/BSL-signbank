@@ -100,7 +100,7 @@ class GlossListView(ListView):
 #        tree = ET.ElementTree(top)
 #        tree.write(open(settings.ECV_FILE, 'w'), encoding ="utf-8",xml_declaration=True, method="xml")
 
-        return HttpResponse('OK')
+        return HttpResponse('OK <a href="' + settings.ECV_URL + '">' + settings.ECV_URL + '</a>')
 
     def get_ecv_descripion_for_gloss(self, gloss, lang, include_phonology_and_frequencies=False):
         desc = ""
