@@ -592,14 +592,23 @@ def missing_video_view(request):
 
 @login_required_config
 def package(request):
-    # Don't support small videos or since_timestamp at the moment
+    # Don't support small videos or since_timestamp for gloss changes (only video and images) at the moment
 
     first_part_of_file_name = 'signbank_pa'
 
     timestamp_part_of_file_name = str(int(time.time()))
 
-    first_part_of_file_name += 'ckage'
-    since_timestamp = 0
+    if 'since_timestamp' in request.GET:
+        first_part_of_file_name += 'tch'
+        since_timestamp = int(request.GET['since_timestamp'])
+        timestamp_part_of_file_name = request.GET['since_timestamp']+'-'+timestamp_part_of_file_name
+    else:
+        first_part_of_file_name += 'ckage'
+        since_timestamp = 0
+
+    # TODO: Get IDs with this code GlossVideo.objects.filter(videofile='bsl-video/AM/AMERICA8.mp4').first().gloss.id
+
+    glosses = signbank.tools.get_gloss_data()
 
     video_and_image_folder = settings.MEDIA_ROOT + "/" + settings.GLOSS_VIDEO_DIRECTORY + "/"
 
@@ -614,7 +623,7 @@ def package(request):
 
     collected_data = {'video_urls':video_urls,
                       'image_urls':image_urls,
-                      'glosses':signbank.tools.get_gloss_data()}
+                      'glosses':glosses}
 
     signbank.tools.create_zip_with_json_files(collected_data,archive_file_path)
 
