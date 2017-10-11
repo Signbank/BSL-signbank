@@ -45,11 +45,11 @@ class VideoPosterMixin:
 
         return poster_path
 
-    def poster_url(self):
+    def poster_url(self, create=True):
         """Return the URL of the poster image for this video"""
 
         # generate the poster image if needed
-        path = self.poster_path()
+        path = self.poster_path(create)
 
         # splitext works on urls too!
         vidurl, ext = os.path.splitext(self.videofile.url)

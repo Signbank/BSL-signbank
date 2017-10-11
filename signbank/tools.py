@@ -14,26 +14,6 @@ from django.utils.dateformat import format
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 
-def get_static_urls_of_files(full_root_path,ext,since_timestamp=0):
-
-    static_urls = {}
-
-    for subfolder_name in os.listdir(full_root_path):
-        if os.path.isdir(full_root_path+subfolder_name):
-            for filename in os.listdir(full_root_path+subfolder_name):
-
-                if os.path.getmtime(full_root_path+subfolder_name+'/'+filename) > since_timestamp:
-                    res = re.search(r'(.+)\.' + ext, filename)
-
-                    try:
-                        gloss_id = res.group(1)
-                    except AttributeError:
-                        continue
-
-                    static_urls[gloss_id] = settings.URL+settings.MEDIA_URL+settings.GLOSS_VIDEO_DIRECTORY+'/'+subfolder_name+'/'+filename
-
-    return static_urls
-
 def get_gloss_data():
 
     glosses = Gloss.objects.all()

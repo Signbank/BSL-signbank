@@ -419,16 +419,23 @@ minor or insignificant ways that can be ignored.""")
                     fields[field.verbose_name.title()] = field.value_to_string(self)
 
         # Get all the keywords associated with this sign
-        allkwds = ", ".join([x.translation.text for x in self.translation_set.all()])
+        translation_set = self.translation_set.select_related('translation').all()
+        allkwds = ", ".join([x.translation.text for x in translation_set])
         fields[Translation.__name__ + "s"] = allkwds
 
-        # Get morphology
-        #fields[Morpheme.__name__ + "s"] = ", ".join([x.__str__() for x in self.morphemePart.all()])
-
-        #
-        #fields["Parent glosses"] = ", ".join([x.__str__() for x in self.parent_glosses.all()])
-
         fields["Link"] = settings.URL + '/dictionary/gloss/' + str(self.pk)
+
+        video = self.get_video()
+        if video:
+            videopath = video.videofile.path
+            if os.path.exists(videopath):
+                fields["VideoLink"] = settings.URL + self.get_video_url()
+                fields["VideoUpdated"] = os.path.getmtime(videopath)
+            imagepath, ext = os.path.splitext(videopath)
+            imagepath = imagepath + ".jpg"
+            if os.path.exists(os.path.join(settings.MEDIA_ROOT, imagepath)):
+                fields["ThumbnailLink"] = settings.URL + self.get_thumbnail_url()
+                fields["ThumnailUpdated"] = os.path.getmtime(imagepath)
 
         return fields
 
@@ -567,6 +574,16 @@ minor or insignificant ways that can be ignored.""")
         video = self.get_video()
         if video != None:
             return video.get_absolute_url()
+        else:
+            return ""
+
+    def get_thumbnail_url(self):
+        """return  the url of the thumbnail for this gloss which may be that of a homophone"""
+
+
+        video = self.get_video()
+        if video != None:
+            return video.poster_url(False)
         else:
             return ""
 

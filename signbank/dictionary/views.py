@@ -606,8 +606,6 @@ def package(request):
         first_part_of_file_name += 'ckage'
         since_timestamp = 0
 
-    # TODO: Get IDs with this code GlossVideo.objects.filter(videofile='bsl-video/AM/AMERICA8.mp4').first().gloss.id
-
     glosses = signbank.tools.get_gloss_data()
 
     video_and_image_folder = settings.MEDIA_ROOT + "/" + settings.GLOSS_VIDEO_DIRECTORY + "/"
@@ -615,8 +613,14 @@ def package(request):
     archive_file_name = '.'.join([first_part_of_file_name,timestamp_part_of_file_name,'zip'])
     archive_file_path = settings.SIGNBANK_PACKAGES_FOLDER + archive_file_name
 
-    video_urls = signbank.tools.get_static_urls_of_files(video_and_image_folder,'mp4',since_timestamp)
-    image_urls = signbank.tools.get_static_urls_of_files(video_and_image_folder,'jpg',since_timestamp)
+    video_urls = {}
+    image_urls = {}
+    for gloss_id in glosses.keys():
+        details = glosses[gloss_id]
+        if "VideoUpdated" in details and details["VideoUpdated"] > since_timestamp:
+            video_urls[gloss_id] = details["VideoLink"]
+        if "ThumnailUpdated" in details and details["ThumnailUpdated"] > since_timestamp:
+            image_urls[gloss_id] = details["ThumbnailLink"]
 
     collected_data = {'video_urls':video_urls,
                       'image_urls':image_urls,
