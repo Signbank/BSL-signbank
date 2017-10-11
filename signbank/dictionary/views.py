@@ -617,9 +617,6 @@ def package(request):
 
     video_urls = signbank.tools.get_static_urls_of_files(video_and_image_folder,'mp4',since_timestamp)
     image_urls = signbank.tools.get_static_urls_of_files(video_and_image_folder,'jpg',since_timestamp)
-    # Filter out all backup files
-    video_urls = dict([(gloss_id, url) for (gloss_id, url) in video_urls.items() if not re.match('.*_\d+', url)])
-    image_urls = dict([(gloss_id, url) for (gloss_id, url) in image_urls.items() if not re.match('.*_\d+', url)])
 
     collected_data = {'video_urls':video_urls,
                       'image_urls':image_urls,

@@ -1,5 +1,6 @@
 from signbank.settings.base import *
 
+#URL = "http://192.168.1.215:8000"
 URL = "http://127.0.0.1:8000"
 
 DATABASES = {
@@ -78,8 +79,13 @@ import mimetypes
 mimetypes.add_type("video/mp4", ".mov", True)
 
 MEDIA_ROOT = os.path.join(PROJECT_DIR, "media")
+WRITABLE_FOLDER = os.path.join(PROJECT_DIR, "files") + "/"
+WRITABLE_URL = "/files/"
 
-ECV_FILE = os.path.join(MEDIA_ROOT, 'bsl.ecv')
+ECV_FILENAME = 'bsl.ecv'
+ECV_FILE = os.path.join(WRITABLE_FOLDER, ECV_FILENAME)
+ECV_URL = URL + WRITABLE_URL + ECV_FILENAME
+
 ECV_SETTINGS = {
     'CV_ID': 'BSL-lexicon',
     'include_phonology_and_frequencies': True,

@@ -1,2 +1,4 @@
 media/bsl-video/*
 !media/bsl-video/.gitkeep 
+files/*
+!files/.gitkeep

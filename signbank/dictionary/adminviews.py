@@ -88,7 +88,7 @@ class GlossListView(ListView):
                     langId = [c[2] for c in settings.LANGUAGE_CODE_MAP if c[3] == langId][0]
                 desc = self.get_ecv_descripion_for_gloss(gloss, langId, settings.ECV_SETTINGS['include_phonology_and_frequencies'])
                 cve_value_element = ET.SubElement(cve_entry_element, cve_value, {description:desc, lang_ref:lang['id']})
-                cve_value_element.text = self.get_value_for_ecv(gloss, lang['annotation_idgloss_fieldname'])
+                cve_value_element.text = self.get_value_for_ecv(gloss, lang['annotation_idgloss_fieldname']).strip()
 
         ET.SubElement(top, 'EXTERNAL_REF', {'EXT_REF_ID':'signbank-ecv', 'TYPE':'resource_url', 'VALUE': settings.URL + "/dictionary/gloss/"})
 
