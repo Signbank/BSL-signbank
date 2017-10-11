@@ -92,7 +92,7 @@ class GlossListView(ListView):
 
         ET.SubElement(top, 'EXTERNAL_REF', {'EXT_REF_ID':'signbank-ecv', 'TYPE':'resource_url', 'VALUE': settings.URL + "/dictionary/gloss/"})
 
-        xmlstr = minidom.parseString(ET.tostring(top,'utf-8')).toprettyxml(indent="   ")
+        xmlstr = minidom.parseString(ET.tostring(top,'utf-8')).toxml()
         import codecs
         with codecs.open(settings.ECV_FILE, "w", "utf-8") as f:
             f.write(xmlstr)
