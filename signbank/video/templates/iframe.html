@@ -40,7 +40,7 @@ min-height: 100%; min-width: 100%; height: auto !important; width: auto !importa
 
      {% if videourl %}
      <video id='sign' class='video-js vjs-default-skin' 
-            poster='{{posterurl}}' controls autoplay preload='auto'>
+            poster='{{posterurl}}' autoplay playsinline muted controls="true" preload='auto'>
          <source src='{{videourl}}' type='video/mp4' codecs='avc1.42E01E, mp4a.40.2'></source>
      </video>
      {% else %}
