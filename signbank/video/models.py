@@ -6,7 +6,7 @@ from django.db import models
 from django.conf import settings
 import sys, os, time, shutil
 
-from convertvideo import extract_frame, convert_video, ffmpeg
+from convertvideo import extract_median_frame, convert_video, ffmpeg
 
 from django.core.files.storage import FileSystemStorage
 from signbank.dictionary.models import Gloss
@@ -28,7 +28,7 @@ class VideoPosterMixin:
         #self.ensure_mp4()
 
 
-    def poster_path(self, create=True):
+    def poster_path(self, create=True, overwrite=False):
         """Return the path of the poster image for this
         video, if create=True, create the image if needed
         Return None if create=False and the file doesn't exist"""
@@ -36,10 +36,10 @@ class VideoPosterMixin:
         vidpath, ext = os.path.splitext(self.videofile.path)
         poster_path = vidpath + ".jpg"
 
-        if not os.path.exists(poster_path):
+        if overwrite or (not os.path.exists(poster_path)):
             if create:
                 # need to create the image
-                extract_frame(self.videofile.path, poster_path)
+                extract_median_frame(self.videofile.path, poster_path)
             else:
                 return None
 

@@ -282,7 +282,10 @@ body {
    clear: both;
 }
 
-
+img.thumb {
+  max-width: 320px;
+  max-height: 180px;
+}
 
 /* tag code adapted from http://cssglobe.com/pure-css3-post-tags/ */
 

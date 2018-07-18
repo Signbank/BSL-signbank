@@ -12,6 +12,7 @@ except:
 import sys, os, time, signal, shutil
 from subprocess import Popen, PIPE
 import re
+import datetime
     
 def parse_ffmpeg_output(text):
     """Get relevant info from the ffmpeg output"""
@@ -80,6 +81,36 @@ def extract_frame(sourcefile, targetfile):
     
     err = ffmpeg(sourcefile, targetfile, options=options)
 
+def extract_median_frame(sourcefile, targetfile):
+    """
+    Extract the middle frame from the source video and write it to the target file
+    Adapted from https://stackoverflow.com/questions/24142119/extract-the-middle-frame-of-a-video-in-python-using-ffmpeg?rq=1
+    """
+
+    result = ffmpeg(sourcefile, '')
+    m = re.search(r"Duration:\s*(\d+):(\d+):(\d+)\.(\d+)", result)
+    if not m:
+        return None # Cannot determine duration
+    # Avoiding strptime here because it has some issues handling milliseconds.
+    m = [int(m.group(i)) for i in range(1, 5)]
+    duration = datetime.timedelta(hours=m[0],
+                                  minutes=m[1],
+                                  seconds=m[2],
+                                  # * 10 because truncated to 2 decimal places
+                                  milliseconds=m[3] * 10
+                                  ).total_seconds()
+    target = max(0, min(duration * position, duration - 0.1))
+    target = "{:.3f}".format(target)
+    options = ["-ss", target,
+            "-map", "v:0",     # first video stream
+            "-frames:v", "1",  # 1 frame
+            "-f", "mjpeg",     # motion jpeg (aka. jpeg since 1 frame) output
+            ]
+
+
+    options = []
+
+    err = ffmpeg(sourcefile, targetfile, options=options)
 
 def probe_format(file):
     """Find the format of a video file via ffmpeg,
