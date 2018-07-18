@@ -292,6 +292,9 @@ body {
     list-style:none;
 }
 
+.tagcol {
+  width: 255px;
+}
 
 .tag {
     float:left;
