@@ -287,16 +287,24 @@ img.thumb {
   max-height: 180px;
 }
 
+.tagcol {
+  width: 255px;
+}
+
+.thumbcol {
+  width: 320px;
+}
+
+.thumbdata {
+  text-align: center;
+}
+
 /* tag code adapted from http://cssglobe.com/pure-css3-post-tags/ */
 
 .taglist {
     margin:0;
     padding:0;
     list-style:none;
-}
-
-.tagcol {
-  width: 255px;
 }
 
 .tag {

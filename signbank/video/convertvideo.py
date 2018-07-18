@@ -52,7 +52,7 @@ def ffmpeg(sourcefile, targetfile, timeout=60, options=[]):
     ffmpeg += options
     ffmpeg += [targetfile]
  
-    print " ".join(ffmpeg)
+    #print " ".join(ffmpeg)
     
     process =  Popen(ffmpeg, stdout=PIPE, stderr=PIPE)
     start = time.time()
@@ -93,16 +93,16 @@ def extract_median_frame(sourcefile, targetfile):
         return None # Cannot determine duration
     # Avoiding strptime here because it has some issues handling milliseconds.
     m = [int(m.group(i)) for i in range(1, 5)]
-    duration = datetime.timedelta(hours=m[0],
-                                  minutes=m[1],
-                                  seconds=m[2],
-                                  # * 10 because truncated to 2 decimal places
-                                  milliseconds=m[3] * 10
-                                  ).total_seconds()
+    td = datetime.timedelta(hours=m[0],
+                              minutes=m[1],
+                              seconds=m[2],
+                              # * 10 because truncated to 2 decimal places
+                              milliseconds=m[3] * 10
+                              )
+    duration = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10.0**6
     position = 0.5 # Half way through
     target = max(0, min(duration * position, duration - 0.1))
     target = "{:.3f}".format(target)
-    print "Duration was " + str(duration) + " and target is " + str(target)
     options = [
             "-ss", target,     # half-way position
             "-map", "v:0",     # first video stream

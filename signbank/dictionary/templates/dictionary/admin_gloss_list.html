@@ -267,7 +267,7 @@ function clearForm(myFormElement) {
 <table class='table'>
     <thead>
       <tr>
-        <th>Thumbnail</th>
+        <th class="thumbcol">Thumbnail</th>
          {% for name, value in object_list.0.admin_fields %}
            <th>{{ name }}</th>
          {% endfor %}
@@ -278,7 +278,7 @@ function clearForm(myFormElement) {
     {% for gloss in object_list %}
         <tr>
 
-            <td>
+            <td class="thumbdata">
               {% if gloss.get_thumbnail_url %}
               <a href="/dictionary/gloss/{{gloss.pk}}/">
                 <img src="{{gloss.get_thumbnail_url}}" class="thumb" alt="{{gloss.pk}}">
