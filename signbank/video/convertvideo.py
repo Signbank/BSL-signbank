@@ -52,7 +52,7 @@ def ffmpeg(sourcefile, targetfile, timeout=60, options=[]):
     ffmpeg += options
     ffmpeg += [targetfile]
  
-    #print " ".join(ffmpeg)
+    print " ".join(ffmpeg)
     
     process =  Popen(ffmpeg, stdout=PIPE, stderr=PIPE)
     start = time.time()
@@ -102,14 +102,13 @@ def extract_median_frame(sourcefile, targetfile):
     position = 0.5 # Half way through
     target = max(0, min(duration * position, duration - 0.1))
     target = "{:.3f}".format(target)
-    options = ["-ss", target,
+    print "Duration was " + str(duration) + " and target is " + str(target)
+    options = [
+            "-ss", target,     # half-way position
             "-map", "v:0",     # first video stream
             "-frames:v", "1",  # 1 frame
             "-f", "mjpeg",     # motion jpeg (aka. jpeg since 1 frame) output
             ]
-
-
-    options = []
 
     err = ffmpeg(sourcefile, targetfile, options=options)
 
