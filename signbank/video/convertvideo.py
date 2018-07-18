@@ -102,7 +102,7 @@ def extract_median_frame(sourcefile, targetfile):
     duration = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10.0**6
     position = 0.5 # Half way through
     target = max(0, min(duration * position, duration - 0.1))
-    target = "{:.3f}".format(target)
+    target = "{0:.3f}".format(target)
     options = [
             "-ss", target,     # half-way position
             "-map", "v:0",     # first video stream
