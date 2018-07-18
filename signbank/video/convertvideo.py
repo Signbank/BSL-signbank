@@ -99,6 +99,7 @@ def extract_median_frame(sourcefile, targetfile):
                                   # * 10 because truncated to 2 decimal places
                                   milliseconds=m[3] * 10
                                   ).total_seconds()
+    position = 0.5 # Half way through
     target = max(0, min(duration * position, duration - 0.1))
     target = "{:.3f}".format(target)
     options = ["-ss", target,
