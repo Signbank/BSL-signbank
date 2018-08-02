@@ -287,9 +287,8 @@ img.thumb {
   max-height: 90px;
 }
 
-/* MJS  - removed 2018-06-02 to allow it to expand */
-.tagcolX {
-  width: 255px;
+.tagcol {
+  width: 400px;
 }
 
 .thumbcol {
@@ -310,13 +309,13 @@ img.thumb {
 
 .tag {
     float:left;
-    font-size: 12px;
-    height:14px;
-    line-height:14px;
+    font-size: 13px;
+    height:18px;
+    line-height:18px;
     position:relative;
-    margin-left:12px;
-    margin-top: 2px;
-    padding:0 3px 0 2px;
+    margin-left:14px;
+    margin-top: 4px;
+    padding:0 4px;
     background:#0089e0;
     color:#fff;
     text-decoration:none;
@@ -329,12 +328,25 @@ img.thumb {
     float:left;
     position:absolute;
     top:0;
-    left:-7px;
+    left:-9px;
     width:0;
     height:0;
     border-color:transparent #0089e0 transparent transparent;
     border-style:solid;
-    border-width:7px 7px 7px 0;      
+    border-width:9px 9px 9px 0;      
+}
+
+.tag:after{
+    content:"";
+    position:absolute;
+    top:7px;
+    left:-2px;
+    float:left;
+    width:4px;
+    height:4px;
+    border-radius:2px;
+    background:#fff;
+    box-shadow:-1px -1px 2px #004977;
 }
 
 
