@@ -283,20 +283,24 @@ body {
 }
 
 img.thumb {
-  max-width: 160px;
-  max-height: 90px;
+  max-width: 100px;
+  max-height: 56px;
 }
 
 .tagcol {
-  width: 400px;
+  width: 450px;
 }
 
 .thumbcol {
-  width: 160px;
+  width: 100px;
 }
 
 .thumbdata {
   text-align: center;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+  padding: 4px;
 }
 
 /* tag code adapted from http://cssglobe.com/pure-css3-post-tags/ */
