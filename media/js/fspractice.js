@@ -404,7 +404,7 @@ function get_word_list() {
 	aTmp[395] = "one-eyed";
 	aTmp[396] = "demonstrate";
 	aTmp[397] = "engagement ring";
-	aTmp[398] = "gang bang";
+	aTmp[398] = "grange";
 	aTmp[399] = "vegetables";
 	aTmp[400] = "act";
 	aTmp[401] = "cooperate";
