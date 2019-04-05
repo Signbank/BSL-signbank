@@ -5,7 +5,7 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 
-URL = 'http://bslsignbank.ucl.ac.uk/'
+URL = 'https://bslsignbank.ucl.ac.uk/'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
