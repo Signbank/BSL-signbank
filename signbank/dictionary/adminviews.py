@@ -408,8 +408,8 @@ class GlossListView(ListView):
             for t in vals:
                 tags.extend(Tag.objects.filter(name=t))
 
-            # search is an implicit AND so intersection
-            tqs = TaggedItem.objects.get_intersection_by_model(Gloss, tags)
+            # search is an implicit OR so union
+            tqs = TaggedItem.objects.get_union_by_model(Gloss, tags)
 
            # print "NOT", tags, len(tqs)
             # exclude all of tqs from qs
