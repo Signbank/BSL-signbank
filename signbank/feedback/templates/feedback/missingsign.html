@@ -66,13 +66,15 @@ $(document).ready(function(){
 
 <form method="post" enctype="multipart/form-data" name="missingsign">
    {% csrf_token %}
+    <p>Video uploads are disabled while we fix the upgraded tools for converting and checking uploads. It should be working again by the end of December.</p>
+    <!--
     <p>You may either upload a video that shows the missing sign or
     fill in details in a form.  In either case, you should
     enter a meaning and any comments you might have in the text 
     boxes at the bottom of the form. <p>
 
     <button class='btn btn-default' id="togglevideobutton">Video Comment</button>
-    
+    -->
  <fieldset id="videoupload">
   <legend>Video Upload</legend>
   <div id="{{form.video.name}}div">
