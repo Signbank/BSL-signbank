@@ -67,7 +67,7 @@ def ffmpeg(sourcefile, targetfile, timeout=300, options=[]):
         
     status = process.poll()
     out,err = process.communicate()
-    print "Ran ffmpeg ", " ".join(ffmpeg), " and got messages ", str(err)
+    #print "Ran ffmpeg ", " ".join(ffmpeg), " and got messages ", str(err)
     
     # should check status
     
@@ -122,7 +122,7 @@ def probe_format(file):
     
     b = ffmpeg(file, "tmp", options=info_options)
     r = parse_ffmpeg_output(b)
-    print "Probe format ", str(r)
+    #print "Probe format ", str(r)
     
     return r['inputvideoformat']
 
@@ -146,9 +146,10 @@ def convert_video(sourcefile, targetfile, force=False):
         b = ffmpeg(sourcefile, targetfile, options=FFMPEG_OPTIONS)
 
     format = probe_format(targetfile)
-    if format == 'h264':
+    if format.startswith('h264'):
         return True
     else:
+        print "File format was not h264, was ", format
         return False 
         
 if __name__=='__main__':
