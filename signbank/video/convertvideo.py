@@ -43,7 +43,7 @@ def parse_ffmpeg_output(text):
     return result
             
     
-def ffmpeg(sourcefile, targetfile, timeout=60, options=[]):
+def ffmpeg(sourcefile, targetfile, timeout=300, options=[]):
     """Run FFMPEG with some command options, returning the output"""
 
     errormsg = ""
@@ -61,7 +61,7 @@ def ffmpeg(sourcefile, targetfile, timeout=60, options=[]):
         if time.time()-start > timeout:
             # we've gone over time, kill the process  
             os.kill(process.pid, signal.SIGKILL)
-            print "Killing ffmpeg process for", sourcefile
+            print "Killing ffmpeg process for", sourcefile, " with arguments ", " ".join(ffmpeg)
             errormsg = "Conversion of video took too long.  This site is only able to host relatively short videos."
             return errormsg
         
