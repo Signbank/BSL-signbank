@@ -9,7 +9,7 @@ DATABASES = {
         'NAME': 'bsl_signbank',
         'USER': 'bsl',
         'PASSWORD': 'pigeon59',
-        'HOST': 'localhost',
+        'HOST': 'postgresdb',
         'PORT': '',
     }
 }
