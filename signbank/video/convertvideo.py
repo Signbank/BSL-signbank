@@ -67,6 +67,7 @@ def ffmpeg(sourcefile, targetfile, timeout=300, options=[]):
         
     status = process.poll()
     out,err = process.communicate()
+    print "Ran ffmpeg ", " ".join(ffmpeg), " and got messages ", str(err)
     
     # should check status
     
@@ -121,7 +122,8 @@ def probe_format(file):
     
     b = ffmpeg(file, "tmp", options=info_options)
     r = parse_ffmpeg_output(b)
-     
+    print "Probe format ", str(r)
+    
     return r['inputvideoformat']
 
 
