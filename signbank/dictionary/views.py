@@ -16,6 +16,7 @@ import os
 import re
 import json
 import time
+import urlparse
 from wsgiref.util import FileWrapper
 
 from signbank.dictionary.models import *
@@ -92,7 +93,7 @@ def word_and_regional_view(request, keyword, n, viewname):
     else:
         feedbackmessage = False
 
-    word = get_object_or_404(Keyword, text=keyword)
+    word = get_object_or_404(Keyword, text=urlparse.unquote(keyword))
 
     # returns (matching translation, number of matches)
     (trans, total) =  word.match_request(request, n, )

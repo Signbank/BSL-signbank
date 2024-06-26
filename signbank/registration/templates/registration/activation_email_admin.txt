@@ -1,0 +1,12 @@
+
+{{username}} has signed up for a new BSL SignBank account.
+
+Find their profile here (click 'View user' to see their email address);
+
+https://bslsignbank.ucl.ac.uk/publisher/registration/userprofile/
+ 
+{% if is_researcher == True %}They requested advanced researcher access.{% endif %}
+
+
+BSL SignBank Webmaster
+

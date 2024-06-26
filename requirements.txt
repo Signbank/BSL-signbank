@@ -1,4 +1,4 @@
-Django==1.6.1
+Django==1.7.11
 South==0.8.4
 django-tagging==0.3.2
 django-mobile==0.3.0
@@ -6,4 +6,4 @@ django-reversion==1.8.1
 django-bootstrap3==4.7.0
 django-summernote==0.5.11
 unicodecsv==0.9.4
-psycopg2
+psycopg2-binary

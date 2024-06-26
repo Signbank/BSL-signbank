@@ -53,6 +53,18 @@ class RegistrationManager(models.Manager):
                 user = profile.user
                 user.is_active = True
                 user.save()
+
+                user_profile = UserProfile.objects.get(user = user)
+                is_researcher = user_profile.is_researcher
+
+                # Send an email to admins
+                from django.core.mail import send_mail
+
+                message = render_to_string('registration/activation_email_admin.txt',
+                                           { 'is_researcher': is_researcher, 'username': user.username })
+            
+                send_mail('BSL SignBank new user', message, settings.DEFAULT_FROM_EMAIL, ['marc@codev.uk', settings.DEFAULT_FROM_EMAIL])
+
                 return user
         return False
     
@@ -107,6 +119,7 @@ class RegistrationManager(models.Manager):
                                          'site': current_site })
             
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [new_user.email])
+
         return new_user
     
     def create_profile(self, user):

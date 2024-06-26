@@ -1,0 +1,550 @@
+<html>
+  <head>
+    <title>BSL SignBank: Quiz</title>
+    <base href="http://bslsignbank.ucl.ac.uk/">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap_css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap_css/bsl.css">
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.dataTables.min.js" charset="utf-8" type="text/javascript"></script>
+    <script src="/static/js/signbank.js"></script>
+    <style>
+      div.view-quiz { margin-top: 1em; }
+      div.quiz-block, div.solution { display: none; }
+      div#quiz-intro { display: block; }
+      div#quiz-intro h1 { text-align: center; }
+      div#quiz-intro h2 { text-align: center; }
+      div#quiz-intro input { display: block; margin: 1em auto; font-size: 2em; }
+      div#quiz { font-size: 2em; }
+      div#quiz p { font-weight: bold; }
+      div#quiz form { margin-left: 1em; }
+      div#quiz label { display: block; font-size: 0.8em; font-weight: normal; }
+      div#quiz input.action { display: block; margin: 1em auto; }
+      div#quiz div.solution { text-align: center; }
+      div#quiz div.solution p { font-weight: normal; }
+      div#quiz div.solution p span.was { font-weight: bold; }
+      div#quiz-total p { text-align: center; }
+      div#quiz p.hidden { display: none; }
+      div#quiz p.scoring { text-align: center; display: none; }
+      div#quiz input.answer { font-size: 2em; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div class="container">
+
+        <div id="leftcontentborder"></div>
+        <div id="rightcontentborder"></div>
+        <div id="header"><h1>Signbank</h1>
+          <div id="logoholder" class="visible-lg visible-md visible-sm"></div>
+        </div>
+
+        <div id="bslstripe"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<noscript>The BSL SignBank Quiz requires javascript</noscript>
+
+<div role="main">
+    <div id="publicsign" class="view-words view-quiz">
+      <div id="definitionblock">
+        <div id="quiz-intro" class="quiz-block">
+          <div class="col-md-10 col-md-offset-1">
+            <h3>BSL Signbank Quiz TEST 2 VERSION</h3>
+
+            <form action="">
+              <input class="action" type="button" value="Start Quiz" onclick="startQuiz();">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div role="main">
+    <div id="publicsign" class="view-words view-quiz">
+      <div id="definitionblock">
+        <div id="quiz-meaning" class="quiz-block">
+          <div class="col-md-4 region-left">
+            <div id="videocontainer">
+              <div id="player">
+                <iframe id="videoiframe" scrolling="no" allowfullscreen="allowfullscreen" frameborder="0">
+                </iframe>
+              </div>
+              <div id="replay"></div>
+            </div>
+            
+            
+            <div id="quiz">
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. What does this sign mean?</p>
+              <form action="">
+                <div class="question">
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0" checked="checked"> <span></span></label>
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
+                <label class="answer"><input class="answer" type="radio" name="answer" value="0"> <span></span></label>
+                </div>
+                
+                <div class="answer">
+                  <input class="action" type="button" value="Answer" onclick="answerMeaning();">
+                </div>
+                
+                <div class="solution">
+                  <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
+                  <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
+                  <p class="used">Did you know? This sign is used in <span class="usedin"></span>.</p>
+                  <input class="action" type="button" value="Next" onclick="showQuiz();">
+                </div>
+              </form>
+              <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
+            </div>
+            
+          </div>
+          
+          <div class="col-md-3 region-right">
+          
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+        <div id="quiz-regional" class="quiz-block">
+          <div class="col-md-4 region-left">
+            <div id="videocontainer">
+              <div id="player">
+                <iframe id="videoiframe" scrolling="no" allowfullscreen="allowfullscreen" frameborder="0">
+                </iframe>
+              </div>
+              <div id="replay"></div>
+            </div>
+            
+
+            <div id="quiz">
+              <p class="question"><span class="countq"></span> of <span class="totalq"></span>. Pick the region where you think this sign is <span class="commonest">most often </span>used.</p>
+              <form action="">
+                <div class="question">
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Belfast</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Birmingham</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Bristol</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Cardiff</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Glasgow</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>London</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Manchester</span></label>
+                <label><input class="answer" type="radio" name="answer" value="0"> <span>Newcastle</span></label>
+                </div>
+                
+                <div class="answer">
+                  <input class="action" type="button" value="Answer" onclick="answerRegional();">
+                </div>
+                
+                <div class="solution">
+
+                  <p class="right">😃 <b>Correct</b> - The answer was <span class="was"></span></p>
+                  <p class="wrong">😕 <b>Wrong</b> - The correct answer was <span class="was"></span></p>
+                  <p class="used">Did you know? This sign is used in <span class="usedin"></span>.</p>
+
+                  <input class="action" type="button" value="Next" onclick="showQuiz();">
+
+                </div>
+              </form>
+              <p class="scoring">Score: <span class="score"></span>/<span class="total"></span></p>
+            </div>
+
+          </div>
+
+          <div class="col-md-3 region-right">
+
+          </div>
+        </div>
+
+        <div>
+          <div class="col-md-4 region-left">
+          
+          </div>
+          
+          <div id="regionblock" class="quiz-block">
+            <div class="col-md-9">
+This map shows the variation found for this concept from the “What’s your sign?” task from the <a href="http://www.bslcorpusproject.org/">BSL Corpus</a> in which 249 Deaf BSL signers (30 each in Belfast, Birmingham, Cardiff, Glasgow, Manchester & Newcastle, 32 in Bristol & 37 in London) were asked their signs for colours, countries, numbers and UK placenames. Orange dots on the map indicate signs that are traditionally linked to that region (typically those used by the oldest signers). Blue dots on the map indicate signs that are not traditionally linked to that region but are reported to be in use. Next to each city name under Sign Distribution, we show the number of people in each city who gave that sign as their preferred sign for that concept. Because we only asked approximately 30 people in each region what sign they preferred to use for a specific concept, all the variants that are actually in use within each region may not have been recorded. A few responses have been excluded (and thus frequencies don’t always add up to 30, 32 or 37) because they were produced by a small number of signers and need to be verified.
+            </div>
+            <div class="col-md-3 region-right">
+                <div id="states">
+                    <div>
+<img src="/static/images/maps/BSL.png" alt="Region" id="map-BSL">
+<img src="/static/images/maps/BSL/Birmingham.png" alt="Birmingham" id="map-Birmingham">
+<img src="/static/images/maps/BSL/Birmingham-traditional.png" alt="Birmingham, traditional" id="map-Birmingham-traditional">
+<img src="/static/images/maps/BSL/Bristol.png" alt="Bristol" id="map-Bristol">
+<img src="/static/images/maps/BSL/Bristol-traditional.png" alt="Bristol, traditional" id="map-Bristol-traditional">
+<img src="/static/images/maps/BSL/Cardiff.png" alt="Cardiff" id="map-Cardiff">
+<img src="/static/images/maps/BSL/Cardiff-traditional.png" alt="Cardiff, traditional" id="map-Cardiff-traditional">
+<img src="/static/images/maps/BSL/Glasgow.png" alt="Glasgow" id="map-Glasgow">
+<img src="/static/images/maps/BSL/Glasgow-traditional.png" alt="Glasgow, traditional" id="map-Glasgow-traditional">
+<img src="/static/images/maps/BSL/Belfast.png" alt="Belfast" id="map-Belfast">
+<img src="/static/images/maps/BSL/Belfast-traditional.png" alt="Belfast, traditional" id="map-Belfast-traditional">
+<img src="/static/images/maps/BSL/Newcastle.png" alt="Newcastle" id="map-Newcastle">
+<img src="/static/images/maps/BSL/Newcastle-traditional.png" alt="Newcastle, traditional" id="map-Newcastle-traditional">
+<img src="/static/images/maps/BSL/London.png" alt="London" id="map-London">
+<img src="/static/images/maps/BSL/London-traditional.png" alt="London, traditional" id="map-London-traditional">
+<img src="/static/images/maps/BSL/Manchester.png" alt="Manchester" id="map-Manchester">
+<img src="/static/images/maps/BSL/Manchester-traditional.png" alt="Manchester, traditional" id="map-Manchester-traditional">
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Sign Distribution</h4>
+                    <table class="table table-condensed" id="regiontable">
+                      <tr>
+                        <td>
+                          Belfast
+                        </td>
+                        <td>
+                          traditional,
+                        </td>
+                        <td>
+                            42
+                        </td>
+                      </tr>
+                    </table>
+                </div>
+            </div>
+          </div>
+
+          <div class="col-md-3 region-right">
+          
+          </div>
+        </div>
+
+        <pre class="quiz-debug"></pre>
+        <div class="s5-fix"></div>
+
+        <div id="quiz-total" class="quiz-block">
+          <div class="col-md-4 region-left">
+            <div id="quiz">
+              <p>You scored <span class="percent"></span></p>
+
+              <div class="quiz-share">
+                <a href="http://www.facebook.com/sharer.php?u=WHATEVER" class="btn btn-primary btn-facebook"><img src="/static/images/social/facebook.png" alt="Facebook"> Share on Facebook</a>
+                <a href="http://twitter.com/share?text=SCORE&url=WHATEVER" class="btn btn-primary btn-twitter"><img src="/static/images/social/twitter.png" alt="Twitter"> Share on Twitter</a>
+              </div>
+
+              <form action="/quiz/"><input class="action" type="submit" value="Play Again"></form>
+            </div>
+
+          </div>
+
+          <div class="col-md-3 region-right">
+
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+</div>
+
+
+
+<script>
+var score = 0.0;
+var total = 0.0;
+var questionIndex = 0;
+var Debug = location.search == '?debug';
+var QuestionCount = 1; // How many questions should we ask?
+var questionsToAsk = []; // Will hold the random list of questions to ask
+
+var score_at_question = [];
+var total_at_question = [];
+
+var quiz = [
+
+
+
+{
+type: 'meaning',
+correct: 'France',
+commonest_region: 'False',
+region_count: ['Glasgow'].length,
+incorrect: ['China', 'India', 'Glasgow'],
+linkout: '/dictionary/gloss/FRANCE05.html',
+video: '/video/iframe/3468'
+},
+{
+type: 'regional',
+correct: ['Glasgow'],
+regions: [['Glasgow', '13/30', 'true']],
+commonest_region: 'False',
+linkout: '/dictionary/gloss/FRANCE05.html',
+video: '/video/iframe/3468'
+},
+
+
+
+
+{}
+
+];
+quiz.pop(); // Just avoiding last comma failing in IE
+
+function scrollToTop() {
+$(window).scrollTop(0);
+}
+
+function shuffle(array) {
+var currentIndex = array.length, temporaryValue, randomIndex ;
+while (0 !== currentIndex) {
+randomIndex = Math.floor(Math.random() * currentIndex);
+currentIndex -= 1;
+temporaryValue = array[currentIndex];
+array[currentIndex] = array[randomIndex];
+array[randomIndex] = temporaryValue;
+}
+return array;
+}
+
+function toSentence(array) {
+var result = array.slice(0, array.length - 1).join(', ');
+if (array.length > 1) {
+result = result + " and " + array.slice(-1);
+} else {
+result = array[0];
+}
+return result;
+}
+
+function percentageScore() {
+return Math.floor(score / total * 100.0) + "%";
+}
+
+function startQuiz() {
+score = 0;
+total = 0;
+questionIndex = 0;
+questionsToAsk = [];
+if (Debug) {
+  // In debug mode we ask all questions in order instead of a random selection
+  QuestionCount = quiz.length / 2;
+  var i = 0;
+  while (questionsToAsk.push(i++) <= QuestionCount * 2);
+} else {
+for (var i=0; i < QuestionCount; i++) {
+  var qNum;
+  do {
+    qNum = Math.floor(Math.random() * quiz.length / 2) * 2;
+  } while(questionsToAsk.indexOf(qNum) != -1);
+  questionsToAsk.push(qNum);
+  questionsToAsk.push(qNum + 1);
+}
+}
+showQuiz();
+}
+
+function showRegionInformation(qu) {
+$('div#regionblock img').hide();
+$('div#regionblock img#map-BSL').show();
+$('div#regionblock table#regiontable').empty();
+for (var i = 0; i < qu.regions.length; i++) {
+  var r = qu.regions[i];
+  var dialect = r[0];
+  var frequency = r[1];
+  var traditional = r[2] == 'true';
+  var row = "<tr><td>" + dialect + "</td><td>";
+  if (traditional) {
+    row = row + "traditional, ";
+    $('img#map-' + dialect + '-traditional').show();
+  } else {
+    $('img#map-' + dialect).show();
+  }
+  row = row + "</td><td>" + frequency + "</td>";
+  $('div#regionblock table#regiontable').append(row);
+}
+$('div#regionblock').show();
+}
+
+function finishQuiz() {
+$('div.quiz-block').hide();
+$('div#quiz-total span.percent').html(percentageScore());
+$('a.btn-twitter').attr('href', $('a.btn-twitter').attr('href').replace('PERCENTSCORE', percentageScore()));
+$('div#quiz-total').show();
+scrollToTop();
+}
+
+function showQuiz() {
+updateScore();
+if (questionIndex >= QuestionCount * 2) {
+finishQuiz();
+return;
+}
+var q = quiz[questionsToAsk[questionIndex]];
+$('div.quiz-block').hide();
+$('div.solution').hide();
+$('div#regionblock').hide();
+$('span.countq').html(Math.floor(questionIndex / 2) + 1);
+$('span.totalq').html(QuestionCount);
+$('.question').show();
+$('div#quiz-regional input[name=answer]:checked').attr('checked', false);
+$('div#quiz-meaning input[name=answer]').attr('checked', false);
+$('.quiz-debug').html(JSON.stringify(q, null, 2));
+if (Debug) {
+$('.quiz-debug').html(JSON.stringify(q, null, 2));
+$('.quiz-debug').show();
+}
+
+if (q.type == 'meaning') {
+$('div#quiz-regional iframe').get(0).contentWindow.location.replace('about:blank');
+$('div#quiz-meaning iframe').get(0).contentWindow.location.replace(q.video);
+$('div#quiz-meaning div.solution a.linkout').attr('href', q.linkout);
+var answers = q.incorrect;
+answers.push(q.correct);
+$.each(shuffle(answers), function(i, answer) {
+$('div#quiz-meaning label.answer span').eq(i).html(answer);      
+});
+$('div#quiz-meaning').show();
+$('div#quiz-meaning div.answer').show();
+scrollToTop();
+
+} else {
+$('div#regionblock').hide();
+$('div#quiz-meaning iframe').get(0).contentWindow.location.replace('about:blank');
+$('div#quiz-regional iframe').get(0).contentWindow.location.replace(q.video);
+$('div#quiz-regional div.solution a.linkout').attr('href', q.linkout);
+$('div#quiz-regional').show();
+$('div#quiz-regional div.answer').show();
+// Skip the top region question if we have several regions
+if (q.correct.length > 1 && q.commonest_region == 'False') {
+score_at_question[questionIndex] = score;
+total_at_question[questionIndex] = total;
+var q = quiz[questionsToAsk[questionIndex++]];
+showQuiz();
+} else {
+if (q.commonest_region == 'False') {
+$('.commonest').hide();
+} else {
+$('.commonest').show();
+}
+scrollToTop();
+}
+}
+}
+
+function updateScore() {
+$('span.score').html(score);
+$('span.total').html(total);
+}
+
+function answerMeaning() {
+score_at_question[questionIndex] = score;
+total_at_question[questionIndex] = total;
+var q = quiz[questionsToAsk[questionIndex++]];
+$('div#quiz-meaning div.answer').hide();
+$('.question').hide();
+var theirAnswer = $('div#quiz-meaning input[name=answer]:checked').parent().children('span').html();
+$('div#quiz-meaning div.solution p.right').hide();
+$('div#quiz-meaning div.solution p.wrong').hide();
+total++;
+if (theirAnswer == q.correct) {
+score++;
+$('div#quiz-meaning div.solution p.right').show();
+} else {
+$('div#quiz-meaning div.solution p.wrong').show();
+}
+updateScore();
+$('div#quiz-meaning div.solution span.was').html(q.correct);
+$('div#quiz-meaning div.solution').show();
+var otherq = quiz[questionsToAsk[questionIndex]];
+if (otherq.regions.length > 1 && otherq.commonest_region == 'False') {
+showRegionInformation(otherq);
+$('div#quiz-meaning div.solution span.usedin').html(toSentence(otherq.correct));
+$('div#quiz-meaning div.solution p.used').show();
+} else {
+$('div#quiz-meaning div.solution p.used').hide();
+}
+scrollToTop();
+}
+
+function answerRegional() {
+score_at_question[questionIndex] = score;
+total_at_question[questionIndex] = total;
+var q = quiz[questionsToAsk[questionIndex++]];
+$('div#quiz-regional div.answer').hide();
+$('.question').hide();
+var theirAnswer = $('div#quiz-regional input[name=answer]:checked').parent().children('span').html();
+$('div#quiz-regional div.solution p.right').hide();
+$('div#quiz-regional div.solution p.wrong').hide();
+total++;
+var correctAnswer = q.correct[0];
+if (q.commonest_region != 'False') {
+correctAnswer = q.commonest_region;
+}
+if (Debug) {
+$('.quiz-debug').html("User answer was '" + theirAnswer + "' correct answer was '" + correctAnswer + "'");
+$('.quiz-debug').show();
+}
+if (theirAnswer == correctAnswer) {
+score++;
+$('div#quiz-regional div.solution p.right').show();
+} else {
+$('div#quiz-regional div.solution p.wrong').show();
+}
+updateScore();
+$('div#quiz-regional div.solution span.was').html(correctAnswer);
+$('div#quiz-regional div.solution span.usedin').html(toSentence(q.correct));
+if (q.correct.length <= 1) {
+$('div#quiz-regional div.solution p.used').hide();
+} else {
+$('div#quiz-regional div.solution p.used').show();
+}
+$('div#quiz-regional div.solution').show();
+
+showRegionInformation(q);
+scrollToTop();
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
