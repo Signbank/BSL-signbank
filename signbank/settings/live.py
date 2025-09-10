@@ -108,7 +108,7 @@ LANGUAGE_NAME = "BSL"
 COUNTRY_NAME = "the UK"
 SITE_TITLE = "BSL SignBank"
 
-GOOGLE_ANALYTICS_TRACKING_CODE = "UA-62204298-1"
+GOOGLE_ANALYTICS_TRACKING_CODE = None # Disabled 2025-09-10 - no cookie banner, it is also an outdated version of google analytics "UA-62204298-1"
 
 SOCIAL_NETWORK_SHARE_LINKS = True
 SOCIAL_NETWORK_FACEBOOK_PAGE = "https://www.facebook.com/pages/DCAL-Deafness-Cognition-and-Language-Research-Centre/136511306447860"
